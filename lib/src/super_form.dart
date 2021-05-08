@@ -234,7 +234,7 @@ class _SuperFormScope extends InheritedModel<String> {
   _SuperFormScope({
     required Widget child,
     required this.state,
-  })  : formId = state.formId,
+  })   : formId = state.formId,
         validationMode = state.validationMode,
         fieldsData = state.data,
         super(child: child);
