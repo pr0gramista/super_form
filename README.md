@@ -2,7 +2,7 @@
 [![pub package](https://img.shields.io/pub/v/super_form.svg)](https://pub.dartlang.org/packages/super_form)
 [![Tests status](https://github.com/pr0gramista/super_form/workflows/Tests/badge.svg)](https://github.com/pr0gramista/super_form/actions)
 [![style: lint](https://img.shields.io/badge/style-lint-4BC0F5.svg)](https://pub.dev/packages/lint)
-[![codecov](https://codecov.io/gh/pr0gramista/super_form/branch/main/graph/badge.svg)](https://codecov.io/gh/pr0gramista/super_form)
+[![codecov](https://codecov.io/gh/pr0gramista/super_form/branch/master/graph/badge.svg)](https://codecov.io/gh/pr0gramista/super_form)
 
 Forms in Flutter without hassle 💪
 
