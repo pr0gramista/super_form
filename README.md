@@ -3,6 +3,7 @@
 [![Tests status](https://github.com/pr0gramista/super_form/workflows/Tests/badge.svg)](https://github.com/pr0gramista/super_form/actions)
 [![style: lint](https://img.shields.io/badge/style-lint-4BC0F5.svg)](https://pub.dev/packages/lint)
 [![codecov](https://codecov.io/gh/pr0gramista/super_form/branch/main/graph/badge.svg)](https://codecov.io/gh/pr0gramista/super_form)
+
 Forms in Flutter without hassle 💪
 
 Managing form state with standard Flutter forms can be extremely tedious. Super Form manages form values, errors and additional properties like whether an input was touched without complicated logic. Super Form also provides a set of ready to use form widgets, but don't worry it is also extremely simple to implement your own.

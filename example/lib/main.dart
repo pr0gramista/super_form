@@ -10,7 +10,7 @@ class MyBeautifulApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(title: 'Super Form Demo', home: LoginPage());
+    return const MaterialApp(title: 'Super Form Demo', home: LoginPage());
   }
 }
 
@@ -20,14 +20,15 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Register")),
+      appBar: AppBar(title: const Text("Register")),
       body: SuperForm(
         validationMode: ValidationMode.onBlur,
         onSubmit: (values) {
+          // ignore: avoid_print
           print(values.toString());
 
-          Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => RegistrationFinishedPage()));
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (_) => const RegistrationFinishedPage()));
         },
         onInit: (form) {
           form.register(name: "termsAndConditionsAccepted", rules: [
@@ -64,7 +65,7 @@ class EmailField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextSuperFormField(
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         labelText: "Email",
         prefixIcon: Icon(Icons.mail),
       ),
@@ -83,7 +84,7 @@ class PasswordField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextSuperFormField(
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         labelText: "Password",
         prefixIcon: Icon(Icons.lock),
       ),
@@ -96,9 +97,9 @@ class PasswordField extends StatelessWidget {
           "Must be at least 6 characters",
         ),
         CustomRule((password) {
-          double strength = estimatePasswordStrength(password);
+          final double strength = estimatePasswordStrength(password as String);
 
-          if (strength < 0.3) return ('This password is too weak!');
+          if (strength < 0.3) return 'This password is too weak!';
         }),
       ],
     );
@@ -111,7 +112,7 @@ class RepeatPasswordField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextSuperFormField(
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         labelText: "Repeat password",
         prefixIcon: Icon(Icons.lock),
       ),
@@ -148,7 +149,7 @@ class SubmitButton extends StatelessWidget {
         ),
       ),
       onPressed: () => SuperForm.of(context, listen: false).submit(),
-      child: Text("Create account"),
+      child: const Text("Create account"),
     );
   }
 }
@@ -192,7 +193,7 @@ class TermsAndConditionsCheckbox extends StatelessWidget {
                           text: 'Terms & Conditions',
                           style:
                               TextStyle(color: Theme.of(context).accentColor)),
-                      TextSpan(text: ' which I did not read.'),
+                      const TextSpan(text: ' which I did not read.'),
                     ],
                   ),
                 ),
@@ -200,7 +201,7 @@ class TermsAndConditionsCheckbox extends StatelessWidget {
             ],
           ),
         ),
-        SuperFormErrorText(name: name)
+        const SuperFormErrorText(name: name)
       ],
     );
   }
@@ -216,7 +217,7 @@ class RegistrationFinishedPage extends StatelessWidget {
         body: Center(
           child: Container(
             width: 500,
-            margin: EdgeInsets.only(top: 30),
+            margin: const EdgeInsets.only(top: 30),
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: const [
