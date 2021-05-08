@@ -14,6 +14,8 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: "stable" # or: 'dev' or 'beta'
+      - name: Pub get
+        run: flutter pub get
       - name: Analyze
         run: flutter analyze
       - name: Check format
