@@ -4,7 +4,8 @@
 [![style: lint](https://img.shields.io/badge/style-lint-4BC0F5.svg)](https://pub.dev/packages/lint)
 [![codecov](https://codecov.io/gh/pr0gramista/super_form/branch/master/graph/badge.svg)](https://codecov.io/gh/pr0gramista/super_form)
 
-Forms in Flutter without hassle 💪
+Quick, familiar and extensible forms in Flutter 💪   
+No magical configuration required 🎉
 
 Managing form state with standard Flutter forms can be extremely tedious. Super Form manages form values, errors and additional properties like whether an input was touched without complicated logic. Super Form also provides a set of ready to use form widgets, but don't worry it is also extremely simple to implement your own.
 
@@ -28,16 +29,16 @@ SuperForm(
 2. Create fields
 ```dart
 TextSuperFormField(
-  decoration: InputDecoration(labelText: "Email"),
+  decoration: const InputDecoration(labelText: "Email"),
   name: "email",
-  rules: [Required("Must not be empty")],
+  rules: [RequiredRule("Must not be empty")],
 ),
 ```
 3. Add a button or whatever you want to submit the form
 ```dart
 OutlinedButton(
   onPressed: () => SuperForm.of(context, listen: false).submit(),
-  child: Text("Sign in"),
+  child: const Text("Sign in"),
 ),
 ```
 
@@ -50,7 +51,7 @@ Note that the order of the rules matters. Validation takes place from the beginn
 
 ```dart
 TextSuperFormField(
-  decoration: InputDecoration(labelText: "Password"),
+  decoration: const InputDecoration(labelText: "Password"),
   name: "password",
   rules: [
     RequiredRule("Must not be empty"),
@@ -103,6 +104,25 @@ showDatePicker(
 ).then((value) {
   SuperForm.of(context, listen: false).setValue("to", value);
 });
+```
+
+## Errors
+Normally you don't have to worry about displaying errors as fields are doing that automatically. However there are cases where you don't have a widget for a field, but you want to display any possible errors. That's where SuperFormErrorText comes to help. It displays single error message, with a `errorColor` from Theme, when there is one.
+```dart
+SuperFormErrorText(name: "termsAndConditionsAccepted")
+```
+
+## Initial values
+Providing initial values for your fields is extremely easy. Just provide a map of field name and its initial value to SuperForm widget. Changing this property does not affect form immediately - new initial values will be used after field is reset - can be done via `reset` method on SuperFormState.
+```dart
+SuperForm(
+  initialValues: const {"quantity": 1},
+  onSubmit: (values) {
+    // Do your thing
+    print(values.toString());
+  },
+  child: // ...
+);
 ```
 
 ## Why use `dynamic`?
