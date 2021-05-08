@@ -1,0 +1,9 @@
+include: package:lint/analysis_options_package.yaml
+linter:
+  rules:
+    # > ...bad practice because they are very ambiguous
+    # setTouched IMHO is not
+    avoid_positional_boolean_parameters: false
+
+    # Used in tests
+    avoid_function_literals_in_foreach_calls: false
