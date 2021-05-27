@@ -15,6 +15,11 @@ class RequiredRule extends SuperFormFieldRule {
       return ValidationError(message);
     }
   }
+
+  @override
+  String toString() {
+    return 'RequiredRule';
+  }
 }
 
 /// Ensures that value is equal to given [value].
@@ -32,6 +37,11 @@ class IsEqualRule<T> extends SuperFormFieldRule {
     if (value != valueToValidate) {
       return ValidationError(message);
     }
+  }
+
+  @override
+  String toString() {
+    return 'IsEqualRule to $value';
   }
 }
 
@@ -99,6 +109,11 @@ class PatternRule extends SuperFormFieldRule {
       return ValidationError(message);
     }
   }
+
+  @override
+  String toString() {
+    return 'PatternRule ($pattern)';
+  }
 }
 
 /// General Email Regex (RFC 5322 Official Standard)
@@ -119,4 +134,9 @@ final RegExp _emailPattern = RegExp(emailPatternSource);
 ///   * [emailPatternSource] for exact pattern
 class EmailRule extends PatternRule {
   EmailRule(String message) : super(_emailPattern, message);
+
+  @override
+  String toString() {
+    return 'EmailRule';
+  }
 }

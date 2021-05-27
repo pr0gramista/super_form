@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
 import '../super_form.dart';
@@ -44,6 +45,13 @@ class SuperFormField extends StatefulWidget {
 
   @override
   SuperFormFieldState createState() => SuperFormFieldState();
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(StringProperty("name", name));
+    properties.add(IterableProperty("rules", rules));
+  }
 }
 
 /// Base state for controls like [TextSuperFormField].

@@ -29,6 +29,11 @@ class MaxValueRule extends SuperFormFieldRule {
       return ValidationError(message);
     }
   }
+
+  @override
+  String toString() {
+    return 'MaxValueRule (max: $max)';
+  }
 }
 
 /// Ensures that given [num] value is greater or equal than given [min].
@@ -60,6 +65,11 @@ class MinValueRule extends SuperFormFieldRule {
       return ValidationError(message);
     }
   }
+
+  @override
+  String toString() {
+    return 'MinValueRule (min: $min)';
+  }
 }
 
 /// Ensures that given value is or can be parsed into [num].
@@ -78,6 +88,11 @@ class IsNumberRule extends SuperFormFieldRule {
       return ValidationError(message);
     }
   }
+
+  @override
+  String toString() {
+    return 'IsNumberRule';
+  }
 }
 
 /// Ensures that given value is or can be parsed into [int].
@@ -95,5 +110,10 @@ class IsIntegerRule extends SuperFormFieldRule {
     if (result == null) {
       return ValidationError(message);
     }
+  }
+
+  @override
+  String toString() {
+    return 'IsIntegerRule';
   }
 }

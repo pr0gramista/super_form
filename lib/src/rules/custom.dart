@@ -16,4 +16,9 @@ class CustomRule extends SuperFormFieldRule {
 
     if (message != null) return ValidationError(message);
   }
+
+  @override
+  String toString() {
+    return 'CustomRule ($validator)';
+  }
 }

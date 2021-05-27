@@ -21,6 +21,11 @@ class MinimumLengthRule extends SuperFormFieldRule {
     }
     return null;
   }
+
+  @override
+  String toString() {
+    return 'MinimumLengthRule (min: $length)';
+  }
 }
 
 /// Ensures that given [String], [Iterable] (List, Set) or [Map] value length
@@ -43,5 +48,10 @@ class MaximumLengthRule extends SuperFormFieldRule {
       return ValidationError(message);
     }
     return null;
+  }
+
+  @override
+  String toString() {
+    return 'MaximumLengthRule (max: $length)';
   }
 }

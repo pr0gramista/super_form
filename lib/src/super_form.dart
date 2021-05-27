@@ -102,6 +102,14 @@ class SuperForm extends StatefulWidget {
     this.initialValues = const {},
   }) : super(key: key);
 
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(EnumProperty("validationMode", validationMode));
+    properties.add(DiagnosticsProperty<Map<String, dynamic>>(
+        "initialValues", initialValues));
+  }
+
   /// Gets the closest [SuperFormState] instance.
   ///
   /// If there is no [SuperForm] in scope, this will throw a [TypeError]

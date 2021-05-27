@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../super_form.dart';
@@ -159,5 +160,11 @@ class SuperFormErrorText extends StatelessWidget {
       textWidthBasis: textWidthBasis,
       textHeightBehavior: textHeightBehavior,
     );
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(StringProperty("name", name));
   }
 }
