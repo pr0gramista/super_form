@@ -36,13 +36,12 @@ import '../super_form.dart';
 ///
 ///  * [TextField], which is non-connected version of this widget
 class TextSuperFormField extends SuperFormField {
-  final FocusNode? _focusNode;
+  final FocusNode? focusNode;
 
   TextSuperFormField({
     Key? key,
     required String name,
     List<SuperFormFieldRule>? rules,
-    FocusNode? focusNode,
     InputDecoration? decoration = const InputDecoration(),
     TextInputType? keyboardType,
     TextCapitalization textCapitalization = TextCapitalization.none,
@@ -86,6 +85,7 @@ class TextSuperFormField extends SuperFormField {
     Iterable<String>? autofillHints,
     ScrollController? scrollController,
     Widget? noFormFallback,
+    this.focusNode,
   })  : assert(obscuringCharacter.length == 1),
         assert(maxLines == null || maxLines > 0),
         assert(minLines == null || minLines > 0),
@@ -100,11 +100,10 @@ class TextSuperFormField extends SuperFormField {
         assert(!obscureText || maxLines == 1,
             'Obscured fields cannot be multiline.'),
         assert(maxLength == null || maxLength > 0),
-        _focusNode = focusNode,
         super(
           key: key,
           name: name,
-          rules: rules ?? [],
+          rules: rules ?? const [],
           noFormFallback: noFormFallback ?? const SizedBox(),
           builder: (
             BuildContext context,
@@ -123,7 +122,7 @@ class TextSuperFormField extends SuperFormField {
 
             VoidCallback? effectiveOnEditingComplete = onEditingComplete;
             if (fieldData != null &&
-                fieldState._validationMode == ValidationMode.onBlur) {
+                formState.validationMode == ValidationMode.onBlur) {
               effectiveOnEditingComplete = () {
                 if (onEditingComplete != null) {
                   onEditingComplete();
@@ -199,7 +198,6 @@ class TextSuperFormField extends SuperFormField {
 
 class _TextSuperFormFieldState extends SuperFormFieldState {
   TextEditingController? _controller;
-  ValidationMode _validationMode = ValidationMode.onSubmit;
   FocusNode? _stateFocusNode;
   bool focused = false;
 
@@ -207,7 +205,7 @@ class _TextSuperFormFieldState extends SuperFormFieldState {
   TextSuperFormField get widget => super.widget as TextSuperFormField;
 
   FocusNode get focusNode =>
-      widget._focusNode ?? (_stateFocusNode ??= FocusNode());
+      widget.focusNode ?? (_stateFocusNode ??= FocusNode());
 
   @override
   void initState() {
@@ -223,7 +221,7 @@ class _TextSuperFormFieldState extends SuperFormFieldState {
       if (focused) {
         focused = false;
 
-        if (_validationMode == ValidationMode.onBlur) {
+        if (form?.validationMode == ValidationMode.onBlur) {
           validate(markSubmitted: true);
         }
       }
@@ -241,7 +239,9 @@ class _TextSuperFormFieldState extends SuperFormFieldState {
 
   @override
   void didUpdateWidget(TextSuperFormField oldWidget) {
-    if (oldWidget._focusNode != widget._focusNode) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.focusNode != widget.focusNode) {
       _stateFocusNode?.removeListener(onFocusChanged);
 
       focusNode.addListener(onFocusChanged);
@@ -252,8 +252,6 @@ class _TextSuperFormFieldState extends SuperFormFieldState {
         validate();
       }
     }
-
-    super.didUpdateWidget(oldWidget);
   }
 
   @override
@@ -262,7 +260,6 @@ class _TextSuperFormFieldState extends SuperFormFieldState {
       _controller ??= TextEditingController(text: data?.value as String? ?? "");
       _controller?.addListener(onTextChange);
     }
-    _validationMode = formState.validationMode;
   }
 
   void onTextChange() {
@@ -278,7 +275,7 @@ class _TextSuperFormFieldState extends SuperFormFieldState {
           value: _controller?.text, touched: true);
 
       // If the field was tried to be submitted it should be now revalidated every change
-      if (_validationMode == ValidationMode.onChange ||
+      if (form?.validationMode == ValidationMode.onChange ||
           currentFieldData.submitted) {
         newData = newData.validate();
       }
@@ -290,9 +287,8 @@ class _TextSuperFormFieldState extends SuperFormFieldState {
 
   @override
   void dispose() {
+    super.dispose();
     _controller?.dispose();
     _stateFocusNode?.dispose();
-
-    super.dispose();
   }
 }

@@ -49,7 +49,7 @@ class LoginPage extends StatelessWidget {
                 SizedBox(height: 8),
                 TermsAndConditionsCheckbox(),
                 SizedBox(height: 8),
-                SubmitButton()
+                SubmitButton(),
               ],
             ),
           ),
