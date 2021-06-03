@@ -4,15 +4,15 @@ import '../super_form.dart';
 
 /// Regular material [TextField] that extends [SuperFormField]
 ///
-/// [SuperFormField], there this widgets state automatically registers field
+/// This widget's state automatically registers field
 /// for [name] so there is no need for manual registration.
 ///
 /// Specify [rules] to add validation for this field. Errors will be displayed
 /// automatically as errorText of [InputDecoration]. Overriding this property will
 /// hide errors from validation.
 ///
-/// Most fields are kept the same as in [TextField] so see there for documentation of
-/// specific properties.
+/// Most fields are kept the same as in [TextField] so see there for documentation
+/// of specific properties.
 ///
 /// ```dart
 /// TextSuperFormField(
