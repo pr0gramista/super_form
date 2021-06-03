@@ -86,7 +86,7 @@ void main() {
     verifyNoMoreInteractions(listener);
   });
 
-  testWidgets('Validates when onChange', (WidgetTester tester) async {
+  testWidgets('validates when onChange', (WidgetTester tester) async {
     const errorText = "Must be at least 8 characters";
     final formKey = GlobalKey<SuperFormState>();
     const inputKey = Key('input');

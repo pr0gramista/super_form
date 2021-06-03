@@ -81,6 +81,38 @@ class SuperFormFieldState extends State<SuperFormField> {
     _lastKnownFormStateId = form?.formId;
   }
 
+  @override
+  void didUpdateWidget(covariant SuperFormField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.name != oldWidget.name) {
+      form = SuperForm.ofFieldMaybe(context, widget.name);
+      data = form?.data[widget.name];
+
+      form?.unregister(
+        name: oldWidget.name,
+        fieldState: this,
+      );
+
+      data = form!.register(
+        name: widget.name,
+        rules: widget.rules,
+        fieldState: this,
+      );
+
+      didReset(form!);
+    }
+
+    // Only rules have changed
+    if (oldWidget.rules != widget.rules && widget.name == oldWidget.name) {
+      if (data?.submitted ?? false) {
+        validate();
+      }
+    }
+
+    _lastKnownFormStateId = form?.formId;
+  }
+
   /// Called when field is initiated or reset
   ///
   /// Can be used to reset underlying stateful controllers like [TextEditingController]

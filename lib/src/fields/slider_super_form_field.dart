@@ -257,12 +257,6 @@ class _SliderFormFieldState extends SuperFormFieldState {
 
       focusNode.addListener(onFocusChanged);
     }
-
-    if (oldWidget.rules != widget.rules) {
-      if (data?.submitted ?? false) {
-        validate();
-      }
-    }
   }
 
   @override

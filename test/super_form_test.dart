@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -423,5 +422,45 @@ void main() {
     expect(formKey.currentState!.values["password"], "123");
 
     expect(find.text("123"), findsOneWidget);
+  });
+
+  testWidgets('field state resets after name change',
+      (WidgetTester tester) async {
+    final initialValues = {"email": "test@pr0gramista.pl"};
+    final listener = SubmitListener();
+
+    await tester.pumpWidget(
+      boilerplate(
+        child: SuperForm(
+          initialValues: initialValues,
+          onSubmit: listener,
+          child: Column(children: [
+            TextSuperFormField(
+              name: "something",
+            ),
+          ]),
+        ),
+      ),
+    );
+
+    await tester.pumpAndSettle();
+
+    await tester.pumpWidget(
+      boilerplate(
+        child: SuperForm(
+          initialValues: initialValues,
+          onSubmit: listener,
+          child: Column(children: [
+            TextSuperFormField(
+              name: "email",
+            ),
+          ]),
+        ),
+      ),
+    );
+
+    await tester.pumpAndSettle();
+
+    expect(find.text("test@pr0gramista.pl"), findsOneWidget);
   });
 }

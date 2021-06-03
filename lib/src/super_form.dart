@@ -428,11 +428,11 @@ class SuperFormState extends State<SuperForm> {
 
   @override
   void didUpdateWidget(covariant SuperForm oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
     if (widget.validationMode != oldWidget.validationMode) {
       _validationMode = widget.validationMode;
     }
-
-    super.didUpdateWidget(oldWidget);
   }
 
   /// Sets value for field under given name.

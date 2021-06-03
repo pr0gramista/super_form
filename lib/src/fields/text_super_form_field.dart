@@ -241,16 +241,14 @@ class _TextSuperFormFieldState extends SuperFormFieldState {
   void didUpdateWidget(TextSuperFormField oldWidget) {
     super.didUpdateWidget(oldWidget);
 
+    if (_controller?.text != data?.value) {
+      _controller?.text = data?.value as String? ?? "";
+    }
+
     if (oldWidget.focusNode != widget.focusNode) {
       _stateFocusNode?.removeListener(onFocusChanged);
 
       focusNode.addListener(onFocusChanged);
-    }
-
-    if (oldWidget.rules != widget.rules) {
-      if (data?.submitted ?? false) {
-        validate();
-      }
     }
   }
 
