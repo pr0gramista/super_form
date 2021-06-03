@@ -1,6 +1,27 @@
 import 'package:flutter/material.dart';
 import '../../super_form.dart';
 
+/// Regular material [Slider] that extends [SuperFormField]
+///
+/// This widget's state automatically registers field for [name] so there is
+/// no need for manual registration.
+///
+/// Specify [rules] to add validation for this field. Errors will not be displayed
+/// automatically. Consider putting [SuperFormErrorText] below the slider.
+///
+/// Most fields are kept the same as in [Slider] so see there for documentation of
+/// specific properties.
+///
+/// ```dart
+/// SliderSuperFormField(
+///   name: "power",
+///   rules: [MaxValueRule(limit, "Cannot exceed the user limit")],
+/// ),
+/// ```
+///
+/// See also:
+///
+///  * [Slider], which is non-connected version of this widget
 class SliderSuperFormField extends SuperFormField {
   final ValueChanged<double>? onChanged;
   final ValueChanged<double>? onChangeStart;
@@ -228,7 +249,7 @@ class _SliderFormFieldState extends SuperFormFieldState {
   }
 
   @override
-  void didUpdateWidget(TextSuperFormField oldWidget) {
+  void didUpdateWidget(SliderSuperFormField oldWidget) {
     super.didUpdateWidget(oldWidget);
 
     if (oldWidget.focusNode != widget.focusNode) {
