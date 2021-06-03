@@ -97,7 +97,8 @@ class PasswordField extends StatelessWidget {
           "Must be at least 6 characters",
         ),
         CustomRule((password) {
-          final double strength = estimatePasswordStrength(password as String);
+          final double strength =
+              estimatePasswordStrength(password as String? ?? "");
 
           if (strength < 0.3) return 'This password is too weak!';
         }),
