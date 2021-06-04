@@ -61,7 +61,7 @@ void main() {
   group("MaximumValueRule", () {
     maxValueTestCases.forEach((testCase) {
       test(
-          'For max value ${testCase.param} "${testCase.value}" ${testCase.isOk ? "passes" : "errors"}',
+          'for max value ${testCase.param} "${testCase.value}" ${testCase.isOk ? "passes" : "errors"}',
           () {
         final rule = MaxValueRule(testCase.param, "Error");
 
@@ -78,7 +78,7 @@ void main() {
   group("MinValueRule", () {
     minValueTestCases.forEach((testCase) {
       test(
-          'For min value ${testCase.param} "${testCase.value}" ${testCase.isOk ? "passes" : "errors"}',
+          'for min value ${testCase.param} "${testCase.value}" ${testCase.isOk ? "passes" : "errors"}',
           () {
         final rule = MinValueRule(testCase.param, "Error");
 
@@ -94,7 +94,7 @@ void main() {
 
   group("IsNumberRule", () {
     numberTestCases.forEach((testCase) {
-      test('For "${testCase.value}" ${testCase.isOk ? "passes" : "errors"}',
+      test('for "${testCase.value}" ${testCase.isOk ? "passes" : "errors"}',
           () {
         final rule = IsNumberRule("Error");
 
@@ -110,7 +110,7 @@ void main() {
 
   group("IsIntegerRule", () {
     integerTestCases.forEach((testCase) {
-      test('For "${testCase.value}" ${testCase.isOk ? "passes" : "errors"}',
+      test('for "${testCase.value}" ${testCase.isOk ? "passes" : "errors"}',
           () {
         final rule = IsIntegerRule("Error");
 

@@ -29,7 +29,7 @@ void main() {
   group("MaximumLengthRule", () {
     maxLengthTestCases.forEach((testCase) {
       test(
-          'For max length ${testCase.param} "${testCase.value}" ${testCase.isOk ? "passes" : "errors"}',
+          'for max length ${testCase.param} "${testCase.value}" ${testCase.isOk ? "passes" : "errors"}',
           () {
         final rule = MaximumLengthRule(testCase.param, "Error");
 
@@ -46,7 +46,7 @@ void main() {
   group("MinimumLengthRule", () {
     minLengthTestCases.forEach((testCase) {
       test(
-          'For min length ${testCase.param} "${testCase.value}" ${testCase.isOk ? "passes" : "errors"}',
+          'for min length ${testCase.param} "${testCase.value}" ${testCase.isOk ? "passes" : "errors"}',
           () {
         final rule = MinimumLengthRule(testCase.param, "Error");
 
