@@ -9,6 +9,7 @@ import 'enums.dart';
 import 'super_form_field.dart';
 
 export 'enums.dart';
+export 'fields/slider_super_form_field.dart';
 export 'fields/text_super_form_field.dart';
 export 'rules.dart';
 export 'super_form_error_text.dart';
@@ -427,11 +428,11 @@ class SuperFormState extends State<SuperForm> {
 
   @override
   void didUpdateWidget(covariant SuperForm oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
     if (widget.validationMode != oldWidget.validationMode) {
       _validationMode = widget.validationMode;
     }
-
-    super.didUpdateWidget(oldWidget);
   }
 
   /// Sets value for field under given name.

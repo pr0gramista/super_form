@@ -31,12 +31,15 @@ class SuperFormField extends StatefulWidget {
   /// Fallback widget for a case where SuperForm ancestor is unavailable
   final Widget noFormFallback;
 
+  final FocusNode? focusNode;
+
   const SuperFormField({
     Key? key,
     required this.builder,
     required this.name,
     this.rules = const [],
     this.noFormFallback = const SizedBox(),
+    this.focusNode,
   }) : super(key: key);
 
   @override
@@ -58,6 +61,18 @@ class SuperFormFieldState extends State<SuperFormField> {
   SuperFormFieldData? data;
   SuperFormState? form;
   String? _lastKnownFormStateId;
+  FocusNode? _stateFocusNode;
+  bool focused = false;
+
+  FocusNode get focusNode =>
+      widget.focusNode ?? (_stateFocusNode ??= FocusNode());
+
+  @override
+  void initState() {
+    super.initState();
+
+    focusNode.addListener(onFocusChanged);
+  }
 
   @override
   void didChangeDependencies() {
@@ -76,6 +91,44 @@ class SuperFormFieldState extends State<SuperFormField> {
       );
 
       didReset(form!);
+    }
+
+    _lastKnownFormStateId = form?.formId;
+  }
+
+  @override
+  void didUpdateWidget(covariant SuperFormField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.name != oldWidget.name) {
+      form = SuperForm.ofFieldMaybe(context, widget.name);
+      data = form?.data[widget.name];
+
+      form?.unregister(
+        name: oldWidget.name,
+        fieldState: this,
+      );
+
+      data = form!.register(
+        name: widget.name,
+        rules: widget.rules,
+        fieldState: this,
+      );
+
+      didReset(form!);
+    }
+
+    // Only rules have changed
+    if (oldWidget.rules != widget.rules && widget.name == oldWidget.name) {
+      if (data?.submitted ?? false) {
+        validate();
+      }
+    }
+
+    if (oldWidget.focusNode != widget.focusNode) {
+      _stateFocusNode?.removeListener(onFocusChanged);
+
+      focusNode.addListener(onFocusChanged);
     }
 
     _lastKnownFormStateId = form?.formId;
@@ -100,6 +153,20 @@ class SuperFormFieldState extends State<SuperFormField> {
     form?.setTouched(widget.name, value);
   }
 
+  void onFocusChanged() {
+    if (focusNode.hasFocus) {
+      focused = true;
+    } else {
+      if (focused) {
+        focused = false;
+
+        if (form?.validationMode == ValidationMode.onBlur) {
+          validate(markSubmitted: true);
+        }
+      }
+    }
+  }
+
   @override
   void deactivate() {
     form?.unregister(
@@ -108,6 +175,12 @@ class SuperFormFieldState extends State<SuperFormField> {
     );
 
     super.deactivate();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _stateFocusNode?.dispose();
   }
 
   @override

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -8,30 +7,7 @@ import 'package:super_form/super_form.dart';
 import 'utils.dart';
 
 void main() {
-  testWidgets('Get simple text field value', (WidgetTester tester) async {
-    final formKey = GlobalKey<SuperFormState>();
-    const inputKey = Key('input');
-
-    await tester.pumpWidget(
-      boilerplate(
-        child: SuperForm(
-          key: formKey,
-          child: Builder(
-            builder: (context) =>
-                TextSuperFormField(key: inputKey, name: "name"),
-          ),
-        ),
-      ),
-    );
-
-    await tester.enterText(find.byKey(inputKey), "hello");
-    expect(formKey.currentState?.data["name"]?.value, "hello");
-
-    await tester.enterText(find.byKey(inputKey), "hello world");
-    expect(formKey.currentState?.data["name"]?.value, "hello world");
-  });
-
-  testWidgets('Can submit', (WidgetTester tester) async {
+  testWidgets('can submit', (WidgetTester tester) async {
     final formKey = GlobalKey<SuperFormState>();
     const inputKey = Key('input');
 
@@ -68,7 +44,7 @@ void main() {
     verifyNoMoreInteractions(listener);
   });
 
-  testWidgets('Can submit multiple times', (WidgetTester tester) async {
+  testWidgets('can submit multiple times', (WidgetTester tester) async {
     final formKey = GlobalKey<SuperFormState>();
     const inputKey = Key('input');
     final listener = SubmitListener();
@@ -105,7 +81,7 @@ void main() {
     verifyNoMoreInteractions(listener);
   });
 
-  testWidgets('Validates on submit', (WidgetTester tester) async {
+  testWidgets('validates on form submit', (WidgetTester tester) async {
     const errorText = "Must be at least 8 characters";
     final formKey = GlobalKey<SuperFormState>();
     const inputKey = Key('input');
@@ -152,176 +128,7 @@ void main() {
     verifyNoMoreInteractions(listener);
   });
 
-  testWidgets('Validates on change', (WidgetTester tester) async {
-    const errorText = "Must be at least 8 characters";
-    final formKey = GlobalKey<SuperFormState>();
-    const inputKey = Key('input');
-
-    final listener = SubmitListener();
-
-    await tester.pumpWidget(
-      boilerplate(
-        child: SuperForm(
-          onSubmit: listener,
-          key: formKey,
-          validationMode: ValidationMode.onChange,
-          child: Builder(
-            builder: (context) => Column(children: [
-              TextSuperFormField(
-                key: inputKey,
-                name: "name",
-                rules: [MinimumLengthRule(8, errorText)],
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  SuperForm.of(context, listen: false).submit();
-                },
-                child: const Text("Submit"),
-              )
-            ]),
-          ),
-        ),
-      ),
-    );
-
-    await tester.enterText(find.byKey(inputKey), "hello");
-    await tester.pump();
-    expect(find.text(errorText), findsOneWidget);
-
-    await tester.enterText(find.byKey(inputKey), "hello world");
-    await tester.pump();
-    expect(find.text(errorText), findsNothing);
-
-    await tester.tap(find.byType(ElevatedButton));
-
-    verify(listener(formKey.currentState!.values)).called(1);
-    verifyNoMoreInteractions(listener);
-  });
-
-  testWidgets('Validates on editing complete', (WidgetTester tester) async {
-    const errorText = "Must be at least 8 characters";
-    final formKey = GlobalKey<SuperFormState>();
-    const inputKey = Key('input');
-    const anotherInput = Key('anotherInput');
-
-    final listener = SubmitListener();
-
-    await tester.pumpWidget(
-      boilerplate(
-        child: SuperForm(
-          onSubmit: listener,
-          key: formKey,
-          validationMode: ValidationMode.onBlur,
-          child: Builder(
-            builder: (context) => Column(children: [
-              TextSuperFormField(
-                key: inputKey,
-                name: "name",
-                rules: [MinimumLengthRule(8, errorText)],
-              ),
-              const TextField(key: anotherInput),
-              ElevatedButton(
-                onPressed: () {
-                  SuperForm.of(context, listen: false).submit();
-                },
-                child: const Text("Submit"),
-              )
-            ]),
-          ),
-        ),
-      ),
-    );
-
-    await tester.enterText(find.byKey(inputKey), "hello");
-    await tester.pump();
-    expect(find.text(errorText), findsNothing);
-
-    await tester.tap(find.byKey(anotherInput));
-    await tester.pump();
-    expect(find.text(errorText), findsOneWidget);
-
-    await tester.enterText(find.byKey(inputKey), "hello world");
-    await tester.pump();
-    expect(find.text(errorText), findsNothing);
-
-    await tester.tap(find.byKey(anotherInput));
-    await tester.pump();
-    expect(find.text(errorText), findsNothing);
-
-    await tester.tap(find.byType(ElevatedButton));
-
-    verify(listener(formKey.currentState!.values)).called(1);
-    verifyNoMoreInteractions(listener);
-  });
-
-  testWidgets('Can reset when form is replaced', (WidgetTester tester) async {
-    final formKey1 = GlobalKey<SuperFormState>();
-    final formKey2 = GlobalKey<SuperFormState>();
-    const inputKey = Key('input');
-
-    final listener = SubmitListener();
-
-    await tester.pumpWidget(
-      boilerplate(
-        child: SuperForm(
-          onSubmit: listener,
-          key: formKey1,
-          validationMode: ValidationMode.onBlur,
-          child: Builder(
-            builder: (context) => Column(children: [
-              TextSuperFormField(
-                key: inputKey,
-                name: "name",
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  SuperForm.of(context, listen: false).submit();
-                },
-                child: const Text("Submit"),
-              )
-            ]),
-          ),
-        ),
-      ),
-    );
-
-    await tester.enterText(find.byKey(inputKey), "hello world");
-    expect(find.text("hello world"), findsOneWidget);
-    expect(formKey1.currentState?.values["name"], "hello world");
-
-    await tester.pumpWidget(
-      boilerplate(
-        child: SuperForm(
-          onSubmit: listener,
-          key: formKey2,
-          validationMode: ValidationMode.onBlur,
-          child: Builder(
-            builder: (context) => Column(children: [
-              TextSuperFormField(
-                key: inputKey,
-                name: "name",
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  SuperForm.of(context, listen: false).submit();
-                },
-                child: const Text("Submit"),
-              )
-            ]),
-          ),
-        ),
-      ),
-    );
-
-    expect(find.text("hello world"), findsNothing);
-    expect(formKey1.currentState, null);
-
-    expect(formKey2.currentState?.values["name"], null);
-    await tester.enterText(find.byKey(inputKey), "hello world");
-    expect(formKey2.currentState?.values["name"], "hello world");
-  });
-
-  testWidgets('Un-registers field automatically', (WidgetTester tester) async {
+  testWidgets('un-registers field automatically', (WidgetTester tester) async {
     final formKey = GlobalKey<SuperFormState>();
     const loginInput = Key('loginInput');
     const passwordInput = Key('passwordInput');
@@ -422,7 +229,7 @@ void main() {
     verifyNoMoreInteractions(listener);
   });
 
-  testWidgets('Can reset form', (WidgetTester tester) async {
+  testWidgets('can reset form', (WidgetTester tester) async {
     final formKey = GlobalKey<SuperFormState>();
     const loginInput = Key('loginInput');
     const passwordInput = Key('passwordInput');
@@ -483,7 +290,7 @@ void main() {
     expect(find.text("Must be at least 6 characters"), findsNothing);
   });
 
-  testWidgets('Can reset field', (WidgetTester tester) async {
+  testWidgets('can reset field', (WidgetTester tester) async {
     final formKey = GlobalKey<SuperFormState>();
     const loginInput = Key('loginInput');
     const passwordInput = Key('passwordInput');
@@ -543,7 +350,7 @@ void main() {
     expect(find.text("Must be at least 6 characters"), findsOneWidget);
   });
 
-  testWidgets('Hot-reload / widget move does not remove field data',
+  testWidgets('hot-reload / widget move does not remove field data',
       (WidgetTester tester) async {
     final formKey = GlobalKey<SuperFormState>();
     const loginInput = Key('loginInput');
@@ -617,35 +424,43 @@ void main() {
     expect(find.text("123"), findsOneWidget);
   });
 
-  testWidgets('text field onEditingComplete is called',
+  testWidgets('field state resets after name change',
       (WidgetTester tester) async {
-    final formKey = GlobalKey<SuperFormState>();
-    const loginInput = Key('loginInput');
-
-    final listener = VoidListener();
+    final initialValues = {"email": "test@pr0gramista.pl"};
+    final listener = SubmitListener();
 
     await tester.pumpWidget(
       boilerplate(
         child: SuperForm(
-          key: formKey,
+          initialValues: initialValues,
+          onSubmit: listener,
           child: Column(children: [
             TextSuperFormField(
-              key: loginInput,
-              name: "login",
-              onEditingComplete: listener,
-            ),
-            TextSuperFormField(
-              name: "password",
+              name: "something",
             ),
           ]),
         ),
       ),
     );
 
-    await tester.enterText(find.byKey(loginInput), "hello@12345.pl");
-    await tester.testTextInput.receiveAction(TextInputAction.done);
+    await tester.pumpAndSettle();
 
-    verify(listener()).called(1);
-    verifyNoMoreInteractions(listener);
+    await tester.pumpWidget(
+      boilerplate(
+        child: SuperForm(
+          initialValues: initialValues,
+          onSubmit: listener,
+          child: Column(children: [
+            TextSuperFormField(
+              name: "email",
+            ),
+          ]),
+        ),
+      ),
+    );
+
+    await tester.pumpAndSettle();
+
+    expect(find.text("test@pr0gramista.pl"), findsOneWidget);
   });
 }

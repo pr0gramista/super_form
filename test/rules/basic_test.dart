@@ -42,7 +42,7 @@ void main() {
     final rule = RequiredRule("Error");
 
     requiredTestCases.forEach((testCase) {
-      test('For "${testCase.value}" ${testCase.isOk ? "passes" : "errors"}',
+      test('for "${testCase.value}" ${testCase.isOk ? "passes" : "errors"}',
           () {
         final error = rule.validate(testCase.value);
 
@@ -58,7 +58,7 @@ void main() {
     final rule = EmailRule("Error");
 
     emailTestCases.forEach((testCase) {
-      test('For "${testCase.value}" ${testCase.isOk ? "passes" : "errors"}',
+      test('for "${testCase.value}" ${testCase.isOk ? "passes" : "errors"}',
           () {
         final error = rule.validate(testCase.value);
 
@@ -73,7 +73,7 @@ void main() {
   group("IsEqualRule", () {
     isEqualTestCases.forEach((testCase) {
       test(
-          'For ${testCase.param} == "${testCase.value}" ${testCase.isOk ? "passes" : "errors"}',
+          'for ${testCase.param} == "${testCase.value}" ${testCase.isOk ? "passes" : "errors"}',
           () {
         final rule = IsEqualRule(testCase.param, "Error");
         final error = rule.validate(testCase.value);
