@@ -105,6 +105,7 @@ class TextSuperFormField extends SuperFormField {
           name: name,
           rules: rules ?? const [],
           noFormFallback: noFormFallback ?? const SizedBox(),
+          focusNode: focusNode,
           builder: (
             BuildContext context,
             fieldState,
@@ -198,35 +199,9 @@ class TextSuperFormField extends SuperFormField {
 
 class _TextSuperFormFieldState extends SuperFormFieldState {
   TextEditingController? _controller;
-  FocusNode? _stateFocusNode;
-  bool focused = false;
 
   @override
   TextSuperFormField get widget => super.widget as TextSuperFormField;
-
-  FocusNode get focusNode =>
-      widget.focusNode ?? (_stateFocusNode ??= FocusNode());
-
-  @override
-  void initState() {
-    super.initState();
-
-    focusNode.addListener(onFocusChanged);
-  }
-
-  void onFocusChanged() {
-    if (focusNode.hasFocus) {
-      focused = true;
-    } else {
-      if (focused) {
-        focused = false;
-
-        if (form?.validationMode == ValidationMode.onBlur) {
-          validate(markSubmitted: true);
-        }
-      }
-    }
-  }
 
   @override
   void didChangeDependencies() {
@@ -243,12 +218,6 @@ class _TextSuperFormFieldState extends SuperFormFieldState {
 
     if (_controller?.text != data?.value) {
       _controller?.text = data?.value as String? ?? "";
-    }
-
-    if (oldWidget.focusNode != widget.focusNode) {
-      _stateFocusNode?.removeListener(onFocusChanged);
-
-      focusNode.addListener(onFocusChanged);
     }
   }
 
@@ -287,6 +256,5 @@ class _TextSuperFormFieldState extends SuperFormFieldState {
   void dispose() {
     super.dispose();
     _controller?.dispose();
-    _stateFocusNode?.dispose();
   }
 }

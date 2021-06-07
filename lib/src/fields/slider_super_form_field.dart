@@ -167,12 +167,12 @@ class SliderSuperFormField extends SuperFormField {
           key: key,
           name: name,
           rules: rules ?? const [],
+          focusNode: focusNode,
           builder: (
             BuildContext context,
             fieldState,
             formState,
           ) {
-            fieldState as _SliderFormFieldState;
             final fieldData = formState.data[name]!;
 
             void effectiveOnChange(double newValue) {
@@ -207,61 +207,9 @@ class SliderSuperFormField extends SuperFormField {
               inactiveColor: inactiveColor,
               mouseCursor: mouseCursor,
               semanticFormatterCallback: semanticFormatterCallback,
-              focusNode: focusNode ?? fieldState.focusNode,
+              focusNode: fieldState.focusNode,
               autofocus: autofocus,
             );
           },
         );
-
-  @override
-  SuperFormFieldState createState() => _SliderFormFieldState();
-}
-
-class _SliderFormFieldState extends SuperFormFieldState {
-  FocusNode? _stateFocusNode;
-  bool focused = false;
-
-  @override
-  SliderSuperFormField get widget => super.widget as SliderSuperFormField;
-
-  FocusNode get focusNode =>
-      widget.focusNode ?? (_stateFocusNode ??= FocusNode());
-
-  @override
-  void initState() {
-    super.initState();
-
-    focusNode.addListener(onFocusChanged);
-  }
-
-  void onFocusChanged() {
-    if (focusNode.hasFocus) {
-      focused = true;
-    } else {
-      if (focused) {
-        focused = false;
-
-        if (form?.validationMode == ValidationMode.onBlur) {
-          validate(markSubmitted: true);
-        }
-      }
-    }
-  }
-
-  @override
-  void didUpdateWidget(SliderSuperFormField oldWidget) {
-    super.didUpdateWidget(oldWidget);
-
-    if (oldWidget.focusNode != widget.focusNode) {
-      _stateFocusNode?.removeListener(onFocusChanged);
-
-      focusNode.addListener(onFocusChanged);
-    }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _stateFocusNode?.dispose();
-  }
 }

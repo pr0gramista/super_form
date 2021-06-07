@@ -31,12 +31,15 @@ class SuperFormField extends StatefulWidget {
   /// Fallback widget for a case where SuperForm ancestor is unavailable
   final Widget noFormFallback;
 
+  final FocusNode? focusNode;
+
   const SuperFormField({
     Key? key,
     required this.builder,
     required this.name,
     this.rules = const [],
     this.noFormFallback = const SizedBox(),
+    this.focusNode,
   }) : super(key: key);
 
   @override
@@ -58,6 +61,18 @@ class SuperFormFieldState extends State<SuperFormField> {
   SuperFormFieldData? data;
   SuperFormState? form;
   String? _lastKnownFormStateId;
+  FocusNode? _stateFocusNode;
+  bool focused = false;
+
+  FocusNode get focusNode =>
+      widget.focusNode ?? (_stateFocusNode ??= FocusNode());
+
+  @override
+  void initState() {
+    super.initState();
+
+    focusNode.addListener(onFocusChanged);
+  }
 
   @override
   void didChangeDependencies() {
@@ -110,6 +125,12 @@ class SuperFormFieldState extends State<SuperFormField> {
       }
     }
 
+    if (oldWidget.focusNode != widget.focusNode) {
+      _stateFocusNode?.removeListener(onFocusChanged);
+
+      focusNode.addListener(onFocusChanged);
+    }
+
     _lastKnownFormStateId = form?.formId;
   }
 
@@ -132,6 +153,20 @@ class SuperFormFieldState extends State<SuperFormField> {
     form?.setTouched(widget.name, value);
   }
 
+  void onFocusChanged() {
+    if (focusNode.hasFocus) {
+      focused = true;
+    } else {
+      if (focused) {
+        focused = false;
+
+        if (form?.validationMode == ValidationMode.onBlur) {
+          validate(markSubmitted: true);
+        }
+      }
+    }
+  }
+
   @override
   void deactivate() {
     form?.unregister(
@@ -140,6 +175,12 @@ class SuperFormFieldState extends State<SuperFormField> {
     );
 
     super.deactivate();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _stateFocusNode?.dispose();
   }
 
   @override

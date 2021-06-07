@@ -57,6 +57,44 @@ void main() {
     expect(find.text("Must be at least 1"), findsOneWidget);
   });
 
+  testWidgets('validates when onBlur', (WidgetTester tester) async {
+    final formKey = GlobalKey<SuperFormState>();
+    const inputKey = Key('input');
+    const anotherInput = Key('anotherInput');
+
+    await tester.pumpWidget(
+      boilerplate(
+        child: SuperForm(
+          validationMode: ValidationMode.onBlur,
+          key: formKey,
+          child: Column(
+            children: [
+              SliderSuperFormField(
+                name: "one",
+                rules: [MinValueRule(1, "Must be at least 1")],
+                key: inputKey,
+                autofocus: true,
+              ),
+              TextSuperFormField(
+                name: "two",
+                key: anotherInput,
+              ),
+              const SuperFormErrorText(name: "one"),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    expect(find.text("Must be at least 1"), findsNothing);
+    await tester.tap(find.byKey(inputKey));
+    await tester.pumpAndSettle();
+    expect(find.text("Must be at least 1"), findsNothing);
+    await tester.tap(find.byKey(anotherInput));
+    await tester.pumpAndSettle();
+    expect(find.text("Must be at least 1"), findsOneWidget);
+  });
+
   testWidgets('can reset when form is replaced', (WidgetTester tester) async {
     final formKey1 = GlobalKey<SuperFormState>();
     final formKey2 = GlobalKey<SuperFormState>();
