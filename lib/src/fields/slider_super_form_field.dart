@@ -140,9 +140,6 @@ class SliderSuperFormField extends SuperFormField {
   /// Ignored if this slider is created with [Slider.adaptive]
   final SemanticFormatterCallback? semanticFormatterCallback;
 
-  /// {@macro flutter.widgets.Focus.focusNode}
-  final FocusNode? focusNode;
-
   /// {@macro flutter.widgets.Focus.autofocus}
   final bool autofocus;
 
@@ -150,6 +147,7 @@ class SliderSuperFormField extends SuperFormField {
     Key? key,
     required String name,
     List<SuperFormFieldRule>? rules,
+    FocusNode? focusNode,
     this.onChanged,
     this.onChangeStart,
     this.onChangeEnd,
@@ -161,7 +159,6 @@ class SliderSuperFormField extends SuperFormField {
     this.inactiveColor,
     this.mouseCursor,
     this.semanticFormatterCallback,
-    this.focusNode,
     this.autofocus = false,
   }) : super(
           key: key,

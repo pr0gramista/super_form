@@ -36,8 +36,6 @@ import '../super_form.dart';
 ///
 ///  * [TextField], which is non-connected version of this widget
 class TextSuperFormField extends SuperFormField {
-  final FocusNode? focusNode;
-
   TextSuperFormField({
     Key? key,
     required String name,
@@ -85,7 +83,7 @@ class TextSuperFormField extends SuperFormField {
     Iterable<String>? autofillHints,
     ScrollController? scrollController,
     Widget? noFormFallback,
-    this.focusNode,
+    FocusNode? focusNode,
   })  : assert(obscuringCharacter.length == 1),
         assert(maxLines == null || maxLines > 0),
         assert(minLines == null || minLines > 0),
