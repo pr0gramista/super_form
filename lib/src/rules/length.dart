@@ -1,6 +1,7 @@
 import '../super_form.dart';
 
-/// Ensures that given [String] value length is greater or equal than given [length].
+/// Ensures that given [String], [Iterable] (List, Set) or [Map] value length
+/// is greater or equal than given [length].
 class MinimumLengthRule extends SuperFormFieldRule {
   final int length;
   final String message;
@@ -9,14 +10,21 @@ class MinimumLengthRule extends SuperFormFieldRule {
 
   @override
   ValidationError? validate(dynamic value) {
+    if (value is Iterable && value.length < length) {
+      return ValidationError(message);
+    }
     if (value is String && value.length < length) {
+      return ValidationError(message);
+    }
+    if (value is Map && value.length < length) {
       return ValidationError(message);
     }
     return null;
   }
 }
 
-/// Ensures that given [String] value length is less or equal than given [length].
+/// Ensures that given [String], [Iterable] (List, Set) or [Map] value length
+/// is less or equal than given [length].
 class MaximumLengthRule extends SuperFormFieldRule {
   final int length;
   final String message;
@@ -25,7 +33,13 @@ class MaximumLengthRule extends SuperFormFieldRule {
 
   @override
   ValidationError? validate(dynamic value) {
+    if (value is Iterable && value.length > length) {
+      return ValidationError(message);
+    }
     if (value is String && value.length > length) {
+      return ValidationError(message);
+    }
+    if (value is Map && value.length > length) {
       return ValidationError(message);
     }
     return null;

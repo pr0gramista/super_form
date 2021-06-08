@@ -12,6 +12,14 @@ const maxLengthTestCases = [
   ParamRuleTestCase("1", 0, false),
   ParamRuleTestCase("", -1, false),
   ParamRuleTestCase("", 1000, true),
+  ParamRuleTestCase([1, 2, 3], 3, true),
+  ParamRuleTestCase([1, 2, 3], 2, false),
+  ParamRuleTestCase([], 0, true),
+  ParamRuleTestCase([], -1, false),
+  ParamRuleTestCase({}, 0, true),
+  ParamRuleTestCase({}, -1, false),
+  ParamRuleTestCase({"one": 1}, 1, true),
+  ParamRuleTestCase({"one": 1}, 0, false),
 ];
 
 const minLengthTestCases = [
@@ -23,6 +31,14 @@ const minLengthTestCases = [
   ParamRuleTestCase("1", 0, true),
   ParamRuleTestCase("", -1, true),
   ParamRuleTestCase("", 1000, false),
+  ParamRuleTestCase([1, 2, 3], 3, true),
+  ParamRuleTestCase([1, 2, 3], 4, false),
+  ParamRuleTestCase([], 0, true),
+  ParamRuleTestCase([], -1, true),
+  ParamRuleTestCase({}, 0, true),
+  ParamRuleTestCase({}, -1, true),
+  ParamRuleTestCase({"one": 1}, 1, true),
+  ParamRuleTestCase({"one": 1}, 2, false),
 ];
 
 void main() {
