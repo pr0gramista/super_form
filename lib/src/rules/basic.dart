@@ -35,6 +35,54 @@ class IsEqualRule<T> extends SuperFormFieldRule {
   }
 }
 
+/// Ensures that value contains given [element].
+///
+/// Works with [null]s by always throwing validation error.
+/// Works with [Iterable]s (List, Set).
+/// Works with [String] when [element] is a [Pattern].
+/// Works with [Map] assuming that [element] is a key or when [element] is
+/// a [MapEntry] it checks for value equality at the given [MapEntry] key.
+class ContainsRule<T> extends SuperFormFieldRule {
+  final T element;
+  final String message;
+
+  ContainsRule(this.element, this.message);
+
+  @override
+  ValidationError? validate(dynamic value) {
+    // So we can promote the type
+    final elementToCheck = element;
+
+    if (value == null) {
+      return ValidationError(message);
+    }
+
+    if (value is Iterable && !value.contains(elementToCheck)) {
+      return ValidationError(message);
+    }
+
+    if (value is String &&
+        elementToCheck is Pattern &&
+        !value.contains(elementToCheck)) {
+      return ValidationError(message);
+    }
+
+    if (value is Map) {
+      if (elementToCheck is MapEntry) {
+        // value.entries.contains(elementToCheck) would check for instance
+        // which is not preferable
+        if (value[elementToCheck.key] != elementToCheck.value) {
+          return ValidationError(message);
+        }
+      } else {
+        if (!value.containsKey(element)) {
+          return ValidationError(message);
+        }
+      }
+    }
+  }
+}
+
 /// Converts value into a string via [toString] method and then
 /// check if it has a match against given [pattern].
 class PatternRule extends SuperFormFieldRule {

@@ -37,6 +37,25 @@ const emailTestCases = [
   RuleTestCase("eg3g033g email@4fun.dev g3g3gg", false),
 ];
 
+final containsTestCases = [
+  const ParamRuleTestCase([1, 2, 3], 1, true),
+  const ParamRuleTestCase([1, 2, 3], 2, true),
+  const ParamRuleTestCase([1, 2, 3], 0, false),
+  const ParamRuleTestCase([1, 2, 3], [], false),
+  const ParamRuleTestCase({'one', 'two', 'three'}, 'two', true),
+  const ParamRuleTestCase(['one', 2, 3], 'one', true),
+  const ParamRuleTestCase(['one', 'two'], 'three', false),
+  const ParamRuleTestCase({"one": 1, "two": 2}, "one", true),
+  const ParamRuleTestCase({"one": 1, "two": 2}, "three", false),
+  const ParamRuleTestCase({"one": 1, "two": 2}, MapEntry("one", 1), true),
+  const ParamRuleTestCase({"one": 1, "two": 2}, MapEntry("one", 2), false),
+  const ParamRuleTestCase({"one": 1, "two": 2}, {}, false),
+  ParamRuleTestCase("Hello World", RegExp("^Hello"), true),
+  ParamRuleTestCase("Hello World", RegExp("^Hello\$"), false),
+  const ParamRuleTestCase(Object(), 1, true),
+  const ParamRuleTestCase(null, 1, false),
+];
+
 void main() {
   group("Required rule", () {
     final rule = RequiredRule("Error");
@@ -76,6 +95,22 @@ void main() {
           'for ${testCase.param} == "${testCase.value}" ${testCase.isOk ? "passes" : "errors"}',
           () {
         final rule = IsEqualRule(testCase.param, "Error");
+        final error = rule.validate(testCase.value);
+
+        expect(error == null, testCase.isOk);
+        if (error != null) {
+          expect(error.message, "Error");
+        }
+      });
+    });
+  });
+
+  group("ContainsRule", () {
+    containsTestCases.forEach((testCase) {
+      test(
+          'for ${testCase.value} contains "${testCase.param}" ${testCase.isOk ? "passes" : "errors"}',
+          () {
+        final rule = ContainsRule(testCase.param, "Error");
         final error = rule.validate(testCase.value);
 
         expect(error == null, testCase.isOk);
