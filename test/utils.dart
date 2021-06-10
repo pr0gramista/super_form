@@ -54,6 +54,10 @@ class RadioChangedListener<T> extends Mock {
   void call(T? value);
 }
 
+class DropdownListener<T> extends Mock {
+  void call(T value);
+}
+
 class RuleTestCase<T> {
   final T value;
   final bool isOk;

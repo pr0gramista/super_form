@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
 import 'package:super_form/super_form.dart';
 
 import '../utils.dart';
@@ -169,5 +170,38 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text("One").last);
     expect(formKey2.currentState?.values["name"], 1);
+  });
+
+  testWidgets('onChanged is called', (WidgetTester tester) async {
+    const key = Key('dropdown');
+    const fieldName = 'field';
+    final listener = DropdownListener<int?>();
+
+    await tester.pumpWidget(
+      boilerplate(
+        child: SuperForm(
+          child: Column(
+            children: [
+              DropdownSuperFormField(
+                name: fieldName,
+                key: key,
+                onChanged: listener,
+                items: const [
+                  DropdownMenuItem(value: 1, child: Text("One")),
+                  DropdownMenuItem(value: 2, child: Text("Two")),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.byKey(key));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text("Two").last);
+
+    verify(listener(2)).called(1);
+    verifyNoMoreInteractions(listener);
   });
 }
