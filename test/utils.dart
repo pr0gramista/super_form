@@ -42,6 +42,14 @@ class VoidListener extends Mock {
   void call();
 }
 
+class CheckboxChangedListener<T> extends Mock {
+  void call(T value, bool checked);
+}
+
+class SliderChangedListener<T> extends Mock {
+  void call(double value);
+}
+
 class RuleTestCase<T> {
   final T value;
   final bool isOk;
