@@ -213,4 +213,37 @@ void main() {
     verify(listener()).called(1);
     verifyNoMoreInteractions(listener);
   });
+
+  testWidgets('onEditingComplete is called when validation mode is onBlur',
+      (WidgetTester tester) async {
+    final formKey = GlobalKey<SuperFormState>();
+    const loginInput = Key('loginInput');
+
+    final listener = VoidListener();
+
+    await tester.pumpWidget(
+      boilerplate(
+        child: SuperForm(
+          key: formKey,
+          validationMode: ValidationMode.onBlur,
+          child: Column(children: [
+            TextSuperFormField(
+              key: loginInput,
+              name: "login",
+              onEditingComplete: listener,
+            ),
+            TextSuperFormField(
+              name: "password",
+            ),
+          ]),
+        ),
+      ),
+    );
+
+    await tester.enterText(find.byKey(loginInput), "hello@12345.pl");
+    await tester.testTextInput.receiveAction(TextInputAction.done);
+
+    verify(listener()).called(1);
+    verifyNoMoreInteractions(listener);
+  });
 }

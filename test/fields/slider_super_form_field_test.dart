@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
 import 'package:super_form/super_form.dart';
 
 import '../utils.dart';
@@ -141,5 +142,28 @@ void main() {
     expect(formKey2.currentState?.values["name"], null);
     await tester.tap(find.byKey(inputKey));
     expect(formKey2.currentState?.values["name"], 0.5);
+  });
+
+  testWidgets('onChanged is called', (WidgetTester tester) async {
+    final formKey = GlobalKey<SuperFormState>();
+    final listener = SliderChangedListener();
+    const key = Key('slider');
+
+    await tester.pumpWidget(
+      boilerplate(
+        child: SuperForm(
+          key: formKey,
+          child: SliderSuperFormField(
+            key: key,
+            name: "name",
+            onChanged: listener,
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.byKey(key));
+    verify(listener(0.5)).called(1);
+    verifyNoMoreInteractions(listener);
   });
 }
