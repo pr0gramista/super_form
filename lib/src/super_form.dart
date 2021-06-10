@@ -10,6 +10,7 @@ import 'super_form_field.dart';
 
 export 'enums.dart';
 export 'fields/checkbox_super_form_field.dart';
+export 'fields/dropdown_super_form_field.dart';
 export 'fields/radio_super_form_field.dart';
 export 'fields/slider_super_form_field.dart';
 export 'fields/text_super_form_field.dart';
