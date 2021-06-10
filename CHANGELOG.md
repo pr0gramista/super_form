@@ -1,3 +1,10 @@
+## 0.1.3
+* DropdownSuperFormField
+* CheckboxSuperFormField with listTile builder
+* RadioSuperFormField with listTile builder
+* ContainsRule
+* Maximum and MinimumLengthRule now supports collections
+
 ## 0.1.2
 * Fixes issue where field would not update after widgets `name` was changed
 * SliderSuperFormField
