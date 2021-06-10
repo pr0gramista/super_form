@@ -8,34 +8,36 @@ import '../utils.dart';
 void main() {
   Widget get123({
     required String name,
-    void Function(String, bool)? onChanged,
+    void Function(String?)? onChanged,
     List<SuperFormFieldRule>? rules,
     bool autofocus = false,
-    CheckboxBuilder<String>? builder,
+    RadioBuilder<String>? builder,
+    bool toggleable = false,
   }) {
     if (builder != null) {
-      return CheckboxSuperFormField(
+      return RadioSuperFormField(
         onChanged: onChanged,
         name: name,
         builder: builder,
         rules: rules,
         options: const [
-          CheckboxOption("one", Text("One")),
-          CheckboxOption("two", Text("Two")),
-          CheckboxOption("three", Text("Three")),
+          RadioOption("one", Text("One")),
+          RadioOption("two", Text("Two")),
+          RadioOption("three", Text("Three")),
         ],
       );
     }
 
-    return CheckboxSuperFormField.listTile(
+    return RadioSuperFormField.listTile(
       onChanged: onChanged,
       name: name,
       autofocus: autofocus,
       rules: rules,
+      toggleable: toggleable,
       options: const [
-        CheckboxOption("one", Text("One")),
-        CheckboxOption("two", Text("Two")),
-        CheckboxOption("three", Text("Three")),
+        RadioOption("one", Text("One")),
+        RadioOption("two", Text("Two")),
+        RadioOption("three", Text("Three")),
       ],
     );
   }
@@ -53,13 +55,32 @@ void main() {
     expect(formKey.currentState?.values[fieldName], isNull);
     await tester.tap(find.text("One"));
     await tester.pumpAndSettle();
-    expect(formKey.currentState?.values[fieldName], equals(["one"]));
+    expect(formKey.currentState?.values[fieldName], equals("one"));
     await tester.tap(find.text("Two"));
     await tester.pumpAndSettle();
-    expect(formKey.currentState?.values[fieldName], equals(["one", "two"]));
+    expect(formKey.currentState?.values[fieldName], equals("two"));
+  });
+
+  testWidgets('can be toggleable', (WidgetTester tester) async {
+    final formKey = GlobalKey<SuperFormState>();
+    const fieldName = 'field';
+
+    await tester.pumpWidget(
+      boilerplate(
+        child: SuperForm(
+          initialValues: const {fieldName: "one"},
+          key: formKey,
+          child: get123(
+            name: fieldName,
+            toggleable: true,
+          ),
+        ),
+      ),
+    );
+
     await tester.tap(find.text("One"));
     await tester.pumpAndSettle();
-    expect(formKey.currentState?.values[fieldName], equals(["two"]));
+    expect(formKey.currentState?.values[fieldName], isNull);
   });
 
   testWidgets('validates when onChange', (WidgetTester tester) async {
@@ -75,7 +96,7 @@ void main() {
             children: [
               get123(
                 name: fieldName,
-                rules: [ContainsRule("three", "Pick 3 my lord!!!")],
+                rules: [IsEqualRule("three", "Pick 3 my lord!!!")],
               ),
               const SuperFormErrorText(name: fieldName),
             ],
@@ -105,7 +126,7 @@ void main() {
               get123(
                 name: fieldName,
                 autofocus: true,
-                rules: [ContainsRule("three", "Pick 3 my lord!!!")],
+                rules: [IsEqualRule("three", "Pick 3 my lord!!!")],
               ),
               TextSuperFormField(
                 name: "two",
@@ -146,7 +167,7 @@ void main() {
 
     await tester.tap(find.text("One"));
     await tester.pumpAndSettle();
-    expect(formKey1.currentState?.values[fieldName], ['one']);
+    expect(formKey1.currentState?.values[fieldName], 'one');
 
     await tester.pumpWidget(
       boilerplate(
@@ -169,12 +190,12 @@ void main() {
 
     await tester.tap(find.text("Two"));
     await tester.pumpAndSettle();
-    expect(formKey2.currentState?.values[fieldName], ['two']);
+    expect(formKey2.currentState?.values[fieldName], 'two');
   });
 
   testWidgets('onChanged is called', (WidgetTester tester) async {
     final formKey = GlobalKey<SuperFormState>();
-    final listener = CheckboxChangedListener();
+    final listener = RadioChangedListener();
 
     await tester.pumpWidget(
       boilerplate(
@@ -190,7 +211,7 @@ void main() {
 
     await tester.tap(find.text("One"));
     await tester.pumpAndSettle();
-    verify(listener("one", true)).called(1);
+    verify(listener("one")).called(1);
     verifyNoMoreInteractions(listener);
   });
 
@@ -203,12 +224,12 @@ void main() {
       boilerplate(
         child: SuperForm(
           key: formKey,
-          child: CheckboxSuperFormField.listTile(
+          child: RadioSuperFormField.listTile(
             name: fieldName,
             options: const [
-              CheckboxOption("one", Text("One")),
-              CheckboxOption("two", Text("Two")),
-              CheckboxOption("three", Text("Three")),
+              RadioOption("one", Text("One")),
+              RadioOption("two", Text("Two")),
+              RadioOption("three", Text("Three")),
             ],
           ),
         ),
@@ -218,20 +239,39 @@ void main() {
     expect(formKey.currentState?.values[fieldName], isNull);
     await tester.tap(find.text("One"));
     await tester.pumpAndSettle();
-    expect(formKey.currentState?.values[fieldName], equals(["one"]));
+    expect(formKey.currentState?.values[fieldName], equals("one"));
+
+    await tester.pumpWidget(
+      boilerplate(
+        child: SuperForm(
+          key: formKey,
+          child: RadioSuperFormField.listTile(
+            name: fieldName,
+            options: const [
+              RadioOption("two", Text("Two")),
+              RadioOption("three", Text("Three")),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    await tester.pumpAndSettle();
+    expect(formKey.currentState?.values[fieldName], isNull);
     await tester.tap(find.text("Two"));
     await tester.pumpAndSettle();
-    expect(formKey.currentState?.values[fieldName], equals(["one", "two"]));
+    expect(formKey.currentState?.values[fieldName], equals("two"));
 
     await tester.pumpWidget(
       boilerplate(
         child: SuperForm(
           key: formKey,
-          child: CheckboxSuperFormField.listTile(
+          child: RadioSuperFormField.listTile(
             name: fieldName,
             options: const [
-              CheckboxOption("two", Text("Two")),
-              CheckboxOption("three", Text("Three")),
+              RadioOption("one", Text("One")),
+              RadioOption("two", Text("Two")),
+              RadioOption("three", Text("Three")),
             ],
           ),
         ),
@@ -239,26 +279,7 @@ void main() {
     );
 
     await tester.pumpAndSettle();
-    expect(formKey.currentState?.values[fieldName], equals(["two"]));
-
-    await tester.pumpWidget(
-      boilerplate(
-        child: SuperForm(
-          key: formKey,
-          child: CheckboxSuperFormField.listTile(
-            name: fieldName,
-            options: const [
-              CheckboxOption("one", Text("One")),
-              CheckboxOption("two", Text("Two")),
-              CheckboxOption("three", Text("Three")),
-            ],
-          ),
-        ),
-      ),
-    );
-
-    await tester.pumpAndSettle();
-    expect(formKey.currentState?.values[fieldName], equals(["two"]));
+    expect(formKey.currentState?.values[fieldName], equals("two"));
   });
 
   testWidgets('renders with selected and subtitle',
@@ -270,17 +291,17 @@ void main() {
       boilerplate(
         child: SuperForm(
           key: formKey,
-          child: CheckboxSuperFormField.listTile(
+          child: RadioSuperFormField.listTile(
             name: fieldName,
             selected: (option) => option.value == 1,
             isThreeLine: true,
-            subtitle: (CheckboxOption<int> o) => Text(
+            subtitle: (RadioOption<int> o) => Text(
               "Did you know that ${o.value} * ${o.value} = ${o.value * o.value}",
             ),
             options: const [
-              CheckboxOption(1, Text("One")),
-              CheckboxOption(2, Text("Two")),
-              CheckboxOption(3, Text("Three")),
+              RadioOption(1, Text("One")),
+              RadioOption(2, Text("Two")),
+              RadioOption(3, Text("Three")),
             ],
           ),
         ),
@@ -289,11 +310,11 @@ void main() {
 
     await tester.tap(find.text("Did you know that 2 * 2 = 4"));
     await tester.pumpAndSettle();
-    expect(formKey.currentState?.values[fieldName], [2]);
+    expect(formKey.currentState?.values[fieldName], 2);
   });
 
   group("custom builder", () {
-    Widget builder(BuildContext context, CheckboxState<String> state) {
+    Widget builder(BuildContext context, RadioState<String> state) {
       // Let's make something avant-garde
       return Row(
           children: state.options
@@ -301,10 +322,7 @@ void main() {
                     focusNode: state.focusNode,
                     autofocus: true,
                     onPressed: () {
-                      final checked =
-                          state.checkedValues?.contains(o.value) ?? false;
-
-                      state.onChanged(o.value, !checked);
+                      state.onChanged(o.value);
                     },
                     child: o.label,
                   ))
@@ -325,13 +343,13 @@ void main() {
       expect(formKey.currentState?.values[fieldName], isNull);
       await tester.tap(find.text("One"));
       await tester.pumpAndSettle();
-      expect(formKey.currentState?.values[fieldName], equals(["one"]));
+      expect(formKey.currentState?.values[fieldName], equals("one"));
       await tester.tap(find.text("Two"));
       await tester.pumpAndSettle();
-      expect(formKey.currentState?.values[fieldName], equals(["one", "two"]));
+      expect(formKey.currentState?.values[fieldName], equals("two"));
       await tester.tap(find.text("One"));
       await tester.pumpAndSettle();
-      expect(formKey.currentState?.values[fieldName], equals(["two"]));
+      expect(formKey.currentState?.values[fieldName], equals("one"));
     });
 
     testWidgets('validates when onChange', (WidgetTester tester) async {
@@ -348,7 +366,7 @@ void main() {
                 get123(
                   name: fieldName,
                   builder: builder,
-                  rules: [ContainsRule("three", "Pick 3 my lord!!!")],
+                  rules: [IsEqualRule("three", "Pick 3 my lord!!!")],
                 ),
                 const SuperFormErrorText(name: fieldName),
               ],
@@ -378,7 +396,7 @@ void main() {
                 get123(
                   name: fieldName,
                   builder: builder,
-                  rules: [ContainsRule("three", "Pick 3 my lord!!!")],
+                  rules: [IsEqualRule("three", "Pick 3 my lord!!!")],
                 ),
                 TextSuperFormField(
                   name: "two",
@@ -420,7 +438,7 @@ void main() {
 
       await tester.tap(find.text("One"));
       await tester.pumpAndSettle();
-      expect(formKey1.currentState?.values[fieldName], ['one']);
+      expect(formKey1.currentState?.values[fieldName], 'one');
 
       await tester.pumpWidget(
         boilerplate(
@@ -444,12 +462,12 @@ void main() {
 
       await tester.tap(find.text("Two"));
       await tester.pumpAndSettle();
-      expect(formKey2.currentState?.values[fieldName], ['two']);
+      expect(formKey2.currentState?.values[fieldName], 'two');
     });
 
     testWidgets('onChanged is called', (WidgetTester tester) async {
       final formKey = GlobalKey<SuperFormState>();
-      final listener = CheckboxChangedListener();
+      final listener = RadioChangedListener();
 
       await tester.pumpWidget(
         boilerplate(
@@ -466,7 +484,7 @@ void main() {
 
       await tester.tap(find.text("One"));
       await tester.pumpAndSettle();
-      verify(listener("one", true)).called(1);
+      verify(listener("one")).called(1);
       verifyNoMoreInteractions(listener);
     });
   });
