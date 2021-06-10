@@ -21,6 +21,6 @@ jobs:
       - name: Check format
         run: flutter format --set-exit-if-changed .
       - name: Run unit tests
-        run: flutter test --coverage
+        run: flutter test --coverage --test-randomize-ordering-seed random
       - name: Upload coverage to codecov
         run: curl -s https://codecov.io/bash | bash
