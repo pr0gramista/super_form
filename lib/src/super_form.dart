@@ -197,6 +197,20 @@ class SuperForm extends StatefulWidget {
     return _SuperFormScope.ofFieldMaybe(context, fieldName);
   }
 
+  /// Gets the field value of the closest [SuperFormState] instance.
+  ///
+  /// Using this method will make the subscriber update only when field with given name
+  /// was modified.
+  ///
+  /// ```dart
+  /// final isEmployed = SuperForm.ofFieldValue<bool>(context, "employment") ?? false;
+  /// ```
+  static T? ofFieldValue<T>(BuildContext context, String fieldName) {
+    return _SuperFormScope.ofFieldMaybe(context, fieldName)
+        ?.data[fieldName]
+        ?.value as T?;
+  }
+
   @override
   SuperFormState createState() => SuperFormState();
 }
