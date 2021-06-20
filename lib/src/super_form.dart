@@ -205,7 +205,7 @@ class SuperForm extends StatefulWidget {
   /// In most cases subscribers should expect at least one build with a null value.
   ///
   /// ```dart
-  /// final isEmployed = SuperForm.ofFieldValue<bool>(context, "employment") ?? false;
+  /// final showEmploymentFields = SuperForm.ofFieldValue<bool>(context, "employment") ?? false;
   /// ```
   static T? ofFieldValue<T>(BuildContext context, String fieldName) {
     return _SuperFormScope.ofFieldMaybe(context, fieldName)
