@@ -197,6 +197,22 @@ class SuperForm extends StatefulWidget {
     return _SuperFormScope.ofFieldMaybe(context, fieldName);
   }
 
+  /// Gets the field value of the closest [SuperFormState] instance.
+  ///
+  /// Using this method will make the subscriber update only when field with given name
+  /// was modified.
+  ///
+  /// In most cases subscribers should expect at least one build with a null value.
+  ///
+  /// ```dart
+  /// final showEmploymentFields = SuperForm.ofFieldValue<bool>(context, "employment") ?? false;
+  /// ```
+  static T? ofFieldValue<T>(BuildContext context, String fieldName) {
+    return _SuperFormScope.ofFieldMaybe(context, fieldName)
+        ?.data[fieldName]
+        ?.value as T?;
+  }
+
   @override
   SuperFormState createState() => SuperFormState();
 }
@@ -572,7 +588,7 @@ class SuperFormState extends State<SuperForm> {
         submitted: false,
         touched: false,
       );
-      _fieldsData[name] = newField;
+      _fieldsData = {..._fieldsData, name: newField};
 
       _triggerRebuild();
       widget.onChange(data);
