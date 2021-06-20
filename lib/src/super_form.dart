@@ -202,6 +202,8 @@ class SuperForm extends StatefulWidget {
   /// Using this method will make the subscriber update only when field with given name
   /// was modified.
   ///
+  /// In most cases subscribers should expect at least one build with a null value.
+  ///
   /// ```dart
   /// final isEmployed = SuperForm.ofFieldValue<bool>(context, "employment") ?? false;
   /// ```
@@ -586,7 +588,7 @@ class SuperFormState extends State<SuperForm> {
         submitted: false,
         touched: false,
       );
-      _fieldsData[name] = newField;
+      _fieldsData = {..._fieldsData, name: newField};
 
       _triggerRebuild();
       widget.onChange(data);

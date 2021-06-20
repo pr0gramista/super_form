@@ -190,6 +190,12 @@ void main() {
       const inputKey = Key('input');
       const anotherInput = Key('anotherInput');
 
+      // 1st null because field is not registered yet
+      // 2nd null because field was registered but it is null
+      // 3rd value because field was edited
+      final expectedValues = [null, null, "hello world"];
+      final seenValues = [];
+
       // This must be unique between all tests
       const buildCounterName = "offield";
 
@@ -207,7 +213,8 @@ void main() {
                   name: "anotherField",
                 ),
                 Builder(builder: (context) {
-                  SuperForm.ofField(context, "anotherField");
+                  final state = SuperForm.ofField(context, "anotherField");
+                  seenValues.add(state.values["anotherField"]);
                   return BuildCounter(name: buildCounterName);
                 }),
               ]),
@@ -215,17 +222,29 @@ void main() {
           ),
         ),
       );
-
-      expect(buildCounters[buildCounterName], 1);
-      await tester.enterText(find.byKey(inputKey), "hello world");
-      expect(buildCounters[buildCounterName], 1);
-      await tester.enterText(find.byKey(anotherInput), "hello world");
+      await tester.pumpAndSettle();
       expect(buildCounters[buildCounterName], 2);
+
+      await tester.enterText(find.byKey(inputKey), "hello world");
+      await tester.pumpAndSettle();
+      expect(buildCounters[buildCounterName], 2);
+
+      await tester.enterText(find.byKey(anotherInput), "hello world");
+      await tester.pumpAndSettle();
+      expect(buildCounters[buildCounterName], 3);
+
+      expect(seenValues, expectedValues);
     });
 
     testWidgets('ofFieldMaybe', (WidgetTester tester) async {
       const inputKey = Key('input');
       const anotherInput = Key('anotherInput');
+
+      // 1st null because field is not registered yet
+      // 2nd null because field was registered but it is null
+      // 3rd value because field was edited
+      final expectedValues = [null, null, "hello world"];
+      final seenValues = [];
 
       // This must be unique between all tests
       const buildCounterName = "offieldmaybe";
@@ -244,8 +263,8 @@ void main() {
                   name: "anotherField",
                 ),
                 Builder(builder: (context) {
-                  SuperForm.ofFieldMaybe(context, "anotherField");
-
+                  final state = SuperForm.ofFieldMaybe(context, "anotherField");
+                  seenValues.add(state?.values["anotherField"]);
                   return BuildCounter(name: buildCounterName);
                 }),
               ]),
@@ -253,14 +272,18 @@ void main() {
           ),
         ),
       );
-
-      expect(buildCounters[buildCounterName], 1);
-      await tester.enterText(find.byKey(inputKey), "hello world");
-      await tester.pumpAndSettle();
-      expect(buildCounters[buildCounterName], 1);
-      await tester.enterText(find.byKey(anotherInput), "hello world");
       await tester.pumpAndSettle();
       expect(buildCounters[buildCounterName], 2);
+
+      await tester.enterText(find.byKey(inputKey), "hello world");
+      await tester.pumpAndSettle();
+      expect(buildCounters[buildCounterName], 2);
+
+      await tester.enterText(find.byKey(anotherInput), "hello world");
+      await tester.pumpAndSettle();
+      expect(buildCounters[buildCounterName], 3);
+
+      expect(seenValues, expectedValues);
     });
 
     testWidgets('ofFieldValue', (WidgetTester tester) async {
@@ -269,6 +292,12 @@ void main() {
 
       const inputKey = Key(name1);
       const anotherInput = Key(name2);
+
+      // 1st null because field is not registered yet
+      // 2nd null because field was registered but it is null
+      // 3rd and 4th value because field was edited
+      final expectedValues = [null, null, "hello world", "hi"];
+      final seenValues = [];
 
       // This must be unique between all tests
       const buildCounterName = "offieldvalue";
@@ -288,7 +317,7 @@ void main() {
                 ),
                 Builder(builder: (context) {
                   final f = SuperForm.ofFieldValue(context, name2);
-
+                  seenValues.add(f);
                   return Column(children: [
                     BuildCounter(name: buildCounterName),
                     Text("Value: $f")
@@ -299,18 +328,24 @@ void main() {
           ),
         ),
       );
+      await tester.pumpAndSettle();
+      expect(buildCounters[buildCounterName], 2);
 
-      expect(buildCounters[buildCounterName], 1);
       await tester.enterText(find.byKey(inputKey), "hello world");
-      expect(buildCounters[buildCounterName], 1);
+      await tester.pumpAndSettle();
+      expect(buildCounters[buildCounterName], 2);
+
       await tester.enterText(find.byKey(anotherInput), "hello world");
       await tester.pumpAndSettle();
       expect(find.text("Value: hello world"), findsOneWidget);
       expect(buildCounters[buildCounterName], 3);
+
       await tester.enterText(find.byKey(anotherInput), "hi");
       await tester.pumpAndSettle();
       expect(find.text("Value: hi"), findsOneWidget);
       expect(buildCounters[buildCounterName], 4);
+
+      expect(seenValues, expectedValues);
     });
   });
 }
