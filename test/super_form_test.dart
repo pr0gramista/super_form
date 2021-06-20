@@ -463,4 +463,53 @@ void main() {
 
     expect(find.text("test@pr0gramista.pl"), findsOneWidget);
   });
+
+  testWidgets('validates on rules changes', (WidgetTester tester) async {
+    final formKey = GlobalKey<SuperFormState>();
+    const fieldName = "email";
+    const errorMessage1 = "Must be an email";
+    const errorMessage2 = "Now it must be at least 10 characters";
+    const inputKey = Key(fieldName);
+
+    await tester.pumpWidget(
+      boilerplate(
+        child: SuperForm(
+          key: formKey,
+          child: Column(children: [
+            TextSuperFormField(
+              key: inputKey,
+              name: fieldName,
+              rules: [EmailRule(errorMessage1)],
+            ),
+          ]),
+        ),
+      ),
+    );
+
+    await tester.enterText(find.byKey(inputKey), "123456");
+    formKey.currentState?.submit();
+
+    await tester.pumpAndSettle();
+    expect(find.text(errorMessage1), findsOneWidget);
+    expect(find.text(errorMessage2), findsNothing);
+
+    await tester.pumpWidget(
+      boilerplate(
+        child: SuperForm(
+          key: formKey,
+          child: Column(children: [
+            TextSuperFormField(
+              key: inputKey,
+              name: fieldName,
+              rules: [MinimumLengthRule(10, errorMessage2)],
+            ),
+          ]),
+        ),
+      ),
+    );
+
+    await tester.pumpAndSettle();
+    expect(find.text(errorMessage1), findsNothing);
+    expect(find.text(errorMessage2), findsOneWidget);
+  });
 }
