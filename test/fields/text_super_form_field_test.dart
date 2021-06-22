@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -245,5 +247,65 @@ void main() {
 
     verify(listener()).called(1);
     verifyNoMoreInteractions(listener);
+  });
+
+  testWidgets('resets when widget is also changed',
+      (WidgetTester tester) async {
+    final formKey = GlobalKey<SuperFormState>();
+    const loginInput = Key('loginInput');
+
+    // We will use a StreamBuilder to rebuild our widgets so it will trigger
+    // didUpdateWidget
+    final StreamController<int> streamController = StreamController<int>();
+    streamController.add(1);
+
+    await tester.pumpWidget(
+      boilerplate(
+          child: StreamBuilder<int>(
+        stream: streamController.stream,
+        builder: (context, snapshot) {
+          return SuperForm(
+            key: formKey,
+            validationMode: ValidationMode.onBlur,
+            initialValues: const {"login": "hello"},
+            onSubmit: (values) {
+              streamController.add(snapshot.data! + 1);
+
+              formKey.currentState?.reset();
+            },
+            child: Column(
+              children: [
+                TextSuperFormField(
+                  key: loginInput,
+                  name: "login",
+                  // Rules are not memorized so this rule will trigger didUpdateWidget
+                  rules: [RequiredRule("Must not be empty")],
+                ),
+                TextSuperFormField(
+                  name: "password",
+                ),
+                Builder(builder: (context) {
+                  return ElevatedButton(
+                    onPressed: () {
+                      SuperForm.of(context, listen: false).submit();
+                    },
+                    child: const Text("Submit"),
+                  );
+                })
+              ],
+            ),
+          );
+        },
+      )),
+    );
+
+    await tester.enterText(find.byKey(loginInput), "rex");
+    await tester.pumpAndSettle();
+    expect(find.text("rex"), findsOneWidget);
+
+    await tester.tap(find.byType(ElevatedButton));
+
+    await tester.pumpAndSettle();
+    expect(find.text("rex"), findsNothing);
   });
 }
