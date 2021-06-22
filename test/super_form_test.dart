@@ -241,7 +241,7 @@ void main() {
         child: SuperForm(
           onSubmit: listener,
           key: formKey,
-          initialValues: const {"login": "@12345.pl"},
+          initialValues: const {"login": "hellothere"},
           child: Builder(
             builder: (context) => Column(children: [
               TextSuperFormField(
@@ -282,10 +282,12 @@ void main() {
     formKey.currentState?.reset();
     await tester.pumpAndSettle();
 
-    expect(formKey.currentState!.values["login"], "@12345.pl");
+    expect(formKey.currentState!.values["login"], "hellothere");
     expect(formKey.currentState!.values["password"], isEmpty);
     expect(formKey.currentState!.errors["login"], isEmpty);
     expect(formKey.currentState!.errors["password"], isEmpty);
+
+    expect(find.text("hellothere"), findsOneWidget);
 
     expect(find.text("Must be at least 6 characters"), findsNothing);
   });

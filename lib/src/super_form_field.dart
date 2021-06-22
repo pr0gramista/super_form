@@ -139,6 +139,7 @@ class SuperFormFieldState extends State<SuperFormField> {
   /// Called when field is initiated or reset
   ///
   /// Can be used to reset underlying stateful controllers like [TextEditingController]
+  @mustCallSuper
   void didReset(SuperFormState formState) {
     data = formState.data[widget.name];
   }

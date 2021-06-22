@@ -221,9 +221,13 @@ class _TextSuperFormFieldState extends SuperFormFieldState {
 
   @override
   void didReset(SuperFormState formState) {
+    super.didReset(formState);
+
     if (_controller == null) {
       _controller ??= TextEditingController(text: data?.value as String? ?? "");
       _controller?.addListener(onTextChange);
+    } else {
+      _controller?.text = data?.value as String? ?? "";
     }
   }
 
