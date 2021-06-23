@@ -1,0 +1,27 @@
+# Name of your workflow.
+name: examples
+on: [push, pull_request]
+
+jobs:
+  examples:
+    defaults:
+      run:
+        working-directory: example
+    runs-on: ubuntu-latest
+    # Contains a sequence of tasks.
+    steps:
+      # https://github.com/actions/checkout
+      - uses: actions/checkout@v1
+      # Sets up a flutter environment.
+      # https://github.com/marketplace/actions/flutter-action
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: "stable" # or: 'dev' or 'beta'
+      - name: Pub get
+        run: flutter pub get
+      - name: Analyze
+        run: flutter analyze
+      - name: Check format
+        run: flutter format --set-exit-if-changed .
+      - name: Run unit tests
+        run: flutter test --coverage --test-randomize-ordering-seed random

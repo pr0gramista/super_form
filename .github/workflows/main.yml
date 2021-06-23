@@ -1,9 +1,9 @@
 # Name of your workflow.
-name: "Tests"
+name: main
 on: [push, pull_request]
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
     # Contains a sequence of tasks.
     steps:
