@@ -308,4 +308,56 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text("rex"), findsNothing);
   });
+
+  testWidgets('shows errors when widget is also changed',
+      (WidgetTester tester) async {
+    final formKey = GlobalKey<SuperFormState>();
+    const loginInput = Key('loginInput');
+
+    // We will use a StreamBuilder to rebuild our widgets so it will trigger
+    // didUpdateWidget
+    final StreamController<int> streamController = StreamController<int>();
+    streamController.add(1);
+
+    await tester.pumpWidget(
+      boilerplate(
+          child: StreamBuilder<int>(
+        stream: streamController.stream,
+        builder: (context, snapshot) {
+          return SuperForm(
+            key: formKey,
+            child: Column(
+              children: [
+                TextSuperFormField(
+                  key: loginInput,
+                  name: "login",
+                  // Rules are not memorized so this rule will trigger didUpdateWidget
+                  rules: [RequiredRule("Must not be empty")],
+                ),
+                TextSuperFormField(
+                  name: "password",
+                ),
+                Builder(builder: (context) {
+                  return ElevatedButton(
+                    onPressed: () {
+                      SuperForm.of(context, listen: false).submit();
+                    },
+                    child: const Text("Submit"),
+                  );
+                })
+              ],
+            ),
+          );
+        },
+      )),
+    );
+    await tester.pumpAndSettle();
+
+    // We are triggering a rebuild while submit will happen
+    streamController.add(2);
+    await tester.tap(find.byType(ElevatedButton));
+    await tester.pumpAndSettle();
+
+    expect(find.text("Must not be empty"), findsOneWidget);
+  });
 }
