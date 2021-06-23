@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:super_form_example/sign_up/sign_up.dart';
+import 'package:super_form_example/survey/survey.dart';
 
 import 'burritox/burritox.dart';
 
@@ -27,6 +28,13 @@ class MyBeautifulApp extends StatelessWidget {
                 child: const Burritox(),
               ),
             );
+          case "survey":
+            return MaterialPageRoute(
+              builder: (_) => Theme(
+                data: ThemeData(primarySwatch: Colors.blueGrey),
+                child: const SurveyPage(),
+              ),
+            );
         }
       },
       home: Scaffold(
@@ -40,6 +48,7 @@ class MyBeautifulApp extends StatelessWidget {
             children: const [
               RouteButton(routeName: "sign_up", name: "Sign Up"),
               RouteButton(routeName: "burrito", name: "Burritox"),
+              RouteButton(routeName: "survey", name: "Survey"),
             ],
           ),
         ),
