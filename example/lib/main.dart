@@ -21,7 +21,7 @@ class MyBeautifulApp extends StatelessWidget {
         switch (routeSettings.name) {
           case "sign_up":
             return MaterialPageRoute(builder: (_) => const SignUpPage());
-          case "burrito":
+          case "burritox":
             return MaterialPageRoute(
               builder: (_) => Theme(
                 data: ThemeData(primarySwatch: Colors.deepOrange),
@@ -44,38 +44,35 @@ class MyBeautifulApp extends StatelessWidget {
           ),
         ),
         body: Builder(
-          builder: (context) => Column(
-            children: const [
-              RouteButton(routeName: "sign_up", name: "Sign Up"),
-              RouteButton(routeName: "burrito", name: "Burritox"),
-              RouteButton(routeName: "survey", name: "Survey"),
+          builder: (context) => ListView(
+            children: [
+              ListTile(
+                title: const Text("Sign Up"),
+                subtitle:
+                    const Text("Classic sign up form with gradual validation"),
+                onTap: () {
+                  Navigator.of(context).pushNamed("sign_up");
+                },
+              ),
+              ListTile(
+                title: const Text("Survey"),
+                subtitle: const Text(
+                    "Satisfaction survey with sliders and dynamic email field"),
+                onTap: () {
+                  Navigator.of(context).pushNamed("survey");
+                },
+              ),
+              ListTile(
+                title: const Text("Burritox"),
+                subtitle: const Text(
+                    "Takeaway order with checkboxes, dynamic rules and editing"),
+                onTap: () {
+                  Navigator.of(context).pushNamed("burritox");
+                },
+              ),
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class RouteButton extends StatelessWidget {
-  final String name;
-  final String routeName;
-
-  const RouteButton({
-    Key? key,
-    required this.routeName,
-    required this.name,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ConstrainedBox(
-      constraints: const BoxConstraints(minWidth: 200),
-      child: ElevatedButton(
-        onPressed: () {
-          Navigator.of(context).pushNamed(routeName);
-        },
-        child: Text(name),
       ),
     );
   }

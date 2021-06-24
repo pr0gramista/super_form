@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:password_strength/password_strength.dart';
 import 'package:super_form/super_form.dart';
+import 'package:super_form_example/github_link.dart';
 import 'package:super_form_example/result_dialog.dart';
 
 /// Entrypoint for Sign Up demo
@@ -25,24 +26,31 @@ class SignUpPage extends StatelessWidget {
             ),
           );
         },
-        child: Center(
-          child: Container(
-            padding: const EdgeInsets.all(20),
-            width: 500,
-            child: Column(
-              children: const [
-                EmailField(),
-                SizedBox(height: 8),
-                PasswordField(),
-                SizedBox(height: 8),
-                RepeatPasswordField(),
-                SizedBox(height: 8),
-                TermsAndConditionsCheckbox(),
-                SizedBox(height: 8),
-                SubmitButton(),
-              ],
+        child: Column(
+          children: [
+            Expanded(
+              child: Center(
+                child: Container(
+                  padding: const EdgeInsets.all(20),
+                  width: 500,
+                  child: Column(
+                    children: const [
+                      EmailField(),
+                      SizedBox(height: 8),
+                      PasswordField(),
+                      SizedBox(height: 8),
+                      RepeatPasswordField(),
+                      SizedBox(height: 8),
+                      TermsAndConditionsCheckbox(),
+                      SizedBox(height: 8),
+                      SubmitButton(),
+                    ],
+                  ),
+                ),
+              ),
             ),
-          ),
+            const GitHubLink(path: "/sign_up"),
+          ],
         ),
       ),
     );

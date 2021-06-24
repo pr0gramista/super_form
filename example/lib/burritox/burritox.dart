@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:super_form/super_form.dart';
 import 'package:super_form_example/burritox/form.dart';
 import 'package:super_form_example/burritox/model.dart';
+import 'package:super_form_example/github_link.dart';
 import 'package:super_form_example/result_dialog.dart';
 
 import 'burrito_list.dart';
@@ -107,6 +108,7 @@ class _BurritoxState extends State<Burritox> {
                   });
                 },
               )),
+              const GitHubLink(path: "/burritox"),
               SizedBox(
                 width: double.infinity,
                 height: 75,

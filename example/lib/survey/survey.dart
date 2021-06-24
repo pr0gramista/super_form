@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:super_form/super_form.dart';
+import 'package:super_form_example/github_link.dart';
 import 'package:super_form_example/result_dialog.dart';
 
 /// Entrypoint for Satisfaction Survey demo
@@ -23,46 +24,51 @@ class SurveyPage extends StatelessWidget {
           );
         },
         initialValues: const {"experience_score": 3.0, "delivery_score": 3.0},
-        child: SingleChildScrollView(
-          child: Center(
-            child: Container(
-              constraints: const BoxConstraints(maxWidth: 600),
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  const Text("Satisfaction Survey",
-                      style: TextStyle(fontSize: 32)),
-                  const SizedBox(height: 32),
-                  const SatisfactionSlider(
-                    name: "experience_score",
-                    question: "How would you describe overall experience?",
-                  ),
-                  const SizedBox(height: 16),
-                  const SatisfactionSlider(
-                    name: "delivery_score",
-                    question: "How would you describe delivery time?",
-                  ),
-                  const SizedBox(height: 16),
-                  CheckboxSuperFormField.listTile(
-                    name: "showEmail",
-                    dense: true,
-                    controlAffinity: ListTileControlAffinity.leading,
-                    options: const [
-                      CheckboxOption(
-                        "yes",
-                        Text(
-                            "I want to receive emails with special offers and discounts, but no spam."),
-                      )
+        child: Column(
+          children: [
+            Expanded(
+              child: Center(
+                child: Container(
+                  constraints: const BoxConstraints(maxWidth: 600),
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      const Text("Satisfaction Survey",
+                          style: TextStyle(fontSize: 32)),
+                      const SizedBox(height: 32),
+                      const SatisfactionSlider(
+                        name: "experience_score",
+                        question: "How would you describe overall experience?",
+                      ),
+                      const SizedBox(height: 16),
+                      const SatisfactionSlider(
+                        name: "delivery_score",
+                        question: "How would you describe delivery time?",
+                      ),
+                      const SizedBox(height: 16),
+                      CheckboxSuperFormField.listTile(
+                        name: "showEmail",
+                        dense: true,
+                        controlAffinity: ListTileControlAffinity.leading,
+                        options: const [
+                          CheckboxOption(
+                            "yes",
+                            Text(
+                                "I want to receive emails with special offers and discounts, but no spam."),
+                          )
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      OffersEmailField(),
+                      const SizedBox(height: 8),
+                      const SendButton(),
                     ],
                   ),
-                  const SizedBox(height: 8),
-                  OffersEmailField(),
-                  const SizedBox(height: 8),
-                  const SendButton(),
-                ],
+                ),
               ),
             ),
-          ),
+            const GitHubLink(path: "/survey")
+          ],
         ),
       ),
     );
@@ -99,7 +105,7 @@ class SatisfactionSlider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final int score =
-        (SuperForm.ofFieldValue<double>(context, name) ?? 2.0).floor();
+        (SuperForm.ofFieldValue<double>(context, name) ?? 3.0).floor();
 
     return Column(
       children: [
