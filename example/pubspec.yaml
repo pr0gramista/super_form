@@ -8,12 +8,12 @@ environment:
   flutter: ">=1.17.0"
 
 dependencies:
+  equatable: ^2.0.2
   flutter:
     sdk: flutter
+  password_strength: null
   super_form:
     path: ../
-  equatable: ^2.0.2
-  password_strength: null
   url_launcher: ^6.0.7
 
 dev_dependencies:

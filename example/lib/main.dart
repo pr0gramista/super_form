@@ -5,14 +5,13 @@ import 'package:super_form_example/survey/survey.dart';
 import 'burritox/burritox.dart';
 
 void main() {
-  runApp(MyBeautifulApp());
+  runApp(ExamplesApp());
 }
 
-/// Entrypoint for our beautiful example app
+/// Entrypoint for our beautiful examples.
 ///
-/// Visit https://superform.dev/example for preview
-class MyBeautifulApp extends StatelessWidget {
-  // This widget is the root of your application.
+/// Visit https://superform.dev/example for preview.
+class ExamplesApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
