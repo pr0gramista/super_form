@@ -1,3 +1,10 @@
+## 0.1.4
+* More examples with Sliders, Checkboxes, dynamic rules and dynamic fields - now also with tests
+* Fix bug where field with rules would reset with an old value
+* Fix bug where field with rules would throw null check error if it was just moved in the tree
+* Fix bug where field would validate with old rules
+* Add SuperForm.ofFieldValue
+
 ## 0.1.3
 * DropdownSuperFormField
 * CheckboxSuperFormField with listTile builder
