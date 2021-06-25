@@ -259,7 +259,7 @@ class _RadioSuperFormFieldState<T> extends SuperFormFieldState {
     super.didUpdateWidget(oldWidget);
 
     // Clearing groupValue if that no longer have corresponding option
-    if (!listEquals(oldWidget.options, widget.options)) {
+    if (!listEquals(oldWidget.options, widget.options) && data != null) {
       final currentGroupValue = data!.value as T?;
 
       final contains =

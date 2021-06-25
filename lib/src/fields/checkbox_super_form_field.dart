@@ -294,7 +294,7 @@ class _CheckboxSuperFormFieldState<T> extends SuperFormFieldState {
     super.didUpdateWidget(oldWidget);
 
     // Clearing values that no longer have corresponding option
-    if (!listEquals(oldWidget.options, widget.options)) {
+    if (!listEquals(oldWidget.options, widget.options) && data != null) {
       final currentValues = data!.value as List<T>? ?? [];
       final List<T> newValues = [];
 
