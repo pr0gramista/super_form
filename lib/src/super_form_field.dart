@@ -120,10 +120,14 @@ class SuperFormFieldState extends State<SuperFormField> {
 
     // Only rules have changed
     if (oldWidget.rules != widget.rules && widget.name == oldWidget.name) {
-      form?.updateFieldData(data!.copyWith(rules: widget.rules));
+      data = form?.data[widget.name];
 
-      if (data?.submitted ?? false) {
-        validate();
+      if (data != null) {
+        form?.updateFieldData(data!.copyWith(rules: widget.rules));
+
+        if (data?.submitted ?? false) {
+          validate();
+        }
       }
     }
 

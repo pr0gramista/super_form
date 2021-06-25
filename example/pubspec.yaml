@@ -8,11 +8,13 @@ environment:
   flutter: ">=1.17.0"
 
 dependencies:
+  equatable: ^2.0.2
   flutter:
     sdk: flutter
   password_strength: null
   super_form:
     path: ../
+  url_launcher: ^6.0.7
 
 dev_dependencies:
   flutter_test:
@@ -21,13 +23,12 @@ dev_dependencies:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
-
 # The following section is specific to Flutter.
 flutter:
   uses-material-design: true
   # To add assets to your package, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
+  assets:
+    - burritox.jpg
   #   - images/a_dot_ham.jpeg
   #
   # For details regarding assets in packages, see
