@@ -10,7 +10,7 @@ void main() {
 
 /// Entrypoint for our beautiful examples.
 ///
-/// Visit https://superform.dev/example for preview.
+/// Visit https://superform.dev for preview.
 class ExamplesApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

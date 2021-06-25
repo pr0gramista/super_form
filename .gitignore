@@ -10,7 +10,6 @@
 .svn/
 coverage
 
-example/web/**
 example/android/**
 example/ios/**
 example/macos/**
