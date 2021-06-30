@@ -224,17 +224,23 @@ bool _debugHasSuperFormInScope(BuildContext context) {
       throw FlutterError.fromParts(<DiagnosticsNode>[
         ErrorSummary('No SuperForm widget ancestor found.'),
         ErrorDescription(
-            '${context.widget.runtimeType} require a SuperForm widget ancestor.'),
-        context.describeWidget(
-            'The specific widget that could not find a SuperForm ancestor was'),
-        context.describeOwnershipChain(
-            'The ownership chain for the affected widget is'),
+            '${context.widget.runtimeType} requires a SuperForm widget ancestor.'),
         ErrorHint(
             'No SuperForm ancestor could be found starting from the context '
             'that was passed to SuperForm.of(). This can happen because you '
             'have not added a SuperForm widget on top of your form, or it can happen if the '
             'context you use comes from the widget building SuperForm widget, in that case '
-            'consider wrapping that part of the tree with a Builder widget.'),
+            'consider wrapping the part of the tree with a Builder widget like this:'),
+        ErrorHint('''
+Builder(
+  builder: (context) => TextButton(
+    onPressed: () => SuperForm.of(context, listen: false).submit(),
+    child: const Text("Submit"),
+  ),
+);
+        '''),
+        context.describeWidget(
+            'The specific widget that could not find a SuperForm ancestor was'),
       ]);
     }
     return true;
