@@ -91,6 +91,11 @@ class ContainsRule<T> extends SuperFormFieldRule {
       }
     }
   }
+
+  @override
+  String toString() {
+    return 'ContainsRule $element';
+  }
 }
 
 /// Converts value into a string via [toString] method and then
