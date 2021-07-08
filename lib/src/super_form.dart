@@ -102,6 +102,14 @@ class SuperForm extends StatefulWidget {
     this.initialValues = const {},
   }) : super(key: key);
 
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(EnumProperty("validationMode", validationMode));
+    properties.add(DiagnosticsProperty<Map<String, dynamic>>(
+        "initialValues", initialValues));
+  }
+
   /// Gets the closest [SuperFormState] instance.
   ///
   /// If there is no [SuperForm] in scope, this will throw a [TypeError]
@@ -415,7 +423,7 @@ class SuperFormFieldData extends Equatable {
   }
 
   @override
-  List<Object?> get props => [name, rules, value, touched, errors, submitted];
+  List<Object?> get props => [name, value, rules, touched, errors, submitted];
 }
 
 /// [SuperForm] state which holds all field data and can be called to modify the form.
