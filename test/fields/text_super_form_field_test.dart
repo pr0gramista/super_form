@@ -120,6 +120,10 @@ void main() {
       ),
     );
 
+    await tester.tap(find.byKey(inputKey));
+    await tester.pump();
+    expect(find.text(errorText), findsNothing);
+
     await tester.enterText(find.byKey(inputKey), "hello");
     await tester.pump();
     expect(find.text(errorText), findsOneWidget);

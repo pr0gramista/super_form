@@ -283,7 +283,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(formKey.currentState!.values["login"], "hellothere");
-    expect(formKey.currentState!.values["password"], isEmpty);
+    expect(formKey.currentState!.values["password"], isNull);
     expect(formKey.currentState!.errors["login"], isEmpty);
     expect(formKey.currentState!.errors["password"], isEmpty);
 
