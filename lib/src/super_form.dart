@@ -423,7 +423,7 @@ class SuperFormFieldData extends Equatable {
   }
 
   @override
-  List<Object?> get props => [name, rules, value, touched, errors, submitted];
+  List<Object?> get props => [name, value, rules, touched, errors, submitted];
 }
 
 /// [SuperForm] state which holds all field data and can be called to modify the form.
