@@ -239,7 +239,7 @@ class _TextSuperFormFieldState extends SuperFormFieldState {
       return;
     }
 
-    if (currentFieldData.value != _controller?.text) {
+    if ((currentFieldData.value ?? "") != _controller?.text) {
       SuperFormFieldData newData = currentFieldData.copyWithValue(
           value: _controller?.text, touched: true);
 
