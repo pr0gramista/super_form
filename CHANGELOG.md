@@ -1,3 +1,8 @@
+## 0.1.5
+* Fix bug where text field would automatically set value to empty string triggering validation
+* Implement toString for rules and better debug properties
+* Add hint in the missing SuperForm ancestor message
+
 ## 0.1.4
 * More examples with Sliders, Checkboxes, dynamic rules and dynamic fields - now also with tests
 * Fix bug where field with rules would reset with an old value
