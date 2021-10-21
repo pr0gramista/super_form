@@ -70,14 +70,6 @@ class ExamplesApp extends StatelessWidget {
                   Navigator.of(context).restorablePushNamed("burritox");
                 },
               ),
-              ListTile(
-                title: const Text("Restorable form"),
-                subtitle:
-                    const Text("Super Forms can be restorable, test it here!"),
-                onTap: () {
-                  Navigator.of(context).restorablePushNamed("restorable");
-                },
-              ),
             ],
           ),
         ),
