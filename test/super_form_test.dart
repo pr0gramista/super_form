@@ -6,6 +6,8 @@ import 'package:super_form/super_form.dart';
 
 import 'utils.dart';
 
+enum ExampleEnum { one, two, three }
+
 void main() {
   testWidgets('can submit', (WidgetTester tester) async {
     final formKey = GlobalKey<SuperFormState>();
@@ -513,5 +515,107 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text(errorMessage1), findsNothing);
     expect(find.text(errorMessage2), findsOneWidget);
+  });
+
+  testWidgets('can restore state', (WidgetTester tester) async {
+    final formKey = GlobalKey<SuperFormState>();
+    const nameInput = Key('nameInput');
+
+    final listener = SubmitListener();
+
+    await tester.pumpWidget(
+      boilerplate(
+        restorationScopeId: "app",
+        child: SuperForm(
+          restorationId: "form",
+          onSubmit: listener,
+          key: formKey,
+          child: Builder(
+            builder: (context) => Column(children: [
+              TextSuperFormField(
+                key: nameInput,
+                name: "name",
+                rules: [RequiredRule("Please provide your name")],
+              ),
+              CheckboxSuperFormField.listTile(name: "services", options: const [
+                CheckboxOption("hoovering", Text("Hoovering")),
+                CheckboxOption("laundry", Text("Laundry")),
+                CheckboxOption("mopping", Text("Mopping")),
+              ]),
+              ElevatedButton(
+                onPressed: () {
+                  SuperForm.of(context, listen: false).submit();
+                },
+                child: const Text("Submit"),
+              )
+            ]),
+          ),
+        ),
+      ),
+    );
+
+    await tester.enterText(find.byKey(nameInput), "Bartatus");
+    await tester.tap(find.text("Laundry"));
+
+    await tester.pumpAndSettle();
+    await tester.restartAndRestore();
+
+    expect(find.text("Bartatus"), findsOneWidget);
+    expect(formKey.currentState!.values["services"], ["laundry"]);
+  });
+
+  testWidgets('can restore ignoring unserializable fields',
+      (WidgetTester tester) async {
+    final formKey = GlobalKey<SuperFormState>();
+    const nameInput = Key('nameInput');
+
+    final listener = SubmitListener();
+
+    await tester.pumpWidget(
+      boilerplate(
+        restorationScopeId: "app",
+        child: SuperForm(
+          restorationId: "form",
+          onSubmit: listener,
+          key: formKey,
+          child: Builder(
+            builder: (context) => Column(children: [
+              TextSuperFormField(
+                key: nameInput,
+                name: "name",
+                rules: [RequiredRule("Please provide your name")],
+              ),
+              CheckboxSuperFormField.listTile(name: "numbers", options: const [
+                CheckboxOption(ExampleEnum.one, Text("One")),
+                CheckboxOption(ExampleEnum.two, Text("Two")),
+                CheckboxOption(ExampleEnum.three, Text("Three")),
+              ]),
+              ElevatedButton(
+                onPressed: () {
+                  SuperForm.of(context, listen: false).submit();
+                },
+                child: const Text("Submit"),
+              )
+            ]),
+          ),
+        ),
+      ),
+    );
+
+    await tester.enterText(find.byKey(nameInput), "Bartatus");
+    await tester.tap(find.text("Two"));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text("Three"));
+    await tester.pumpAndSettle();
+
+    expect(
+      formKey.currentState!.values["numbers"],
+      [ExampleEnum.two, ExampleEnum.three],
+    );
+
+    await tester.restartAndRestore();
+
+    expect(find.text("Bartatus"), findsOneWidget);
+    expect(formKey.currentState!.values["numbers"], null);
   });
 }

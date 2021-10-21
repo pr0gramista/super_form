@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mockito/mockito.dart';
 
-Widget boilerplate({required Widget child}) {
+Widget boilerplate({required Widget child, String? restorationScopeId}) {
   return MaterialApp(
+    restorationScopeId: restorationScopeId,
     home: Directionality(
       textDirection: TextDirection.ltr,
       child: MediaQuery(

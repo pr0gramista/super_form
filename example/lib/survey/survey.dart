@@ -14,6 +14,7 @@ class SurveyPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SuperForm(
+        restorationId: "survey",
         onSubmit: (values) {
           showDialog(
             context: context,

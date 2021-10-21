@@ -16,6 +16,7 @@ class SignUpPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text("Sign Up")),
       body: SuperForm(
+        restorationId: "signup",
         validationMode: ValidationMode.onChange,
         onSubmit: (values) {
           showDialog(
@@ -179,7 +180,8 @@ class TermsAndConditionsCheckbox extends StatelessWidget {
                 children: <TextSpan>[
                   TextSpan(
                       text: 'Terms & Conditions',
-                      style: TextStyle(color: Theme.of(context).accentColor)),
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.secondary)),
                   const TextSpan(text: ' which I did not read.'),
                 ],
               ),

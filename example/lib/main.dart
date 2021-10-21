@@ -15,6 +15,7 @@ class ExamplesApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      restorationScopeId: "example_app",
       title: 'Super Form Demo',
       onGenerateRoute: (routeSettings) {
         switch (routeSettings.name) {
@@ -50,7 +51,7 @@ class ExamplesApp extends StatelessWidget {
                 subtitle:
                     const Text("Classic sign up form with gradual validation"),
                 onTap: () {
-                  Navigator.of(context).pushNamed("sign_up");
+                  Navigator.of(context).restorablePushNamed("sign_up");
                 },
               ),
               ListTile(
@@ -58,7 +59,7 @@ class ExamplesApp extends StatelessWidget {
                 subtitle: const Text(
                     "Satisfaction survey with sliders and dynamic email field"),
                 onTap: () {
-                  Navigator.of(context).pushNamed("survey");
+                  Navigator.of(context).restorablePushNamed("survey");
                 },
               ),
               ListTile(
@@ -66,7 +67,7 @@ class ExamplesApp extends StatelessWidget {
                 subtitle: const Text(
                     "Takeaway order with checkboxes, dynamic rules and editing"),
                 onTap: () {
-                  Navigator.of(context).pushNamed("burritox");
+                  Navigator.of(context).restorablePushNamed("burritox");
                 },
               ),
             ],
