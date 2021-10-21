@@ -1,3 +1,7 @@
+## 0.1.6
+* Add support for state restoration of primitives and collections of primitives
+* Bump dependencies and fix deprecated usages
+
 ## 0.1.5
 * Fix bug where text field would automatically set value to empty string triggering validation
 * Implement toString for rules and better debug properties
