@@ -222,7 +222,7 @@ class CheckboxSuperFormField<T> extends SuperFormField {
           rules: rules ?? [],
           builder: (context, fieldState, formState) {
             final List<T> currentValue =
-                (fieldState.data?.value as List<T>?) ?? [];
+                List.from(fieldState.data?.value as List? ?? []);
 
             void effectiveOnChanged(T value, bool checked) {
               List<T> newValue = currentValue;
@@ -295,7 +295,7 @@ class _CheckboxSuperFormFieldState<T> extends SuperFormFieldState {
 
     // Clearing values that no longer have corresponding option
     if (!listEquals(oldWidget.options, widget.options) && data != null) {
-      final currentValues = data!.value as List<T>? ?? [];
+      final List<T> currentValues = List.from(data!.value as List? ?? []);
       final List<T> newValues = [];
 
       for (final value in currentValues) {

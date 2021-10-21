@@ -16,6 +16,7 @@ class SignUpPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text("Sign Up")),
       body: SuperForm(
+        restorationId: "signup",
         validationMode: ValidationMode.onChange,
         onSubmit: (values) {
           showDialog(

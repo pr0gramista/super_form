@@ -87,6 +87,11 @@ class SuperForm extends StatefulWidget {
   final Function(Map<String, SuperFormFieldData> fields) onChange;
   final Function(SuperFormState form) onInit;
 
+  /// Restoration ID to save and restore form values
+  ///
+  /// See [RestorationManager], which explains how state restoration works in Flutter.
+  final String? restorationId;
+
   /// Map of initial values which will be obtained by field when registered or reset
   ///
   /// Modifying this field without resetting the form or registering fields has no effects.
@@ -100,6 +105,7 @@ class SuperForm extends StatefulWidget {
     this.onInit = _doNothing,
     this.onChange = _doNothing,
     this.initialValues = const {},
+    this.restorationId,
   }) : super(key: key);
 
   @override
@@ -427,7 +433,7 @@ class SuperFormFieldData extends Equatable {
 }
 
 /// [SuperForm] state which holds all field data and can be called to modify the form.
-class SuperFormState extends State<SuperForm> {
+class SuperFormState extends State<SuperForm> with RestorationMixin {
   ValidationMode _validationMode = ValidationMode.onSubmit;
   final String _formId =
       (_random.nextInt(15728640) + 1048576).toRadixString(16);
@@ -450,13 +456,18 @@ class SuperFormState extends State<SuperForm> {
   Map<String, List<ValidationError>> get errors =>
       data.map((key, field) => MapEntry(key, field.errors));
 
+  final _RestorableSuperFormValues _restorableFormValues =
+      _RestorableSuperFormValues();
+
   @override
   void initState() {
     super.initState();
 
     _validationMode = widget.validationMode;
 
-    widget.onInit(this);
+    // This is called in [restoreState] to already have restored values as
+    // onInit may depend on them i.e. registration of manual field
+    // widget.onInit(this);
   }
 
   @override
@@ -504,6 +515,9 @@ class SuperFormState extends State<SuperForm> {
     _triggerRebuild();
 
     widget.onChange(_fieldsData);
+
+    _restorableFormValues.value =
+        values.map((key, value) => MapEntry(key, value));
   }
 
   /// Validates field and updates it state
@@ -597,7 +611,7 @@ class SuperFormState extends State<SuperForm> {
       final newField = SuperFormFieldData(
         name: name,
         rules: rules,
-        value: widget.initialValues[name],
+        value: _restorableFormValues.value[name] ?? widget.initialValues[name],
         errors: const [],
         submitted: false,
         touched: false,
@@ -695,6 +709,42 @@ class SuperFormState extends State<SuperForm> {
       child: widget.child,
     );
   }
+
+  @override
+  String? get restorationId => widget.restorationId;
+
+  @override
+  void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
+    registerForRestoration(_restorableFormValues, 'formValues');
+
+    widget.onInit(this);
+  }
+}
+
+class _RestorableSuperFormValues extends RestorableValue<Map> {
+  @override
+  Map createDefaultValue() => {};
+
+  @override
+  void didUpdateValue(Map? oldValue) {
+    notifyListeners();
+  }
+
+  @override
+  Map fromPrimitives(Object? data) {
+    final map = data as Map?;
+
+    if (map == null) {
+      return const {};
+    }
+
+    map.removeWhere((key, value) => key is! String);
+
+    return map;
+  }
+
+  @override
+  Object? toPrimitives() => value;
 }
 
 class ValidationError extends Error {
