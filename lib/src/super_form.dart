@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 import 'enums.dart';
@@ -517,7 +518,15 @@ class SuperFormState extends State<SuperForm> with RestorationMixin {
     widget.onChange(_fieldsData);
 
     _restorableFormValues.value =
-        values.map((key, value) => MapEntry(key, value));
+        Map.fromEntries(values.entries.where((fieldData) {
+      // Filter out values that cannot be encoded
+      try {
+        const StandardMessageCodec().encodeMessage(fieldData.value);
+        return true;
+      } catch (_) {
+        return false;
+      }
+    }));
   }
 
   /// Validates field and updates it state

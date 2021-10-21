@@ -132,6 +132,8 @@ SuperForm(
 ## State restoration
 SuperForm also supports state restoration for collection and primitives values - all you need to do is to ensure that you have provided `restorationScopeId` to your `WidgetsApp`/`MaterialApp` and `restorationId` to SuperForm widget. See demo see survey and sign up examples.
 
+Field that cannot be encoded will be ignored.
+
 ### Does it use state management?
 Super Form follows the idea of form state being inherently ephemeral and local, so tracking it in Redux or Bloc is unnecessary. Super Form is also faster since changing one field doesn't trigger an update to all fields. While this behavior can be achieved with Redux/Bloc it is not done by default.
 
