@@ -11,11 +11,6 @@ Managing form state with standard Flutter forms can be extremely tedious. Super 
 
 Check out examples at [superform.dev](https://superform.dev)!
 
-### Does it use state management?
-Super Form follows the idea of form state being inherently ephemeral and local, so tracking it in Redux or Bloc is unnecessary. Super Form is also faster since changing one field doesn't trigger an update to all fields. While this behavior can be achieved with Redux/Bloc it is not done by default.
-
-Having said that it is possible to save the values to anything you want.
-
 ## Usage
 1. Create SuperForm widget at the top of your form the as you would do with Form. You may want to add a GlobalKey, but that's not required.
 ```dart
@@ -134,7 +129,15 @@ SuperForm(
 );
 ```
 
-## Why use `dynamic`?
+## State restoration
+SuperForm also supports state restoration for collection and primitives values - all you need to do is to ensure that you have provided `restorationScopeId` to your `WidgetsApp`/`MaterialApp` and `restorationId` to SuperForm widget. See demo see survey and sign up examples.
+
+### Does it use state management?
+Super Form follows the idea of form state being inherently ephemeral and local, so tracking it in Redux or Bloc is unnecessary. Super Form is also faster since changing one field doesn't trigger an update to all fields. While this behavior can be achieved with Redux/Bloc it is not done by default.
+
+Having said that it is possible to save the values to anything you want.
+
+### Why use `dynamic`?
 While it comes with many implications it allows to put everything into one place. Having tried to do that using generics resulted in putting lots of stupid mapping functions or additional classes. Code generation could solve that, but then I would name this package SuperChonkyForm. In the end, when static metaprogramming shows up I'll probably create SuperForm v2 which would preserve types.
 
 ## Contributing
