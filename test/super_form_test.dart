@@ -514,4 +514,51 @@ void main() {
     expect(find.text(errorMessage1), findsNothing);
     expect(find.text(errorMessage2), findsOneWidget);
   });
+
+  testWidgets('can restore state', (WidgetTester tester) async {
+    final formKey = GlobalKey<SuperFormState>();
+    const nameInput = Key('nameInput');
+
+    final listener = SubmitListener();
+
+    await tester.pumpWidget(
+      boilerplate(
+        restorationScopeId: "app",
+        child: SuperForm(
+          restorationId: "form",
+          onSubmit: listener,
+          key: formKey,
+          child: Builder(
+            builder: (context) => Column(children: [
+              TextSuperFormField(
+                key: nameInput,
+                name: "name",
+                rules: [RequiredRule("Please provide your name")],
+              ),
+              CheckboxSuperFormField.listTile(name: "services", options: const [
+                CheckboxOption("hoovering", Text("Hoovering")),
+                CheckboxOption("laundry", Text("Laundry")),
+                CheckboxOption("mopping", Text("Mopping")),
+              ]),
+              ElevatedButton(
+                onPressed: () {
+                  SuperForm.of(context, listen: false).submit();
+                },
+                child: const Text("Submit"),
+              )
+            ]),
+          ),
+        ),
+      ),
+    );
+
+    await tester.enterText(find.byKey(nameInput), "Bartatus");
+    await tester.tap(find.text("Laundry"));
+
+    await tester.pumpAndSettle();
+    await tester.restartAndRestore();
+
+    expect(find.text("Bartatus"), findsOneWidget);
+    expect(formKey.currentState!.values["services"], ["laundry"]);
+  });
 }
