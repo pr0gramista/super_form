@@ -180,7 +180,8 @@ class TermsAndConditionsCheckbox extends StatelessWidget {
                 children: <TextSpan>[
                   TextSpan(
                       text: 'Terms & Conditions',
-                      style: TextStyle(color: Theme.of(context).accentColor)),
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.secondary)),
                   const TextSpan(text: ' which I did not read.'),
                 ],
               ),
