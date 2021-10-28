@@ -13,6 +13,8 @@ import '../../super_form.dart';
 /// hide errors from validation.
 ///
 /// If [enabled] is set to false, the field will be displayed as disabled.
+/// If non-null this property overrides the [decoration]'s
+/// [InputDecoration.enabled] property.
 ///
 /// Most fields are kept the same as in [DropdownButton] so see there for documentation
 /// of specific properties.

@@ -257,5 +257,29 @@ void main() {
     await tester.tap(find.text("One").last, warnIfMissed: false);
     await tester.pumpAndSettle();
     expect(formKey.currentState?.values[fieldName], equals(2));
+
+    await tester.pumpWidget(
+      boilerplate(
+        child: SuperForm(
+          key: formKey,
+          child: DropdownSuperFormField(
+            name: fieldName,
+            key: key,
+            decoration: const InputDecoration(enabled: false),
+            items: const [
+              DropdownMenuItem(value: 1, child: Text("One")),
+              DropdownMenuItem(value: 2, child: Text("Two")),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.byKey(key));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text("One").last, warnIfMissed: false);
+    await tester.pumpAndSettle();
+    expect(formKey.currentState?.values[fieldName], equals(2));
   });
 }
