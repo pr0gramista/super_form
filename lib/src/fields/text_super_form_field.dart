@@ -136,6 +136,8 @@ class TextSuperFormField extends SuperFormField {
               };
             }
 
+            final effectiveEnabled = enabled ?? decoration?.enabled ?? true;
+
             return TextField(
               controller: fieldState._controller,
               focusNode: fieldState.focusNode,
@@ -174,7 +176,7 @@ class TextSuperFormField extends SuperFormField {
               onEditingComplete: effectiveOnEditingComplete,
               onSubmitted: onFieldSubmitted,
               inputFormatters: inputFormatters,
-              enabled: enabled ?? decoration?.enabled ?? true,
+              enabled: effectiveEnabled,
               cursorWidth: cursorWidth,
               cursorHeight: cursorHeight,
               cursorRadius: cursorRadius,

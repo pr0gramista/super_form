@@ -166,4 +166,44 @@ void main() {
     verify(listener(0.5)).called(1);
     verifyNoMoreInteractions(listener);
   });
+
+  testWidgets('can be disabled', (WidgetTester tester) async {
+    final formKey = GlobalKey<SuperFormState>();
+    final listener = SliderChangedListener();
+    const key = Key('slider');
+
+    await tester.pumpWidget(
+      boilerplate(
+        child: SuperForm(
+          key: formKey,
+          child: SliderSuperFormField(
+            key: key,
+            name: "name",
+            onChanged: listener,
+            enabled: true,
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.byKey(key));
+    verify(listener(0.5)).called(1);
+    verifyNoMoreInteractions(listener);
+
+    await tester.pumpWidget(
+      boilerplate(
+        child: SuperForm(
+          key: formKey,
+          child: SliderSuperFormField(
+            key: key,
+            name: "name",
+            onChanged: listener,
+            enabled: true,
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.byKey(key));
+  });
 }

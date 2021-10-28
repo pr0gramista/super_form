@@ -13,6 +13,7 @@ void main() {
     bool autofocus = false,
     RadioBuilder<String>? builder,
     bool toggleable = false,
+    bool? enabled,
   }) {
     if (builder != null) {
       return RadioSuperFormField(
@@ -20,6 +21,7 @@ void main() {
         name: name,
         builder: builder,
         rules: rules,
+        enabled: enabled,
         options: const [
           RadioOption("one", Text("One")),
           RadioOption("two", Text("Two")),
@@ -34,6 +36,7 @@ void main() {
       autofocus: autofocus,
       rules: rules,
       toggleable: toggleable,
+      enabled: enabled,
       options: const [
         RadioOption("one", Text("One")),
         RadioOption("two", Text("Two")),
@@ -313,6 +316,44 @@ void main() {
     expect(formKey.currentState?.values[fieldName], 2);
   });
 
+  testWidgets('can be disabled', (WidgetTester tester) async {
+    final formKey = GlobalKey<SuperFormState>();
+    const fieldName = 'field';
+
+    await tester.pumpWidget(
+      boilerplate(
+        child: SuperForm(
+          key: formKey,
+          child: get123(
+            name: fieldName,
+            enabled: true,
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.text("One"));
+    await tester.pumpAndSettle();
+    expect(formKey.currentState?.values[fieldName], equals("one"));
+
+    await tester.pumpWidget(
+      boilerplate(
+        child: SuperForm(
+          key: formKey,
+          child: get123(
+            name: fieldName,
+            enabled: false,
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text("Two"));
+    await tester.pumpAndSettle();
+    expect(formKey.currentState?.values[fieldName], equals("one"));
+  });
+
   group("custom builder", () {
     Widget builder(BuildContext context, RadioState<String> state) {
       // Let's make something avant-garde
@@ -321,9 +362,11 @@ void main() {
               .map((o) => ElevatedButton(
                     focusNode: state.focusNode,
                     autofocus: true,
-                    onPressed: () {
-                      state.onChanged(o.value);
-                    },
+                    onPressed: state.onChanged != null
+                        ? () {
+                            state.onChanged!(o.value);
+                          }
+                        : null,
                     child: o.label,
                   ))
               .toList());
@@ -486,6 +529,46 @@ void main() {
       await tester.pumpAndSettle();
       verify(listener("one")).called(1);
       verifyNoMoreInteractions(listener);
+    });
+
+    testWidgets('can be disabled', (WidgetTester tester) async {
+      final formKey = GlobalKey<SuperFormState>();
+      const fieldName = 'field';
+
+      await tester.pumpWidget(
+        boilerplate(
+          child: SuperForm(
+            key: formKey,
+            child: get123(
+              name: fieldName,
+              builder: builder,
+              enabled: true,
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text("One"));
+      await tester.pumpAndSettle();
+      expect(formKey.currentState?.values[fieldName], equals("one"));
+
+      await tester.pumpWidget(
+        boilerplate(
+          child: SuperForm(
+            key: formKey,
+            child: get123(
+              name: fieldName,
+              builder: builder,
+              enabled: false,
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text("Two"));
+      await tester.pumpAndSettle();
+      expect(formKey.currentState?.values[fieldName], equals("one"));
     });
   });
 }

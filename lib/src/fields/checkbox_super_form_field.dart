@@ -58,9 +58,11 @@ Widget listTileCheckboxBuilder<T>(
           contentPadding: contentPadding,
           shape: shape,
           selectedTileColor: selectedTileColor,
-          onChanged: (checked) {
-            state.onChanged(option.value, checked!);
-          },
+          onChanged: state.onChanged != null
+              ? (checked) {
+                  state.onChanged!(option.value, checked!);
+                }
+              : null,
         );
       }).toList(),
     ),
@@ -71,7 +73,7 @@ Widget listTileCheckboxBuilder<T>(
 class CheckboxState<T> {
   final List<CheckboxOption<T>> options;
   final List<T>? checkedValues;
-  final void Function(T value, bool checked) onChanged;
+  final void Function(T value, bool checked)? onChanged;
   final FocusNode focusNode;
 
   const CheckboxState(
@@ -125,6 +127,9 @@ class CheckboxSuperFormField<T> extends SuperFormField {
   /// List of available options
   final List<CheckboxOption<T>> options;
 
+  /// If false, the field will be displayed as disabled.
+  final bool? enabled;
+
   /// Creates a [CheckboxSuperFormField] that delegates its build to a [builder]
   /// while providing helpful [CheckboxState] abstraction.
   ///
@@ -137,6 +142,7 @@ class CheckboxSuperFormField<T> extends SuperFormField {
     required this.options,
     List<SuperFormFieldRule>? rules,
     void Function(T value, bool checked)? onChanged,
+    this.enabled,
   }) : super(
           key: key,
           name: name,
@@ -176,12 +182,14 @@ class CheckboxSuperFormField<T> extends SuperFormField {
               }
             }
 
+            final effectiveEnabled = enabled ?? true;
+
             return builder(
               context,
               CheckboxState<T>(
                 options,
                 currentValue,
-                effectiveOnChanged,
+                effectiveEnabled ? effectiveOnChanged : null,
                 fieldState.focusNode,
               ),
             );
@@ -216,6 +224,7 @@ class CheckboxSuperFormField<T> extends SuperFormField {
     ShapeBorder? shape,
     Color? selectedTileColor,
     void Function(T value, bool checked)? onChanged,
+    this.enabled,
   }) : super(
           key: key,
           name: name,
@@ -255,12 +264,14 @@ class CheckboxSuperFormField<T> extends SuperFormField {
               }
             }
 
+            final effectiveEnabled = enabled ?? true;
+
             return listTileCheckboxBuilder(
               context,
               CheckboxState<T>(
                 options,
                 currentValue,
-                effectiveOnChanged,
+                effectiveEnabled ? effectiveOnChanged : null,
                 fieldState.focusNode,
               ),
               activeColor: activeColor,

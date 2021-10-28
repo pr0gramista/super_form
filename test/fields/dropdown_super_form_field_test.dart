@@ -204,4 +204,58 @@ void main() {
     verify(listener(2)).called(1);
     verifyNoMoreInteractions(listener);
   });
+
+  testWidgets('can be disabled', (WidgetTester tester) async {
+    final formKey = GlobalKey<SuperFormState>();
+    const key = Key('dropdown');
+    const fieldName = 'field';
+
+    await tester.pumpWidget(
+      boilerplate(
+        child: SuperForm(
+          key: formKey,
+          child: DropdownSuperFormField(
+            name: fieldName,
+            key: key,
+            enabled: true,
+            items: const [
+              DropdownMenuItem(value: 1, child: Text("One")),
+              DropdownMenuItem(value: 2, child: Text("Two")),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.byKey(key));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text("Two").last);
+    await tester.pumpAndSettle();
+    expect(formKey.currentState?.values[fieldName], equals(2));
+
+    await tester.pumpWidget(
+      boilerplate(
+        child: SuperForm(
+          key: formKey,
+          child: DropdownSuperFormField(
+            name: fieldName,
+            key: key,
+            enabled: false,
+            items: const [
+              DropdownMenuItem(value: 1, child: Text("One")),
+              DropdownMenuItem(value: 2, child: Text("Two")),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.byKey(key));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text("One").last, warnIfMissed: false);
+    await tester.pumpAndSettle();
+    expect(formKey.currentState?.values[fieldName], equals(2));
+  });
 }
