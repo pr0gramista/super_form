@@ -231,6 +231,62 @@ void main() {
     verifyNoMoreInteractions(listener);
   });
 
+  testWidgets('can un-register field manually', (WidgetTester tester) async {
+    final formKey = GlobalKey<SuperFormState>();
+    const loginInput = Key('loginInput');
+    const passwordInput = Key('passwordInput');
+
+    final listener = SubmitListener();
+
+    await tester.pumpWidget(
+      boilerplate(
+        child: SuperForm(
+          onSubmit: listener,
+          key: formKey,
+          child: Builder(
+            builder: (context) => Column(children: [
+              TextSuperFormField(
+                key: loginInput,
+                name: "login",
+                rules: [RequiredRule("Login is required")],
+              ),
+              TextSuperFormField(
+                key: passwordInput,
+                name: "password",
+                rules: [
+                  RequiredRule("Password is required"),
+                  MinimumLengthRule(6, "Must be at least 6 characters"),
+                ],
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  SuperForm.of(context, listen: false).submit();
+                },
+                child: const Text("Submit"),
+              )
+            ]),
+          ),
+        ),
+      ),
+    );
+
+    await tester.enterText(find.byKey(loginInput), "hello@12345.pl");
+    await tester.enterText(find.byKey(passwordInput), "123456");
+
+    // Not really doing anything meaningful, but if you want to unregister a field
+    // that is "live" you still should be able to.
+    formKey.currentState!.unregister(name: "password");
+
+    expect(formKey.currentState!.values["login"], "hello@12345.pl");
+    expect(formKey.currentState!.values["password"], isNull);
+    expect(tester.takeException(), isNull);
+
+    await tester.tap(find.byType(ElevatedButton));
+
+    verify(listener({"login": "hello@12345.pl"})).called(1);
+    verifyNoMoreInteractions(listener);
+  });
+
   testWidgets('can reset form', (WidgetTester tester) async {
     final formKey = GlobalKey<SuperFormState>();
     const loginInput = Key('loginInput');
@@ -617,5 +673,26 @@ void main() {
 
     expect(find.text("Bartatus"), findsOneWidget);
     expect(formKey.currentState!.values["numbers"], null);
+  });
+
+  testWidgets('can set touched programatically', (WidgetTester tester) async {
+    final formKey = GlobalKey<SuperFormState>();
+
+    await tester.pumpWidget(
+      boilerplate(
+        child: SuperForm(
+          key: formKey,
+          child: Builder(
+            builder: (context) => Column(children: [
+              TextSuperFormField(name: "login"),
+              TextSuperFormField(name: "password"),
+            ]),
+          ),
+        ),
+      ),
+    );
+
+    formKey.currentState!.setTouched("login", true);
+    expect(formKey.currentState!.data["login"]!.touched, true);
   });
 }

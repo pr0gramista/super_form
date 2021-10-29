@@ -84,21 +84,7 @@ class TextSuperFormField extends SuperFormField {
     ScrollController? scrollController,
     Widget? noFormFallback,
     FocusNode? focusNode,
-  })  : assert(obscuringCharacter.length == 1),
-        assert(maxLines == null || maxLines > 0),
-        assert(minLines == null || minLines > 0),
-        assert(
-          (maxLines == null) || (minLines == null) || (maxLines >= minLines),
-          "minLines can't be greater than maxLines",
-        ),
-        assert(
-          !expands || (maxLines == null && minLines == null),
-          'minLines and maxLines must be null when expands is true.',
-        ),
-        assert(!obscureText || maxLines == 1,
-            'Obscured fields cannot be multiline.'),
-        assert(maxLength == null || maxLength > 0),
-        super(
+  }) : super(
           key: key,
           name: name,
           rules: rules ?? const [],
