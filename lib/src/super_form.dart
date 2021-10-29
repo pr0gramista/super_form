@@ -370,8 +370,6 @@ class SuperFormFieldData extends Equatable {
     required this.submitted,
   });
 
-  static SuperFormFieldData? of(BuildContext buildContext, String name) {}
-
   SuperFormFieldData reset(dynamic newInitialValue) {
     return SuperFormFieldData(
       name: name,
