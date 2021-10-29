@@ -364,4 +364,46 @@ void main() {
 
     expect(find.text("Must not be empty"), findsOneWidget);
   });
+
+  testWidgets('can be disabled', (WidgetTester tester) async {
+    final formKey = GlobalKey<SuperFormState>();
+    const inputKey = Key('input');
+    const fieldName = 'field';
+
+    await tester.pumpWidget(
+      boilerplate(
+        child: SuperForm(
+          key: formKey,
+          child: Builder(
+            builder: (context) => TextSuperFormField(
+              key: inputKey,
+              name: fieldName,
+              enabled: true,
+            ),
+          ),
+        ),
+      ),
+    );
+
+    await tester.enterText(find.byKey(inputKey), "hello");
+    expect(formKey.currentState?.data[fieldName]?.value, "hello");
+
+    await tester.pumpWidget(
+      boilerplate(
+        child: SuperForm(
+          key: formKey,
+          child: Builder(
+            builder: (context) => TextSuperFormField(
+              key: inputKey,
+              name: fieldName,
+              enabled: false,
+            ),
+          ),
+        ),
+      ),
+    );
+
+    await tester.enterText(find.byKey(inputKey), "world");
+    expect(formKey.currentState?.data[fieldName]?.value, "hello");
+  });
 }

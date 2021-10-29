@@ -41,9 +41,7 @@ Widget listTileRadioBuilder<T>(
       children: state.options.map((option) {
         return RadioListTile(
           groupValue: state.groupValue,
-          onChanged: (T? value) {
-            state.onChanged(value);
-          },
+          onChanged: state.onChanged,
           value: option.value,
           title: option.label,
           toggleable: toggleable,
@@ -70,7 +68,7 @@ Widget listTileRadioBuilder<T>(
 class RadioState<T> {
   final List<RadioOption<T>> options;
   final T? groupValue;
-  final void Function(T? value) onChanged;
+  final void Function(T? value)? onChanged;
   final FocusNode focusNode;
 
   const RadioState(
@@ -118,6 +116,9 @@ class RadioSuperFormField<T> extends SuperFormField {
   /// List of available options
   final List<RadioOption<T>> options;
 
+  /// If false, the field will be displayed as disabled.
+  final bool? enabled;
+
   /// Creates a [RadioSuperFormField] that delegates its build to a [builder]
   /// while providing helpful [RadioState] abstraction.
   ///
@@ -130,6 +131,7 @@ class RadioSuperFormField<T> extends SuperFormField {
     required this.options,
     List<SuperFormFieldRule>? rules,
     void Function(T? value)? onChanged,
+    this.enabled,
   }) : super(
           key: key,
           name: name,
@@ -156,12 +158,14 @@ class RadioSuperFormField<T> extends SuperFormField {
               }
             }
 
+            final effectiveEnabled = enabled ?? true;
+
             return builder(
               context,
               RadioState<T>(
                 options,
                 currentGroupValue,
-                effectiveOnChanged,
+                effectiveEnabled ? effectiveOnChanged : null,
                 fieldState.focusNode,
               ),
             );
@@ -195,6 +199,7 @@ class RadioSuperFormField<T> extends SuperFormField {
     Color? tileColor,
     Color? selectedTileColor,
     void Function(T? value)? onChanged,
+    this.enabled,
   }) : super(
           key: key,
           name: name,
@@ -221,12 +226,14 @@ class RadioSuperFormField<T> extends SuperFormField {
               }
             }
 
+            final effectiveEnabled = enabled ?? true;
+
             return listTileRadioBuilder(
               context,
               RadioState<T>(
                 options,
                 currentGroupValue,
-                effectiveOnChanged,
+                effectiveEnabled ? effectiveOnChanged : null,
                 fieldState.focusNode,
               ),
               toggleable: toggleable,

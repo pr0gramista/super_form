@@ -143,6 +143,9 @@ class SliderSuperFormField extends SuperFormField {
   /// {@macro flutter.widgets.Focus.autofocus}
   final bool autofocus;
 
+  /// If null, the slider will be displayed as disabled.
+  final bool? enabled;
+
   SliderSuperFormField({
     Key? key,
     required String name,
@@ -160,6 +163,7 @@ class SliderSuperFormField extends SuperFormField {
     this.mouseCursor,
     this.semanticFormatterCallback,
     this.autofocus = false,
+    this.enabled,
   }) : super(
           key: key,
           name: name,
@@ -171,6 +175,8 @@ class SliderSuperFormField extends SuperFormField {
             formState,
           ) {
             final fieldData = formState.data[name]!;
+
+            final effectiveEnabled = enabled ?? true;
 
             void effectiveOnChange(double newValue) {
               SuperFormFieldData newData = fieldData.copyWithValue(
@@ -193,7 +199,7 @@ class SliderSuperFormField extends SuperFormField {
 
             return Slider(
               value: (fieldData.value as double?) ?? min,
-              onChanged: effectiveOnChange,
+              onChanged: effectiveEnabled ? effectiveOnChange : null,
               onChangeStart: onChangeStart,
               onChangeEnd: onChangeEnd,
               min: min,

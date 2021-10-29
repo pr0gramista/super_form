@@ -12,6 +12,7 @@ void main() {
     List<SuperFormFieldRule>? rules,
     bool autofocus = false,
     CheckboxBuilder<String>? builder,
+    bool? enabled,
   }) {
     if (builder != null) {
       return CheckboxSuperFormField(
@@ -24,6 +25,7 @@ void main() {
           CheckboxOption("two", Text("Two")),
           CheckboxOption("three", Text("Three")),
         ],
+        enabled: enabled,
       );
     }
 
@@ -37,6 +39,7 @@ void main() {
         CheckboxOption("two", Text("Two")),
         CheckboxOption("three", Text("Three")),
       ],
+      enabled: enabled,
     );
   }
 
@@ -292,6 +295,48 @@ void main() {
     expect(formKey.currentState?.values[fieldName], [2]);
   });
 
+  testWidgets('can be disabled', (WidgetTester tester) async {
+    final formKey = GlobalKey<SuperFormState>();
+    const fieldName = 'field';
+
+    await tester.pumpWidget(
+      boilerplate(
+        child: SuperForm(
+          key: formKey,
+          child: get123(
+            name: fieldName,
+            enabled: true,
+          ),
+        ),
+      ),
+    );
+
+    expect(formKey.currentState?.values[fieldName], isNull);
+    await tester.tap(find.text("One"));
+    await tester.pumpAndSettle();
+    expect(formKey.currentState?.values[fieldName], equals(["one"]));
+
+    await tester.pumpWidget(
+      boilerplate(
+        child: SuperForm(
+          key: formKey,
+          child: get123(
+            name: fieldName,
+            enabled: false,
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.text("Two"));
+    await tester.pumpAndSettle();
+    expect(formKey.currentState?.values[fieldName], equals(["one"]));
+
+    await tester.tap(find.text("One"));
+    await tester.pumpAndSettle();
+    expect(formKey.currentState?.values[fieldName], equals(["one"]));
+  });
+
   group("custom builder", () {
     Widget builder(BuildContext context, CheckboxState<String> state) {
       // Let's make something avant-garde
@@ -300,12 +345,14 @@ void main() {
               .map((o) => ElevatedButton(
                     focusNode: state.focusNode,
                     autofocus: true,
-                    onPressed: () {
-                      final checked =
-                          state.checkedValues?.contains(o.value) ?? false;
+                    onPressed: state.onChanged != null
+                        ? () {
+                            final checked =
+                                state.checkedValues?.contains(o.value) ?? false;
 
-                      state.onChanged(o.value, !checked);
-                    },
+                            state.onChanged!(o.value, !checked);
+                          }
+                        : null,
                     child: o.label,
                   ))
               .toList());
@@ -468,6 +515,50 @@ void main() {
       await tester.pumpAndSettle();
       verify(listener("one", true)).called(1);
       verifyNoMoreInteractions(listener);
+    });
+
+    testWidgets('can be disabled', (WidgetTester tester) async {
+      final formKey = GlobalKey<SuperFormState>();
+      const fieldName = 'field';
+
+      await tester.pumpWidget(
+        boilerplate(
+          child: SuperForm(
+            key: formKey,
+            child: get123(
+              name: fieldName,
+              builder: builder,
+              enabled: true,
+            ),
+          ),
+        ),
+      );
+
+      expect(formKey.currentState?.values[fieldName], isNull);
+      await tester.tap(find.text("One"));
+      await tester.pumpAndSettle();
+      expect(formKey.currentState?.values[fieldName], equals(["one"]));
+
+      await tester.pumpWidget(
+        boilerplate(
+          child: SuperForm(
+            key: formKey,
+            child: get123(
+              name: fieldName,
+              builder: builder,
+              enabled: false,
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text("Two"));
+      await tester.pumpAndSettle();
+      expect(formKey.currentState?.values[fieldName], equals(["one"]));
+
+      await tester.tap(find.text("One"));
+      await tester.pumpAndSettle();
+      expect(formKey.currentState?.values[fieldName], equals(["one"]));
     });
   });
 }

@@ -12,6 +12,10 @@ import '../../super_form.dart';
 /// automatically as errorText of [InputDecoration]. Overriding this property will
 /// hide errors from validation.
 ///
+/// If [enabled] is set to false, the field will be displayed as disabled.
+/// If non-null this property overrides the [decoration]'s
+/// [InputDecoration.enabled] property.
+///
 /// Most fields are kept the same as in [DropdownButton] so see there for documentation
 /// of specific properties.
 ///
@@ -59,6 +63,7 @@ class DropdownSuperFormField<T> extends SuperFormField {
     InputDecoration? decoration,
     double? menuMaxHeight,
     ValueChanged<T?>? onChanged,
+    bool? enabled,
   }) : super(
           key: key,
           name: name,
@@ -76,6 +81,8 @@ class DropdownSuperFormField<T> extends SuperFormField {
                   errorText: fieldData.errors.first.message);
             }
 
+            final effectiveEnabled = enabled ?? decoration?.enabled ?? true;
+
             return Focus(
               canRequestFocus: false,
               skipTraversal: true,
@@ -91,22 +98,25 @@ class DropdownSuperFormField<T> extends SuperFormField {
                       value: fieldData?.value as T?,
                       hint: hint,
                       disabledHint: disabledHint,
-                      onChanged: (newValue) {
-                        SuperFormFieldData newData = fieldData!.copyWithValue(
-                          value: newValue,
-                          touched: true,
-                        );
+                      onChanged: effectiveEnabled
+                          ? (newValue) {
+                              SuperFormFieldData newData =
+                                  fieldData!.copyWithValue(
+                                value: newValue,
+                                touched: true,
+                              );
 
-                        if (formState.validationMode ==
-                                ValidationMode.onChange ||
-                            newData.submitted) {
-                          newData = newData.validate();
-                        }
+                              if (formState.validationMode ==
+                                      ValidationMode.onChange ||
+                                  newData.submitted) {
+                                newData = newData.validate();
+                              }
 
-                        formState.updateFieldData(newData);
+                              formState.updateFieldData(newData);
 
-                        if (onChanged != null) onChanged(newValue);
-                      },
+                              if (onChanged != null) onChanged(newValue);
+                            }
+                          : null,
                       onTap: onTap,
                       elevation: elevation,
                       style: style,
