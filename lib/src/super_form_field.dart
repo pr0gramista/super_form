@@ -175,6 +175,10 @@ class SuperFormFieldState extends State<SuperFormField> {
       if (focused) {
         focused = false;
 
+        if (data?.touched == false) {
+          setTouched(true);
+        }
+
         if (form?.validationMode == ValidationMode.onBlur) {
           validate(markSubmitted: true);
         }

@@ -74,6 +74,8 @@ void main() {
     await tester.pump();
     expect(find.text(errorText), findsOneWidget);
 
+    expect(formKey.currentState!.data["name"]!.touched, true);
+
     await tester.enterText(find.byKey(inputKey), "hello world");
     await tester.pump();
     expect(find.text(errorText), findsNothing);
