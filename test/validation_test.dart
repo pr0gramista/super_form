@@ -222,5 +222,6 @@ void main() {
     const error2 = ValidationError("Must be a number!");
 
     expect(error == error2, true);
+    expect(error.hashCode == error2.hashCode, true);
   });
 }

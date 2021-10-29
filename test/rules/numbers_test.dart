@@ -16,6 +16,8 @@ const maxValueTestCases = [
   ParamRuleTestCase(0, 1000, true),
   ParamRuleTestCase("1000", 1000, true),
   ParamRuleTestCase("1001", 1000, false),
+  ParamRuleTestCase("null", 1000, false),
+  ParamRuleTestCase("kaboom", 1000, false),
 ];
 
 const minValueTestCases = [
@@ -30,6 +32,8 @@ const minValueTestCases = [
   ParamRuleTestCase("4", 4, true),
   ParamRuleTestCase("4.6", 4.5, true),
   ParamRuleTestCase("3", 4, false),
+  ParamRuleTestCase("null", 0, false),
+  ParamRuleTestCase("kaboom", 0, false),
 ];
 
 const numberTestCases = [

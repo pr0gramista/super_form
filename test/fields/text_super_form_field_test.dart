@@ -408,4 +408,54 @@ void main() {
     await tester.enterText(find.byKey(inputKey), "world");
     expect(formKey.currentState?.data[fieldName]?.value, "hello");
   });
+
+  testWidgets('can switch FocusNodes', (WidgetTester tester) async {
+    const inputKey = Key('input');
+    const fieldName = 'field';
+
+    final listener1 = VoidListener();
+    final listener2 = VoidListener();
+    final FocusNode focusNode1 = FocusNode();
+    final FocusNode focusNode2 = FocusNode();
+    focusNode1.addListener(listener1);
+    focusNode2.addListener(listener2);
+
+    await tester.pumpWidget(
+      boilerplate(
+        child: SuperForm(
+          child: Builder(
+            builder: (context) => TextSuperFormField(
+              key: inputKey,
+              name: fieldName,
+              focusNode: focusNode1,
+            ),
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.byKey(inputKey));
+
+    verify(listener1()).called(1);
+    verifyNever(listener2());
+
+    await tester.pumpWidget(
+      boilerplate(
+        child: SuperForm(
+          child: Builder(
+            builder: (context) => TextSuperFormField(
+              key: inputKey,
+              name: fieldName,
+              focusNode: focusNode2,
+            ),
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.byKey(inputKey));
+
+    verifyNever(listener1());
+    verify(listener2()).called(1);
+  });
 }
