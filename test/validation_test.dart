@@ -210,4 +210,17 @@ void main() {
     verify(listener(formKey.currentState!.values)).called(1);
     verifyNoMoreInteractions(listener);
   });
+
+  test("ValidationError.toString", () {
+    const error = ValidationError("Must be a number!");
+
+    expect(error.toString(), "Validation error: Must be a number!");
+  });
+
+  test("ValidationError implements hashCode/equals", () {
+    const error = ValidationError("Must be a number!");
+    const error2 = ValidationError("Must be a number!");
+
+    expect(error == error2, true);
+  });
 }
