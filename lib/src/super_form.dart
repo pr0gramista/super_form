@@ -756,15 +756,18 @@ class _RestorableSuperFormValues extends RestorableValue<Map> {
   Object? toPrimitives() => value;
 }
 
-class ValidationError extends Error {
+class ValidationError extends Equatable {
   final String message;
 
-  ValidationError(this.message);
+  const ValidationError(this.message);
 
   @override
   String toString() {
-    return 'ValidationError: "$message"';
+    return 'Validation error: $message';
   }
+
+  @override
+  List<Object?> get props => [message];
 }
 
 abstract class SuperFormFieldRule<T> {
