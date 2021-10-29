@@ -1,3 +1,8 @@
+## 0.1.7
+* Add support for disabled state via `enabled` property for SuperFormFields
+* Fix ValidationError extending Dart Error class
+* Set field as touched after focus is lost
+
 ## 0.1.6
 * Add support for state restoration of primitives and collections of primitives
 * Bump dependencies and fix deprecated usages

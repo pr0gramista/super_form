@@ -1,6 +1,6 @@
 name: super_form
 description: Quick, familiar and extensible forms in Flutter. No magical configuration required. Comes with form widgets, error text and many validation rules.
-version: 0.1.6
+version: 0.1.7
 repository: https://github.com/pr0gramista/super_form
 
 environment:
