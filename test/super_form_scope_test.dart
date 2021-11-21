@@ -68,62 +68,6 @@ void main() {
       expect(buildCounters[buildCounterName], 1);
     });
 
-    testWidgets('of without listen updates when form has changed',
-        (WidgetTester tester) async {
-      const inputKey = Key('input');
-
-      // This must be unique between all tests
-      const buildCounterName = "ofnolistenform";
-
-      await tester.pumpWidget(
-        boilerplate(
-          child: SuperForm(
-            validationMode: ValidationMode.onBlur,
-            child: Builder(
-              builder: (context) => Column(children: [
-                TextSuperFormField(
-                  key: inputKey,
-                  name: "name",
-                ),
-                Builder(builder: (context) {
-                  SuperForm.of(context, listen: false);
-
-                  return BuildCounter(name: buildCounterName);
-                }),
-              ]),
-            ),
-          ),
-        ),
-      );
-
-      expect(buildCounters[buildCounterName], 1);
-      await tester.enterText(find.byKey(inputKey), "hello world");
-      expect(buildCounters[buildCounterName], 1);
-
-      await tester.pumpWidget(
-        boilerplate(
-          child: SuperForm(
-            validationMode: ValidationMode.onChange,
-            child: Builder(
-              builder: (context) => Column(children: [
-                TextSuperFormField(
-                  key: inputKey,
-                  name: "name",
-                ),
-                Builder(builder: (context) {
-                  SuperForm.of(context, listen: false);
-
-                  return BuildCounter(name: buildCounterName);
-                }),
-              ]),
-            ),
-          ),
-        ),
-      );
-
-      expect(buildCounters[buildCounterName], 2);
-    });
-
     testWidgets('ofMaybe with listen', (WidgetTester tester) async {
       const inputKey = Key('input');
 
@@ -346,6 +290,92 @@ void main() {
       expect(buildCounters[buildCounterName], 4);
 
       expect(seenValues, expectedValues);
+    });
+
+    testWidgets('ofField updates when form properties are changed',
+        (WidgetTester tester) async {
+      // This must be unique between all tests
+      const buildCounterName = "offield-form-properties";
+
+      await tester.pumpWidget(
+        boilerplate(
+          child: Builder(builder: (context) {
+            return SuperFormMangler(
+              child: Column(children: [
+                TextSuperFormField(name: "name"),
+                Builder(builder: (context) {
+                  SuperForm.ofField(context, "name");
+
+                  return BuildCounter(name: buildCounterName);
+                }),
+              ]),
+            );
+          }),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+      expect(buildCounters[buildCounterName], 2);
+
+      await tester.tap(find.text("Disable"));
+      await tester.pumpAndSettle();
+      expect(buildCounters[buildCounterName], 3);
+
+      await tester.tap(find.text("Set onBlur"));
+      await tester.pumpAndSettle();
+      expect(buildCounters[buildCounterName], 4);
+
+      // These are not providing any real change
+      await tester.tap(find.text("Set onBlur"));
+      await tester.pumpAndSettle();
+      expect(buildCounters[buildCounterName], 4);
+
+      await tester.tap(find.text("Disable"));
+      await tester.pumpAndSettle();
+      expect(buildCounters[buildCounterName], 4);
+    });
+
+    testWidgets('of updates when form properties are changed',
+        (WidgetTester tester) async {
+      // This must be unique between all tests
+      const buildCounterName = "of-form-properties";
+
+      await tester.pumpWidget(
+        boilerplate(
+          child: Builder(builder: (context) {
+            return SuperFormMangler(
+              child: Column(children: [
+                TextSuperFormField(name: "name"),
+                Builder(builder: (context) {
+                  SuperForm.of(context);
+
+                  return BuildCounter(name: buildCounterName);
+                }),
+              ]),
+            );
+          }),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+      expect(buildCounters[buildCounterName], 2);
+
+      await tester.tap(find.text("Disable"));
+      await tester.pumpAndSettle();
+      expect(buildCounters[buildCounterName], 3);
+
+      await tester.tap(find.text("Set onBlur"));
+      await tester.pumpAndSettle();
+      expect(buildCounters[buildCounterName], 4);
+
+      // These are not providing any real change
+      await tester.tap(find.text("Set onBlur"));
+      await tester.pumpAndSettle();
+      expect(buildCounters[buildCounterName], 4);
+
+      await tester.tap(find.text("Disable"));
+      await tester.pumpAndSettle();
+      expect(buildCounters[buildCounterName], 4);
     });
   });
 }

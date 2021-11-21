@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mockito/mockito.dart';
+import 'package:super_form/super_form.dart';
 
 Widget boilerplate({required Widget child, String? restorationScopeId}) {
   return MaterialApp(
@@ -32,6 +33,47 @@ class BuildCounter extends StatelessWidget {
     buildCounters[name] = (buildCounters[name] ?? 0) + 1;
 
     return Text("Building $name: ${buildCounters[name]}");
+  }
+}
+
+class SuperFormMangler extends StatefulWidget {
+  final Widget child;
+
+  const SuperFormMangler({Key? key, required this.child}) : super(key: key);
+
+  @override
+  State<SuperFormMangler> createState() => _SuperFormManglerState();
+}
+
+class _SuperFormManglerState extends State<SuperFormMangler> {
+  bool enabled = true;
+  ValidationMode validationMode = ValidationMode.onSubmit;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: [
+      SuperForm(
+        enabled: enabled,
+        validationMode: validationMode,
+        child: widget.child,
+      ),
+      TextButton(
+        onPressed: () {
+          setState(() {
+            enabled = false;
+          });
+        },
+        child: const Text("Disable"),
+      ),
+      TextButton(
+        onPressed: () {
+          setState(() {
+            validationMode = ValidationMode.onBlur;
+          });
+        },
+        child: const Text("Set onBlur"),
+      )
+    ]);
   }
 }
 

@@ -158,7 +158,7 @@ class RadioSuperFormField<T> extends SuperFormField {
               }
             }
 
-            final effectiveEnabled = enabled ?? true;
+            final effectiveEnabled = enabled ?? formState.enabled;
 
             return builder(
               context,
@@ -226,7 +226,7 @@ class RadioSuperFormField<T> extends SuperFormField {
               }
             }
 
-            final effectiveEnabled = enabled ?? true;
+            final effectiveEnabled = enabled ?? formState.enabled;
 
             return listTileRadioBuilder(
               context,

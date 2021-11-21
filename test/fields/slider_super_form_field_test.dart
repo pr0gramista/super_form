@@ -186,9 +186,9 @@ void main() {
       ),
     );
 
-    await tester.tap(find.byKey(key));
-    verify(listener(0.5)).called(1);
-    verifyNoMoreInteractions(listener);
+    final offset = tester.getCenter(find.byKey(key));
+    await tester.tapAt(offset.translate(30, 0));
+    verify(listener(0.5398936170212766)).called(1);
 
     await tester.pumpWidget(
       boilerplate(
@@ -198,12 +198,53 @@ void main() {
             key: key,
             name: "name",
             onChanged: listener,
-            enabled: true,
+            enabled: false,
           ),
         ),
       ),
     );
 
     await tester.tap(find.byKey(key));
+    verifyNoMoreInteractions(listener);
+  });
+
+  testWidgets('can be disabled by SuperForm', (WidgetTester tester) async {
+    final formKey = GlobalKey<SuperFormState>();
+    final listener = SliderChangedListener();
+    const key = Key('slider');
+
+    await tester.pumpWidget(
+      boilerplate(
+        child: SuperForm(
+          key: formKey,
+          child: SliderSuperFormField(
+            key: key,
+            name: "name",
+            onChanged: listener,
+          ),
+        ),
+      ),
+    );
+
+    final offset = tester.getCenter(find.byKey(key));
+    await tester.tapAt(offset.translate(30, 0));
+    verify(listener(0.5398936170212766)).called(1);
+
+    await tester.pumpWidget(
+      boilerplate(
+        child: SuperForm(
+          key: formKey,
+          enabled: false,
+          child: SliderSuperFormField(
+            key: key,
+            name: "name",
+            onChanged: listener,
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.byKey(key));
+    verifyNoMoreInteractions(listener);
   });
 }
