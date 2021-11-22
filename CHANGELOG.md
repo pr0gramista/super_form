@@ -1,3 +1,10 @@
+## 0.1.8
+* Add `modified` getter to SuperForm
+* Add `enabled` property to SuperForm, which allows to disable all form fields
+* Updated Survey demo with navigation alert and SuperForm 'enabled' property
+* Bugfix: SuperForm will not update descendent fields when its property is changed but have no effect
+* BREAKING CHANGE (minor): SuperForm TextField and DropdownField will not longer respect InputDecoration enabled property
+
 ## 0.1.7
 * Add support for disabled state via `enabled` property for SuperFormFields
 * Fix ValidationError extending Dart Error class
