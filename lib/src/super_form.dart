@@ -36,7 +36,7 @@ Random _random = Random();
 ///
 /// [onSubmit] is called when form is submitted and contains no errors.
 ///
-/// [onChange] is called when fields is being modified.
+/// [onChange] is called when fields are being modified.
 ///
 /// [onInit] is called right after state is initialized. This can be helpful
 /// when you want to manually register a field.
@@ -83,10 +83,27 @@ Random _random = Random();
 /// ```
 class SuperForm extends StatefulWidget {
   final Widget child;
+
+  /// Mode in which fields are validated.
+  ///
+  /// [ValidationMode.onSubmit] by default.
   final ValidationMode validationMode;
+
+  /// Called when form is submitted and contains no errors.
   final Function(Map<String, dynamic> values) onSubmit;
+
+  /// Called when fields are being modified.
   final Function(Map<String, SuperFormFieldData> fields) onChange;
+
+  /// Called right after state is initialized. This can be helpful
+  /// when you want to manually register a field.
   final Function(SuperFormState form) onInit;
+
+  /// Whether fields should be enabled. Default is true.
+  ///
+  /// Can be used to block interaction with form when data is submitted and the app
+  /// is waiting for a response.
+  final bool enabled;
 
   /// Restoration ID to save and restore form values
   ///
@@ -107,12 +124,19 @@ class SuperForm extends StatefulWidget {
     this.onChange = _doNothing,
     this.initialValues = const {},
     this.restorationId,
+    this.enabled = true,
   }) : super(key: key);
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties.add(EnumProperty("validationMode", validationMode));
+    properties.add(FlagProperty(
+      "enabled",
+      value: enabled,
+      ifTrue: "enabled",
+      ifFalse: "disabled via enabled: false",
+    ));
     properties.add(DiagnosticsProperty<Map<String, dynamic>>(
         "initialValues", initialValues));
   }
@@ -270,6 +294,7 @@ class _SuperFormScope extends InheritedModel<String> {
   // the same - "old" state is current state.
   final Map<String, SuperFormFieldData> fieldsData;
   final ValidationMode validationMode;
+  final bool enabled;
   final String formId;
 
   _SuperFormScope({
@@ -278,6 +303,7 @@ class _SuperFormScope extends InheritedModel<String> {
   })  : formId = state.formId,
         validationMode = state.validationMode,
         fieldsData = state.data,
+        enabled = state.enabled,
         super(child: child);
 
   static SuperFormState of(BuildContext context, {String? aspect}) {
@@ -312,6 +338,8 @@ class _SuperFormScope extends InheritedModel<String> {
 
     if (validationMode != old.validationMode) return true;
 
+    if (enabled != old.enabled) return true;
+
     return false;
   }
 
@@ -319,8 +347,7 @@ class _SuperFormScope extends InheritedModel<String> {
   bool updateShouldNotify(_SuperFormScope old) {
     if (_propertiesCheck(old)) return true;
 
-    return old.fieldsData != fieldsData ||
-        mapEquals(old.fieldsData, fieldsData);
+    return !mapEquals(old.fieldsData, fieldsData);
   }
 
   @override
@@ -434,6 +461,8 @@ class SuperFormFieldData extends Equatable {
 /// [SuperForm] state which holds all field data and can be called to modify the form.
 class SuperFormState extends State<SuperForm> with RestorationMixin {
   ValidationMode _validationMode = ValidationMode.onSubmit;
+  bool _enabled = true;
+
   final String _formId =
       (_random.nextInt(15728640) + 1048576).toRadixString(16);
 
@@ -447,6 +476,8 @@ class SuperFormState extends State<SuperForm> with RestorationMixin {
 
   ValidationMode get validationMode => _validationMode;
 
+  bool get enabled => _enabled;
+
   /// Gets a map of field names and their values.
   Map<String, dynamic> get values =>
       data.map((key, field) => MapEntry(key, field.value));
@@ -458,11 +489,16 @@ class SuperFormState extends State<SuperForm> with RestorationMixin {
   final _RestorableSuperFormValues _restorableFormValues =
       _RestorableSuperFormValues();
 
+  /// Returns true when any field is modified considering given [initialValues]
+  bool get modified => data.entries
+      .any((entry) => entry.value.value != widget.initialValues[entry.key]);
+
   @override
   void initState() {
     super.initState();
 
     _validationMode = widget.validationMode;
+    _enabled = widget.enabled;
 
     // This is called in [restoreState] to already have restored values as
     // onInit may depend on them i.e. registration of manual field
@@ -475,6 +511,10 @@ class SuperFormState extends State<SuperForm> with RestorationMixin {
 
     if (widget.validationMode != oldWidget.validationMode) {
       _validationMode = widget.validationMode;
+    }
+
+    if (widget.enabled != oldWidget.enabled) {
+      _enabled = widget.enabled;
     }
   }
 

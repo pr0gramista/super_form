@@ -81,7 +81,7 @@ class DropdownSuperFormField<T> extends SuperFormField {
                   errorText: fieldData.errors.first.message);
             }
 
-            final effectiveEnabled = enabled ?? decoration?.enabled ?? true;
+            final effectiveEnabled = enabled ?? formState.enabled;
 
             return Focus(
               canRequestFocus: false,

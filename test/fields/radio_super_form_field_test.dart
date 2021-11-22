@@ -354,6 +354,43 @@ void main() {
     expect(formKey.currentState?.values[fieldName], equals("one"));
   });
 
+  testWidgets('can be disabled by SuperForm', (WidgetTester tester) async {
+    final formKey = GlobalKey<SuperFormState>();
+    const fieldName = 'field';
+
+    await tester.pumpWidget(
+      boilerplate(
+        child: SuperForm(
+          key: formKey,
+          child: get123(
+            name: fieldName,
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.text("One"));
+    await tester.pumpAndSettle();
+    expect(formKey.currentState?.values[fieldName], equals("one"));
+
+    await tester.pumpWidget(
+      boilerplate(
+        child: SuperForm(
+          key: formKey,
+          enabled: false,
+          child: get123(
+            name: fieldName,
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text("Two"));
+    await tester.pumpAndSettle();
+    expect(formKey.currentState?.values[fieldName], equals("one"));
+  });
+
   group("custom builder", () {
     Widget builder(BuildContext context, RadioState<String> state) {
       // Let's make something avant-garde
@@ -560,6 +597,45 @@ void main() {
               name: fieldName,
               builder: builder,
               enabled: false,
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text("Two"));
+      await tester.pumpAndSettle();
+      expect(formKey.currentState?.values[fieldName], equals("one"));
+    });
+
+    testWidgets('can be disabled by SuperForm', (WidgetTester tester) async {
+      final formKey = GlobalKey<SuperFormState>();
+      const fieldName = 'field';
+
+      await tester.pumpWidget(
+        boilerplate(
+          child: SuperForm(
+            key: formKey,
+            child: get123(
+              name: fieldName,
+              builder: builder,
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text("One"));
+      await tester.pumpAndSettle();
+      expect(formKey.currentState?.values[fieldName], equals("one"));
+
+      await tester.pumpWidget(
+        boilerplate(
+          child: SuperForm(
+            key: formKey,
+            enabled: false,
+            child: get123(
+              name: fieldName,
+              builder: builder,
             ),
           ),
         ),

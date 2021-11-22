@@ -182,7 +182,7 @@ class CheckboxSuperFormField<T> extends SuperFormField {
               }
             }
 
-            final effectiveEnabled = enabled ?? true;
+            final effectiveEnabled = enabled ?? formState.enabled;
 
             return builder(
               context,
@@ -264,7 +264,7 @@ class CheckboxSuperFormField<T> extends SuperFormField {
               }
             }
 
-            final effectiveEnabled = enabled ?? true;
+            final effectiveEnabled = enabled ?? formState.enabled;
 
             return listTileCheckboxBuilder(
               context,

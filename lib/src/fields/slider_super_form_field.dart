@@ -143,7 +143,7 @@ class SliderSuperFormField extends SuperFormField {
   /// {@macro flutter.widgets.Focus.autofocus}
   final bool autofocus;
 
-  /// If null, the slider will be displayed as disabled.
+  /// If false the slider will be displayed as disabled.
   final bool? enabled;
 
   SliderSuperFormField({
@@ -176,7 +176,7 @@ class SliderSuperFormField extends SuperFormField {
           ) {
             final fieldData = formState.data[name]!;
 
-            final effectiveEnabled = enabled ?? true;
+            final effectiveEnabled = enabled ?? formState.enabled;
 
             void effectiveOnChange(double newValue) {
               SuperFormFieldData newData = fieldData.copyWithValue(

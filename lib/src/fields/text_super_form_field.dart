@@ -122,7 +122,7 @@ class TextSuperFormField extends SuperFormField {
               };
             }
 
-            final effectiveEnabled = enabled ?? decoration?.enabled ?? true;
+            final effectiveEnabled = enabled ?? formState.enabled;
 
             return TextField(
               controller: fieldState._controller,

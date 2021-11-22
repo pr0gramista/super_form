@@ -329,6 +329,7 @@ void main() {
 
     await tester.enterText(find.byKey(loginInput), "hello@12345.pl");
     await tester.enterText(find.byKey(passwordInput), "123");
+    expect(formKey.currentState!.modified, isTrue);
 
     expect(find.text("123"), findsWidgets);
 
@@ -344,6 +345,7 @@ void main() {
     expect(formKey.currentState!.values["password"], isNull);
     expect(formKey.currentState!.errors["login"], isEmpty);
     expect(formKey.currentState!.errors["password"], isEmpty);
+    expect(formKey.currentState!.modified, isFalse);
 
     expect(find.text("hellothere"), findsOneWidget);
 

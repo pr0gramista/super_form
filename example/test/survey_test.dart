@@ -15,7 +15,7 @@ void main() {
       await tester.drag(find.byKey(experienceScoreKey), const Offset(100, 0));
       await tester.pumpAndSettle();
 
-      await tester.tap(find.text("Send"));
+      await tester.tap(find.text("SEND"));
       await tester.pumpAndSettle();
 
       expect(
@@ -35,7 +35,7 @@ void main() {
           .tap(find.textContaining("I want to receive emails with special"));
       await tester.pumpAndSettle();
 
-      await tester.tap(find.text("Send"));
+      await tester.tap(find.text("SEND"));
       await tester.pumpAndSettle();
 
       expect(
@@ -46,7 +46,7 @@ void main() {
       await tester.enterText(find.byKey(emailKey), "test@pr0gramista.pl");
       await tester.pumpAndSettle();
 
-      await tester.tap(find.text("Send"));
+      await tester.tap(find.text("SEND"));
       await tester.pumpAndSettle();
 
       expect(

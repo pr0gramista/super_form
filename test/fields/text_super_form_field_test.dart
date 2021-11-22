@@ -409,6 +409,47 @@ void main() {
     expect(formKey.currentState?.data[fieldName]?.value, "hello");
   });
 
+  testWidgets('can be disabled by SuperForm', (WidgetTester tester) async {
+    final formKey = GlobalKey<SuperFormState>();
+    const inputKey = Key('input');
+    const fieldName = 'field';
+
+    await tester.pumpWidget(
+      boilerplate(
+        child: SuperForm(
+          key: formKey,
+          child: Builder(
+            builder: (context) => TextSuperFormField(
+              key: inputKey,
+              name: fieldName,
+            ),
+          ),
+        ),
+      ),
+    );
+
+    await tester.enterText(find.byKey(inputKey), "hello");
+    expect(formKey.currentState?.data[fieldName]?.value, "hello");
+
+    await tester.pumpWidget(
+      boilerplate(
+        child: SuperForm(
+          key: formKey,
+          enabled: false,
+          child: Builder(
+            builder: (context) => TextSuperFormField(
+              key: inputKey,
+              name: fieldName,
+            ),
+          ),
+        ),
+      ),
+    );
+
+    await tester.enterText(find.byKey(inputKey), "world");
+    expect(formKey.currentState?.data[fieldName]?.value, "hello");
+  });
+
   testWidgets('can switch FocusNodes', (WidgetTester tester) async {
     const inputKey = Key('input');
     const fieldName = 'field';

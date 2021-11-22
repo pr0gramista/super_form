@@ -8,9 +8,9 @@ void main() {
   runApp(ExamplesApp());
 }
 
-/// Entrypoint for our beautiful examples.
+/// Entrypoint for the super SuperForm examples.
 ///
-/// Visit https://superform.dev for preview.
+/// Visit https://superform.dev
 class ExamplesApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class ExamplesApp extends StatelessWidget {
           case "survey":
             return MaterialPageRoute(
               builder: (_) => Theme(
-                data: ThemeData(primarySwatch: Colors.blueGrey),
+                data: ThemeData(primarySwatch: Colors.green),
                 child: const SurveyPage(),
               ),
             );
@@ -57,7 +57,7 @@ class ExamplesApp extends StatelessWidget {
               ListTile(
                 title: const Text("Survey"),
                 subtitle: const Text(
-                    "Satisfaction survey with sliders and dynamic email field"),
+                    "Survey with sliders, dynamic email field, navigation block and loading state"),
                 onTap: () {
                   Navigator.of(context).restorablePushNamed("survey");
                 },
