@@ -187,7 +187,7 @@ class SliderSuperFormField extends SuperFormField {
               // If the field was tried to be submitted it should be now revalidated every change
               if (formState.validationMode == ValidationMode.onChange ||
                   newData.submitted) {
-                newData = newData.validate();
+                newData = newData.validate(rules ?? []);
               }
 
               formState.updateFieldData(newData);

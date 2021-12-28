@@ -109,7 +109,7 @@ class DropdownSuperFormField<T> extends SuperFormField {
                               if (formState.validationMode ==
                                       ValidationMode.onChange ||
                                   newData.submitted) {
-                                newData = newData.validate();
+                                newData = newData.validate(rules ?? []);
                               }
 
                               formState.updateFieldData(newData);

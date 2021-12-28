@@ -34,10 +34,11 @@ void main() {
         () => key.currentState?.updateFieldData(const SuperFormFieldData(
             name: "hello",
             value: true,
-            rules: [],
             touched: true,
             errors: [],
             submitted: false)),
+        throwsStateError);
+    expect(() => key.currentState?.updateFieldRules("hello", []),
         throwsStateError);
   });
 

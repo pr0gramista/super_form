@@ -147,7 +147,7 @@ class RadioSuperFormField<T> extends SuperFormField {
               // If the field was tried to be submitted it should be now revalidated every change
               if (formState.validationMode == ValidationMode.onChange ||
                   newData.submitted) {
-                newData = newData.validate();
+                newData = newData.validate(rules ?? []);
               }
 
               formState.updateFieldData(newData);
@@ -215,7 +215,7 @@ class RadioSuperFormField<T> extends SuperFormField {
               // If the field was tried to be submitted it should be now revalidated every change
               if (formState.validationMode == ValidationMode.onChange ||
                   newData.submitted) {
-                newData = newData.validate();
+                newData = newData.validate(rules ?? []);
               }
 
               formState.updateFieldData(newData);
