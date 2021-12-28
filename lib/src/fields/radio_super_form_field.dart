@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:super_form/super_form.dart';
 
 /// A pair of value and optional label for a single radio.
