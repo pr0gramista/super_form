@@ -5,11 +5,11 @@ import 'package:super_form/super_form.dart';
 import 'utils.dart';
 
 void main() {
-  testWidgets('Empty form does not crash', (WidgetTester tester) async {
+  testWidgets('empty form does not crash', (WidgetTester tester) async {
     await tester.pumpWidget(const SuperForm(child: SizedBox()));
   });
 
-  testWidgets('Empty form with key does not crash',
+  testWidgets('empty form with key does not crash',
       (WidgetTester tester) async {
     final key = GlobalKey<SuperFormState>();
 
@@ -18,7 +18,7 @@ void main() {
     expect(key.currentState?.data.length, 0);
   });
 
-  testWidgets('Actions on unregistered field throws StateError',
+  testWidgets('actions on unregistered field throws StateError',
       (WidgetTester tester) async {
     final key = GlobalKey<SuperFormState>();
 
@@ -41,7 +41,7 @@ void main() {
         throwsStateError);
   });
 
-  testWidgets('Calls .of without ancestor throws', (WidgetTester tester) async {
+  testWidgets('calls .of without ancestor throws', (WidgetTester tester) async {
     await tester.pumpWidget(boilerplate(
       child: Builder(
         builder: (context) => OutlinedButton(
@@ -58,7 +58,7 @@ void main() {
     expect(tester.takeException(), isInstanceOf<FlutterError>());
   });
 
-  testWidgets('Rogue text field does not crash', (WidgetTester tester) async {
+  testWidgets('rogue text field does not crash', (WidgetTester tester) async {
     await tester.pumpWidget(boilerplate(
       child: TextSuperFormField(name: "hello_there"),
     ));
