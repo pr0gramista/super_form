@@ -1,3 +1,8 @@
+## 1.0.0
+* Rules are no longer part of fields data, but are still persisted in the SuperForm state as `rules`
+* Bugfix: Rules causing infinite rendering loop
+* BREAKING CHANGE (minor): When implementing fields, validation now requires list of rules, which is easy to obtain from field's widget constructor
+
 ## 0.1.8
 * Add `modified` getter to SuperForm
 * Add `enabled` property to SuperForm, which allows to disable all form fields
