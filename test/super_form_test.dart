@@ -732,5 +732,9 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text("Minimum 3"), findsNothing);
+    expect(
+        formKey.currentState!.rules["virtual"],
+        predicate<List>((rules) =>
+            rules[0] is MinValueRule && (rules[0] as MinValueRule).min == 1));
   });
 }
