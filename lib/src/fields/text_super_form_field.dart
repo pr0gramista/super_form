@@ -113,7 +113,7 @@ class TextSuperFormField extends SuperFormField {
                   onEditingComplete();
                 }
 
-                final validated = fieldData.validate();
+                final validated = fieldData.validate(rules ?? []);
                 if (validated.errors.isEmpty) {
                   fieldState.focusNode.nextFocus();
                 }
@@ -234,7 +234,7 @@ class _TextSuperFormFieldState extends SuperFormFieldState {
       // If the field was tried to be submitted it should be now revalidated every change
       if (form?.validationMode == ValidationMode.onChange ||
           currentFieldData.submitted) {
-        newData = newData.validate();
+        newData = newData.validate(widget.rules);
       }
 
       SuperForm.ofFieldMaybe(context, currentFieldData.name)

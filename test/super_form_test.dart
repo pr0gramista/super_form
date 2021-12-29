@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:super_form/super_form.dart';
@@ -696,5 +695,46 @@ void main() {
 
     formKey.currentState!.setTouched("login", true);
     expect(formKey.currentState!.data["login"]!.touched, true);
+  });
+
+  testWidgets('can update rules programatically', (WidgetTester tester) async {
+    final formKey = GlobalKey<SuperFormState>();
+
+    await tester.pumpWidget(
+      boilerplate(
+        child: SuperForm(
+          key: formKey,
+          child: Builder(
+            builder: (context) =>
+                Column(children: const [SuperFormErrorText(name: "virtual")]),
+          ),
+        ),
+      ),
+    );
+
+    formKey.currentState!
+        .register(name: "virtual", rules: [MinValueRule(3, "Minimum 3")]);
+    formKey.currentState!.setValue("virtual", "a");
+    formKey.currentState!.validate("virtual");
+    await tester.pumpAndSettle();
+
+    expect(find.text("Minimum 3"), findsOneWidget);
+
+    formKey.currentState!.updateFieldRules(
+      "virtual",
+      [MinValueRule(1, "Minimum 1")],
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text("Minimum 3"), findsOneWidget);
+
+    formKey.currentState!.validate("virtual");
+    await tester.pumpAndSettle();
+
+    expect(find.text("Minimum 3"), findsNothing);
+    expect(
+        formKey.currentState!.rules["virtual"],
+        predicate<List>((rules) =>
+            rules[0] is MinValueRule && (rules[0] as MinValueRule).min == 1));
   });
 }

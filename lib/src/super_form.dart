@@ -5,9 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-
-import 'enums.dart';
-import 'super_form_field.dart';
+import 'package:super_form/super_form.dart';
 
 export 'enums.dart';
 export 'fields/checkbox_super_form_field.dart';
@@ -373,9 +371,6 @@ class SuperFormFieldData extends Equatable {
   /// Field name
   final String name;
 
-  /// Field rules
-  final List<SuperFormFieldRule> rules;
-
   /// Field's current value
   final dynamic value;
 
@@ -391,7 +386,6 @@ class SuperFormFieldData extends Equatable {
   const SuperFormFieldData({
     required this.name,
     required this.value,
-    required this.rules,
     required this.touched,
     required this.errors,
     required this.submitted,
@@ -400,7 +394,6 @@ class SuperFormFieldData extends Equatable {
   SuperFormFieldData reset(dynamic newInitialValue) {
     return SuperFormFieldData(
       name: name,
-      rules: rules,
       touched: false,
       errors: const [],
       submitted: false,
@@ -418,7 +411,6 @@ class SuperFormFieldData extends Equatable {
   }) {
     return SuperFormFieldData(
       name: name ?? this.name,
-      rules: rules ?? this.rules,
       touched: touched ?? this.touched,
       errors: errors ?? this.errors,
       submitted: submitted ?? this.submitted,
@@ -435,7 +427,6 @@ class SuperFormFieldData extends Equatable {
   }) {
     return SuperFormFieldData(
       name: name ?? this.name,
-      rules: rules ?? this.rules,
       touched: touched ?? this.touched,
       errors: errors ?? this.errors,
       submitted: submitted ?? this.submitted,
@@ -443,8 +434,9 @@ class SuperFormFieldData extends Equatable {
     );
   }
 
-  /// Validates the field against its rules and returns updated copy
-  SuperFormFieldData validate({bool markSubmitted = false}) {
+  /// Validates the field against given rules
+  SuperFormFieldData validate(Iterable<SuperFormFieldRule> rules,
+      {bool markSubmitted = false}) {
     final errors = rules
         .map((r) => r.validate(value))
         .where((element) => element != null)
@@ -455,7 +447,7 @@ class SuperFormFieldData extends Equatable {
   }
 
   @override
-  List<Object?> get props => [name, value, rules, touched, errors, submitted];
+  List<Object?> get props => [name, value, touched, errors, submitted];
 }
 
 /// [SuperForm] state which holds all field data and can be called to modify the form.
@@ -468,11 +460,14 @@ class SuperFormState extends State<SuperForm> with RestorationMixin {
 
   final List<SuperFormFieldState> _fields = [];
   Map<String, SuperFormFieldData> _fieldsData = {};
+  Map<String, List<SuperFormFieldRule>> _fieldsRules = {};
 
   /// Form id - just a string of random characters, uuid like.
   String get formId => _formId;
 
   Map<String, SuperFormFieldData> get data => _fieldsData;
+
+  Map<String, List<SuperFormFieldRule>> get rules => _fieldsRules;
 
   ValidationMode get validationMode => _validationMode;
 
@@ -520,7 +515,7 @@ class SuperFormState extends State<SuperForm> with RestorationMixin {
 
   /// Sets value for field under given name.
   ///
-  /// This method cannot be on non-registered names. When that happens
+  /// This method cannot be run on non-registered names. When that happens
   /// [StateError] is thrown.
   ///
   /// This will update the field and therefore trigger didChangeDependencies
@@ -539,7 +534,7 @@ class SuperFormState extends State<SuperForm> with RestorationMixin {
 
   /// Updates field data.
   ///
-  /// This method cannot be on non-registered names. When that happens
+  /// This method cannot be run on non-registered names. When that happens
   /// [StateError] is thrown.
   ///
   /// This will update the field and therefore trigger didChangeDependencies
@@ -567,14 +562,28 @@ class SuperFormState extends State<SuperForm> with RestorationMixin {
     }));
   }
 
-  /// Validates field and updates it state
+  /// Updates field rules.
   ///
-  /// This method cannot be on non-registered names. When that happens
+  /// This method cannot be run on non-registered names. When that happens
   /// [StateError] is thrown.
   ///
-  /// This will update the field and therefore trigger didChangeDependencies
-  /// on subscribing widgets. When changing multiple properties be careful with
-  /// the order of operations or consider using [updateFieldData] instead.
+  /// The field will not be automatically validated.
+  void updateFieldRules(String name, Iterable<SuperFormFieldRule> rules) {
+    if (!_fieldsRules.containsKey(name)) {
+      throw StateError(
+          "You are trying to update rules on field $name, but it is not registered");
+    }
+
+    _fieldsRules = {..._fieldsRules, name: List.from(rules)};
+  }
+
+  /// Validates field and updates it state
+  ///
+  /// This method cannot be run on non-registered names. When that happens
+  /// [StateError] is thrown.
+  ///
+  /// This may update the field and therefore trigger didChangeDependencies
+  /// on subscribing widgets.
   bool validate(String name, {bool markSubmitted = false}) {
     final SuperFormFieldData? fieldData = _fieldsData[name];
 
@@ -583,14 +592,19 @@ class SuperFormState extends State<SuperForm> with RestorationMixin {
           'Field $name is not registered so it cannot be validated. Have you forget to register your field manually?');
     }
 
-    final newData = fieldData.validate(markSubmitted: markSubmitted);
-    updateFieldData(newData);
+    final List<SuperFormFieldRule> rules = _fieldsRules[name]!;
+    final newData = fieldData.validate(rules, markSubmitted: markSubmitted);
+
+    if (newData != fieldData) {
+      updateFieldData(newData);
+    }
+
     return newData.errors.isNotEmpty;
   }
 
   /// Sets touched value for field under given name.
   ///
-  /// This method cannot be on non-registered names. When that happens
+  /// This method cannot be run on non-registered names. When that happens
   /// [StateError] is thrown.
   ///
   /// This will update the field and therefore trigger didChangeDependencies
@@ -608,8 +622,8 @@ class SuperFormState extends State<SuperForm> with RestorationMixin {
   }
 
   bool _validateFields() {
-    final newFieldsData = _fieldsData.map(
-        (key, field) => MapEntry(key, field.validate(markSubmitted: true)));
+    final newFieldsData = _fieldsData.map((key, field) =>
+        MapEntry(key, field.validate(_fieldsRules[key]!, markSubmitted: true)));
 
     _fieldsData = newFieldsData;
     _triggerRebuild();
@@ -657,13 +671,13 @@ class SuperFormState extends State<SuperForm> with RestorationMixin {
     if (existingFieldData == null) {
       final newField = SuperFormFieldData(
         name: name,
-        rules: rules,
         value: _restorableFormValues.value[name] ?? widget.initialValues[name],
         errors: const [],
         submitted: false,
         touched: false,
       );
       _fieldsData = {..._fieldsData, name: newField};
+      _fieldsRules = {..._fieldsRules, name: rules};
 
       _triggerRebuild();
       widget.onChange(data);
@@ -738,11 +752,13 @@ class SuperFormState extends State<SuperForm> with RestorationMixin {
       if (!_fields.any((element) => element.widget.name == name)) {
         _fieldsData = {...data};
         _fieldsData.removeWhere((key, value) => key == name);
+        _fieldsRules.removeWhere((key, value) => key == name);
         _triggerRebuild();
       }
     } else {
       _fieldsData = {...data};
       _fieldsData.removeWhere((key, value) => key == name);
+      _fieldsRules.removeWhere((key, value) => key == name);
       _triggerRebuild();
     }
 

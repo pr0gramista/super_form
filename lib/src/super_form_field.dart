@@ -131,7 +131,7 @@ class SuperFormFieldState extends State<SuperFormField> {
       data = form?.data[widget.name];
 
       if (data != null) {
-        form?.updateFieldData(data!.copyWith(rules: widget.rules));
+        form?.updateFieldRules(widget.name, widget.rules);
 
         if (data?.submitted ?? false) {
           validate();
