@@ -28,6 +28,7 @@ class MaxValueRule extends SuperFormFieldRule {
     if (numericValue > max) {
       return ValidationError(message);
     }
+    return null;
   }
 
   @override
@@ -64,6 +65,7 @@ class MinValueRule extends SuperFormFieldRule {
     if (numericValue < min) {
       return ValidationError(message);
     }
+    return null;
   }
 
   @override
@@ -87,6 +89,7 @@ class IsNumberRule extends SuperFormFieldRule {
     if (result == null) {
       return ValidationError(message);
     }
+    return null;
   }
 
   @override
@@ -110,6 +113,7 @@ class IsIntegerRule extends SuperFormFieldRule {
     if (result == null) {
       return ValidationError(message);
     }
+    return null;
   }
 
   @override

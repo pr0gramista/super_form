@@ -15,6 +15,8 @@ class CustomRule extends SuperFormFieldRule {
     final message = validator(value);
 
     if (message != null) return ValidationError(message);
+
+    return null;
   }
 
   @override

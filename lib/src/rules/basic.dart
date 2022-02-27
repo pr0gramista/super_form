@@ -14,6 +14,7 @@ class RequiredRule extends SuperFormFieldRule {
     if (value is String && value.trim().isEmpty) {
       return ValidationError(message);
     }
+    return null;
   }
 
   @override
@@ -37,6 +38,7 @@ class IsEqualRule<T> extends SuperFormFieldRule {
     if (value != valueToValidate) {
       return ValidationError(message);
     }
+    return null;
   }
 
   @override
@@ -90,6 +92,7 @@ class ContainsRule<T> extends SuperFormFieldRule {
         }
       }
     }
+    return null;
   }
 
   @override
@@ -113,6 +116,7 @@ class PatternRule extends SuperFormFieldRule {
     if (!pattern.hasMatch(s)) {
       return ValidationError(message);
     }
+    return null;
   }
 
   @override

@@ -36,6 +36,7 @@ class ExamplesApp extends StatelessWidget {
               ),
             );
         }
+        return null;
       },
       home: Scaffold(
         appBar: AppBar(
