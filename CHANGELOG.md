@@ -1,3 +1,6 @@
+## 1.0.1
+* Chore: Fix analyzer new problems
+
 ## 1.0.0
 * Rules are no longer part of fields data, but are still persisted in the SuperForm state as `rules`
 * Bugfix: Rules causing infinite rendering loop
