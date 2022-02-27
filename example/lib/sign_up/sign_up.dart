@@ -102,6 +102,8 @@ class PasswordField extends StatelessWidget {
               estimatePasswordStrength(password as String? ?? "");
 
           if (strength < 0.3) return 'This password is too weak!';
+
+          return null;
         }),
       ],
     );
@@ -129,6 +131,8 @@ class RepeatPasswordField extends StatelessWidget {
           final arePasswordsEqual = password == password2;
 
           if (!arePasswordsEqual) return "Passwords must match";
+
+          return null;
         })
       ],
     );
