@@ -618,7 +618,7 @@ void main() {
     await tester.restartAndRestore();
 
     expect(find.text("Bartatus"), findsOneWidget);
-    expect(formKey.currentState!.values["services"], ["laundry"]);
+    expect(formKey.currentState!.values["services"], {"laundry"});
   });
 
   testWidgets('can restore ignoring unserializable fields',

@@ -555,7 +555,14 @@ class SuperFormState extends State<SuperForm> with RestorationMixin {
     widget.onChange(_fieldsData);
 
     _restorableFormValues.value =
-        Map.fromEntries(values.entries.where((fieldData) {
+        Map.fromEntries(values.entries.map((fieldData) {
+      // StandardMessageCodec does not support Set so we need to convert it to List
+      // CheckboxFields are able to convert it back to Set
+      if (fieldData.value is Set) {
+        return MapEntry(fieldData.key, fieldData.value.toList());
+      }
+      return fieldData;
+    }).where((fieldData) {
       // Filter out values that cannot be encoded
       try {
         const StandardMessageCodec().encodeMessage(fieldData.value);
