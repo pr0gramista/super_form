@@ -1,3 +1,6 @@
+## 1.0.2
+* Bugfix: Fix changing initial values causing `modified` to be `true`
+
 ## 1.0.1
 * Chore: Fix analyzer new problems
 
