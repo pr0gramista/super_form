@@ -126,7 +126,7 @@ class _BurritoxState extends State<Burritox> {
                   style: TextButton.styleFrom(
                     textStyle: const TextStyle(fontWeight: FontWeight.bold),
                     backgroundColor: Theme.of(context).primaryColor,
-                    primary:
+                    foregroundColor:
                         Theme.of(context).primaryTextTheme.bodyText1?.color,
                   ),
                   child: const Text("Proceed to checkout"),
