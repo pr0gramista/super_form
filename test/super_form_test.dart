@@ -737,4 +737,105 @@ void main() {
         predicate<List>((rules) =>
             rules[0] is MinValueRule && (rules[0] as MinValueRule).min == 1));
   });
+
+  testWidgets('changing initial values does not effect modified state',
+      (WidgetTester tester) async {
+    final formKey = GlobalKey<SuperFormState>();
+
+    await tester.pumpWidget(
+      boilerplate(
+        child: SuperForm(
+          key: formKey,
+          initialValues: const {"name": "Bartosz"},
+          child: Builder(
+            builder: (context) => Column(children: [
+              TextSuperFormField(
+                name: "name",
+              ),
+            ]),
+          ),
+        ),
+      ),
+    );
+
+    expect(formKey.currentState!.modified, false);
+
+    await tester.pumpWidget(
+      boilerplate(
+        child: SuperForm(
+          key: formKey,
+          initialValues: const {"name": "Anna"},
+          child: Builder(
+            builder: (context) => Column(children: [
+              TextSuperFormField(
+                name: "name",
+              ),
+            ]),
+          ),
+        ),
+      ),
+    );
+
+    expect(formKey.currentState!.modified, false);
+  });
+
+  testWidgets(
+      'resetting form field does not use internal copy of initial values',
+      (WidgetTester tester) async {
+    final formKey = GlobalKey<SuperFormState>();
+
+    await tester.pumpWidget(
+      boilerplate(
+        child: SuperForm(
+          key: formKey,
+          initialValues: const {"name": "Bartosz"},
+          child: Builder(
+            builder: (context) => Column(children: [
+              TextSuperFormField(
+                name: "name",
+              ),
+            ]),
+          ),
+        ),
+      ),
+    );
+
+    await tester.pumpWidget(
+      boilerplate(
+        child: SuperForm(
+          key: formKey,
+          initialValues: const {"name": "Anna"},
+          child: Builder(
+            builder: (context) => Column(children: [
+              TextSuperFormField(
+                name: "name",
+              ),
+            ]),
+          ),
+        ),
+      ),
+    );
+
+    formKey.currentState!.reset(name: "name");
+    expect(formKey.currentState!.values["name"], "Anna");
+
+    await tester.pumpWidget(
+      boilerplate(
+        child: SuperForm(
+          key: formKey,
+          initialValues: const {"name": "John"},
+          child: Builder(
+            builder: (context) => Column(children: [
+              TextSuperFormField(
+                name: "name",
+              ),
+            ]),
+          ),
+        ),
+      ),
+    );
+
+    formKey.currentState!.reset();
+    expect(formKey.currentState!.values["name"], "John");
+  });
 }

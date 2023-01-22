@@ -14,10 +14,11 @@ void main() {
       // Burritox is built for big screens
       tester.binding.window.physicalSizeTestValue = const Size(1600, 2000);
       tester.binding.window.devicePixelRatioTestValue = 1;
-      tester.binding.window.textScaleFactorTestValue = 0.5;
+      tester.binding.platformDispatcher.textScaleFactorTestValue = 0.5;
       addTearDown(tester.binding.window.clearPhysicalSizeTestValue);
       addTearDown(tester.binding.window.clearDevicePixelRatioTestValue);
-      addTearDown(tester.binding.window.clearTextScaleFactorTestValue);
+      addTearDown(
+          tester.binding.platformDispatcher.clearTextScaleFactorTestValue);
     }
 
     testWidgets('can keep multiple SuperForm instances',

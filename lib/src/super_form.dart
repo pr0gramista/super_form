@@ -481,12 +481,15 @@ class SuperFormState extends State<SuperForm> with RestorationMixin {
   Map<String, List<ValidationError>> get errors =>
       data.map((key, field) => MapEntry(key, field.errors));
 
+  // Internal copy of initial values so that we can provide correct [modified] getter
+  Map<String, dynamic> _initialValues = {};
+
   final _RestorableSuperFormValues _restorableFormValues =
       _RestorableSuperFormValues();
 
   /// Returns true when any field is modified considering given [initialValues]
   bool get modified => data.entries
-      .any((entry) => entry.value.value != widget.initialValues[entry.key]);
+      .any((entry) => entry.value.value != _initialValues[entry.key]);
 
   @override
   void initState() {
@@ -494,6 +497,7 @@ class SuperFormState extends State<SuperForm> with RestorationMixin {
 
     _validationMode = widget.validationMode;
     _enabled = widget.enabled;
+    _initialValues = Map.of(widget.initialValues);
 
     // This is called in [restoreState] to already have restored values as
     // onInit may depend on them i.e. registration of manual field
@@ -669,9 +673,12 @@ class SuperFormState extends State<SuperForm> with RestorationMixin {
     }
 
     if (existingFieldData == null) {
+      // Update internal copy of initial values
+      _initialValues[name] = widget.initialValues[name];
+
       final newField = SuperFormFieldData(
         name: name,
-        value: _restorableFormValues.value[name] ?? widget.initialValues[name],
+        value: _restorableFormValues.value[name] ?? _initialValues[name],
         errors: const [],
         submitted: false,
         touched: false,
@@ -696,8 +703,11 @@ class SuperFormState extends State<SuperForm> with RestorationMixin {
   }
 
   void _resetAllFields() {
-    _fieldsData = _fieldsData.map((name, field) =>
-        MapEntry(name, field.reset(widget.initialValues[name])));
+    // Update internal copy of initial values
+    _initialValues = widget.initialValues;
+
+    _fieldsData = _fieldsData.map(
+        (name, field) => MapEntry(name, field.reset(_initialValues[name])));
 
     _fields.forEach((controller) {
       controller.didReset(this);
