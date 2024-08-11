@@ -127,7 +127,7 @@ class _BurritoxState extends State<Burritox> {
                     textStyle: const TextStyle(fontWeight: FontWeight.bold),
                     backgroundColor: Theme.of(context).primaryColor,
                     foregroundColor:
-                        Theme.of(context).primaryTextTheme.bodyText1?.color,
+                        Theme.of(context).primaryTextTheme.bodyMedium?.color,
                   ),
                   child: const Text("Proceed to checkout"),
                 ),

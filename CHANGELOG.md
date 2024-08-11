@@ -1,3 +1,6 @@
+## 1.0.3-beta
+* Upgrade stuff to newer Flutter version
+
 ## 1.0.2
 * Bugfix: Fix changing initial values causing `modified` to be `true`
 

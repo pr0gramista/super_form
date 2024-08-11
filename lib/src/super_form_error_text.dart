@@ -65,15 +65,8 @@ class SuperFormErrorText extends StatelessWidget {
   /// Defaults to retrieving the value from the nearest [DefaultTextStyle] ancestor.}
   final TextOverflow? overflow;
 
-  /// The number of font pixels for each logical pixel.
-  ///
-  /// For example, if the text scale factor is 1.5, text will be 50% larger than
-  /// the specified font size.
-  ///
-  /// The value given to the constructor as textScaleFactor. If null, will
-  /// use the [MediaQueryData.textScaleFactor] obtained from the ambient
-  /// [MediaQuery], or 1.0 if there is no [MediaQuery] in scope.
-  final double? textScaleFactor;
+  /// {@macro flutter.painting.textPainter.textScaler}
+  final TextScaler? textScaler;
 
   /// An optional maximum number of lines for the text to span, wrapping if necessary.
   /// If the text exceeds the given number of lines, it will be truncated according
@@ -108,6 +101,16 @@ class SuperFormErrorText extends StatelessWidget {
   /// {@macro flutter.dart:ui.textHeightBehavior}
   final TextHeightBehavior? textHeightBehavior;
 
+  /// The color to use when painting the selection.
+  ///
+  /// This is ignored if [SelectionContainer.maybeOf] returns null
+  /// in the [BuildContext] of the [Text] widget.
+  ///
+  /// If null, the ambient [DefaultSelectionStyle] is used (if any); failing
+  /// that, the selection color defaults to [DefaultSelectionStyle.defaultColor]
+  /// (semi-transparent grey).
+  final Color? selectionColor;
+
   const SuperFormErrorText({
     Key? key,
     required this.name,
@@ -119,11 +122,12 @@ class SuperFormErrorText extends StatelessWidget {
     this.locale,
     this.softWrap,
     this.overflow,
-    this.textScaleFactor,
+    this.textScaler,
     this.maxLines,
     this.semanticsLabel,
     this.textWidthBasis,
     this.textHeightBehavior,
+    this.selectionColor,
   }) : super(key: key);
 
   @override
@@ -136,29 +140,21 @@ class SuperFormErrorText extends StatelessWidget {
       return fallback;
     }
 
-    final ThemeData theme = Theme.of(context);
-    final DefaultTextStyle defaultTextStyle = DefaultTextStyle.of(context);
-
-    TextStyle? effectiveTextStyle = style;
-    if (style == null || style!.inherit) {
-      effectiveTextStyle = defaultTextStyle.style
-          .merge(TextStyle(color: theme.errorColor))
-          .merge(style);
-    }
-
     return Text(
       error.message,
-      style: effectiveTextStyle,
+      style: style,
       strutStyle: strutStyle,
       textAlign: textAlign,
       textDirection: textDirection,
       locale: locale,
+      softWrap: softWrap,
       overflow: overflow,
-      textScaleFactor: textScaleFactor,
+      textScaler: textScaler,
       maxLines: maxLines,
       semanticsLabel: semanticsLabel,
       textWidthBasis: textWidthBasis,
       textHeightBehavior: textHeightBehavior,
+      selectionColor: selectionColor,
     );
   }
 

@@ -56,8 +56,7 @@ void main() {
               ),
               ElevatedButton(
                 onPressed: () {
-                  seen =
-                      WidgetsBinding.instance.renderViewElement!.toStringDeep();
+                  seen = WidgetsBinding.instance.rootElement!.toStringDeep();
                 },
                 child: const Text("Check"),
               )
