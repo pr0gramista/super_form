@@ -56,13 +56,13 @@ void main() {
     expect(formKey.currentState?.values[fieldName], isNull);
     await tester.tap(find.text("One"));
     await tester.pumpAndSettle();
-    expect(formKey.currentState?.values[fieldName], equals(["one"]));
+    expect(formKey.currentState?.values[fieldName], equals({"one"}));
     await tester.tap(find.text("Two"));
     await tester.pumpAndSettle();
-    expect(formKey.currentState?.values[fieldName], equals(["one", "two"]));
+    expect(formKey.currentState?.values[fieldName], equals({"one", "two"}));
     await tester.tap(find.text("One"));
     await tester.pumpAndSettle();
-    expect(formKey.currentState?.values[fieldName], equals(["two"]));
+    expect(formKey.currentState?.values[fieldName], equals({"two"}));
   });
 
   testWidgets('validates when onChange', (WidgetTester tester) async {
@@ -221,10 +221,10 @@ void main() {
     expect(formKey.currentState?.values[fieldName], isNull);
     await tester.tap(find.text("One"));
     await tester.pumpAndSettle();
-    expect(formKey.currentState?.values[fieldName], equals(["one"]));
+    expect(formKey.currentState?.values[fieldName], equals({"one"}));
     await tester.tap(find.text("Two"));
     await tester.pumpAndSettle();
-    expect(formKey.currentState?.values[fieldName], equals(["one", "two"]));
+    expect(formKey.currentState?.values[fieldName], equals({"one", "two"}));
 
     await tester.pumpWidget(
       boilerplate(
@@ -242,7 +242,7 @@ void main() {
     );
 
     await tester.pumpAndSettle();
-    expect(formKey.currentState?.values[fieldName], equals(["two"]));
+    expect(formKey.currentState?.values[fieldName], equals({"two"}));
 
     await tester.pumpWidget(
       boilerplate(
@@ -261,7 +261,7 @@ void main() {
     );
 
     await tester.pumpAndSettle();
-    expect(formKey.currentState?.values[fieldName], equals(["two"]));
+    expect(formKey.currentState?.values[fieldName], equals({"two"}));
   });
 
   testWidgets('renders with selected and subtitle',
@@ -314,7 +314,7 @@ void main() {
     expect(formKey.currentState?.values[fieldName], isNull);
     await tester.tap(find.text("One"));
     await tester.pumpAndSettle();
-    expect(formKey.currentState?.values[fieldName], equals(["one"]));
+    expect(formKey.currentState?.values[fieldName], equals({"one"}));
 
     await tester.pumpWidget(
       boilerplate(
@@ -330,11 +330,11 @@ void main() {
 
     await tester.tap(find.text("Two"));
     await tester.pumpAndSettle();
-    expect(formKey.currentState?.values[fieldName], equals(["one"]));
+    expect(formKey.currentState?.values[fieldName], equals({"one"}));
 
     await tester.tap(find.text("One"));
     await tester.pumpAndSettle();
-    expect(formKey.currentState?.values[fieldName], equals(["one"]));
+    expect(formKey.currentState?.values[fieldName], equals({"one"}));
   });
 
   testWidgets('can be disabled by SuperForm', (WidgetTester tester) async {
@@ -355,7 +355,7 @@ void main() {
     expect(formKey.currentState?.values[fieldName], isNull);
     await tester.tap(find.text("One"));
     await tester.pumpAndSettle();
-    expect(formKey.currentState?.values[fieldName], equals(["one"]));
+    expect(formKey.currentState?.values[fieldName], equals({"one"}));
 
     await tester.pumpWidget(
       boilerplate(
@@ -371,11 +371,11 @@ void main() {
 
     await tester.tap(find.text("Two"));
     await tester.pumpAndSettle();
-    expect(formKey.currentState?.values[fieldName], equals(["one"]));
+    expect(formKey.currentState?.values[fieldName], equals({"one"}));
 
     await tester.tap(find.text("One"));
     await tester.pumpAndSettle();
-    expect(formKey.currentState?.values[fieldName], equals(["one"]));
+    expect(formKey.currentState?.values[fieldName], equals({"one"}));
   });
 
   group("custom builder", () {
@@ -413,13 +413,13 @@ void main() {
       expect(formKey.currentState?.values[fieldName], isNull);
       await tester.tap(find.text("One"));
       await tester.pumpAndSettle();
-      expect(formKey.currentState?.values[fieldName], equals(["one"]));
+      expect(formKey.currentState?.values[fieldName], equals({"one"}));
       await tester.tap(find.text("Two"));
       await tester.pumpAndSettle();
-      expect(formKey.currentState?.values[fieldName], equals(["one", "two"]));
+      expect(formKey.currentState?.values[fieldName], equals({"one", "two"}));
       await tester.tap(find.text("One"));
       await tester.pumpAndSettle();
-      expect(formKey.currentState?.values[fieldName], equals(["two"]));
+      expect(formKey.currentState?.values[fieldName], equals({"two"}));
     });
 
     testWidgets('validates when onChange', (WidgetTester tester) async {
@@ -508,7 +508,7 @@ void main() {
 
       await tester.tap(find.text("One"));
       await tester.pumpAndSettle();
-      expect(formKey1.currentState?.values[fieldName], ['one']);
+      expect(formKey1.currentState?.values[fieldName], {'one'});
 
       await tester.pumpWidget(
         boilerplate(
@@ -532,7 +532,7 @@ void main() {
 
       await tester.tap(find.text("Two"));
       await tester.pumpAndSettle();
-      expect(formKey2.currentState?.values[fieldName], ['two']);
+      expect(formKey2.currentState?.values[fieldName], {'two'});
     });
 
     testWidgets('onChanged is called', (WidgetTester tester) async {
@@ -578,7 +578,7 @@ void main() {
       expect(formKey.currentState?.values[fieldName], isNull);
       await tester.tap(find.text("One"));
       await tester.pumpAndSettle();
-      expect(formKey.currentState?.values[fieldName], equals(["one"]));
+      expect(formKey.currentState?.values[fieldName], equals({"one"}));
 
       await tester.pumpWidget(
         boilerplate(
@@ -595,11 +595,11 @@ void main() {
 
       await tester.tap(find.text("Two"));
       await tester.pumpAndSettle();
-      expect(formKey.currentState?.values[fieldName], equals(["one"]));
+      expect(formKey.currentState?.values[fieldName], equals({"one"}));
 
       await tester.tap(find.text("One"));
       await tester.pumpAndSettle();
-      expect(formKey.currentState?.values[fieldName], equals(["one"]));
+      expect(formKey.currentState?.values[fieldName], equals({"one"}));
     });
 
     testWidgets('can be disabled by SuperForm', (WidgetTester tester) async {
@@ -621,7 +621,7 @@ void main() {
       expect(formKey.currentState?.values[fieldName], isNull);
       await tester.tap(find.text("One"));
       await tester.pumpAndSettle();
-      expect(formKey.currentState?.values[fieldName], equals(["one"]));
+      expect(formKey.currentState?.values[fieldName], equals({"one"}));
 
       await tester.pumpWidget(
         boilerplate(
@@ -638,11 +638,11 @@ void main() {
 
       await tester.tap(find.text("Two"));
       await tester.pumpAndSettle();
-      expect(formKey.currentState?.values[fieldName], equals(["one"]));
+      expect(formKey.currentState?.values[fieldName], equals({"one"}));
 
       await tester.tap(find.text("One"));
       await tester.pumpAndSettle();
-      expect(formKey.currentState?.values[fieldName], equals(["one"]));
+      expect(formKey.currentState?.values[fieldName], equals({"one"}));
     });
   });
 }

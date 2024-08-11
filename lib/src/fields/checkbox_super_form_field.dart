@@ -2,6 +2,18 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:super_form/super_form.dart';
 
+Set<T> _correctValue<T>(dynamic value) {
+  if (value == null) return {};
+  if (value is Set<T>) return value;
+  if (value is Map) {
+    final mapValue = value;
+    if (mapValue["type"] == "Set") {
+      return (mapValue["data"] as Iterable).map((e) => e as T).toSet();
+    }
+  }
+  throw ArgumentError.value(value, "value", "Value must be a Set");
+}
+
 /// A pair of value and optional label for a single checkbox.
 ///
 /// Label is optional since some people may want to implement more complex
@@ -71,7 +83,7 @@ Widget listTileCheckboxBuilder<T>(
 /// Encapsulates checkbox field state into a single object.
 class CheckboxState<T> {
   final List<CheckboxOption<T>> options;
-  final List<T>? checkedValues;
+  final Set<T>? checkedValues;
   final void Function(T value, bool checked)? onChanged;
   final FocusNode focusNode;
 
@@ -96,8 +108,8 @@ typedef CheckboxBuilder<T> = Widget Function(
 /// Specify [rules] to add validation for this field. Errors will not be displayed
 /// automatically. Consider putting [SuperFormErrorText] below the field.
 ///
-/// Checkboxes are operating on [List]. If the list constains the value checkbox
-/// is considered as checked. Initial value if provided must be a list.
+/// Checkboxes are operating on [Set].
+/// If the Set contains the value the checkbox is considered checked.
 ///
 /// The field will automatically clear values that no longer have corresponding
 /// options.
@@ -147,20 +159,16 @@ class CheckboxSuperFormField<T> extends SuperFormField {
           name: name,
           rules: rules ?? [],
           builder: (context, fieldState, formState) {
-            final List<T> currentValue =
-                (fieldState.data?.value as List<T>?) ?? [];
+            final Set<T> currentValue =
+                _correctValue<T>(fieldState.data?.value);
 
             void effectiveOnChanged(T value, bool checked) {
-              List<T> newValue = currentValue;
+              final Set<T> newValue = Set.of(currentValue);
 
               if (checked) {
-                if (!currentValue.contains(value)) {
-                  newValue = <T>[...currentValue, value];
-                }
+                newValue.add(value);
               } else {
-                newValue = currentValue
-                    .where((element) => element != value)
-                    .toList(growable: false);
+                newValue.remove(value);
               }
 
               SuperFormFieldData newData = fieldState.data!.copyWithValue(
@@ -229,20 +237,16 @@ class CheckboxSuperFormField<T> extends SuperFormField {
           name: name,
           rules: rules ?? [],
           builder: (context, fieldState, formState) {
-            final List<T> currentValue =
-                List.from(fieldState.data?.value as List? ?? []);
+            final Set<T> currentValue =
+                _correctValue<T>(fieldState.data?.value);
 
             void effectiveOnChanged(T value, bool checked) {
-              List<T> newValue = currentValue;
+              final Set<T> newValue = Set.of(currentValue);
 
               if (checked) {
-                if (!currentValue.contains(value)) {
-                  newValue = <T>[...currentValue, value];
-                }
+                newValue.add(value);
               } else {
-                newValue = currentValue
-                    .where((element) => element != value)
-                    .toList(growable: false);
+                newValue.remove(value);
               }
 
               SuperFormFieldData newData = fieldState.data!.copyWithValue(
@@ -305,8 +309,8 @@ class _CheckboxSuperFormFieldState<T> extends SuperFormFieldState {
 
     // Clearing values that no longer have corresponding option
     if (!listEquals(oldWidget.options, widget.options) && data != null) {
-      final List<T> currentValues = List.from(data!.value as List? ?? []);
-      final List<T> newValues = [];
+      final Set<T> currentValues = _correctValue<T>(data!.value);
+      final Set<T> newValues = {};
 
       for (final value in currentValues) {
         if (widget.options.any((element) => element.value == value)) {
