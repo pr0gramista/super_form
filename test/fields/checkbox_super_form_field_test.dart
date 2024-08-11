@@ -378,57 +378,6 @@ void main() {
     expect(formKey.currentState?.values[fieldName], equals({"one"}));
   });
 
-  testWidgets('initial value can be a list', (WidgetTester tester) async {
-    final formKey = GlobalKey<SuperFormState>();
-    const fieldName = 'field';
-
-    await tester.pumpWidget(
-      boilerplate(
-        child: SuperForm(
-          key: formKey,
-          initialValues: const {
-            fieldName: ["one", "two"],
-          },
-          child: get123(
-            name: fieldName,
-          ),
-        ),
-      ),
-    );
-
-    expect(formKey.currentState?.values[fieldName], equals({"one", "two"}));
-
-    await tester.tap(find.text("Three"));
-    await tester.pumpAndSettle();
-    expect(formKey.currentState?.values[fieldName],
-        equals({"one", "two", "three"}));
-  });
-
-  testWidgets('updated value can be a list', (WidgetTester tester) async {
-    final formKey = GlobalKey<SuperFormState>();
-    const fieldName = 'field';
-
-    await tester.pumpWidget(
-      boilerplate(
-        child: SuperForm(
-          key: formKey,
-          child: get123(
-            name: fieldName,
-          ),
-        ),
-      ),
-    );
-
-    formKey.currentState!.setValue(fieldName, <String>["one", "two"]);
-    expect(formKey.currentState?.values[fieldName], equals({"one", "two"}));
-
-    await tester.pumpAndSettle();
-    await tester.tap(find.text("Three"));
-    await tester.pumpAndSettle();
-    expect(formKey.currentState?.values[fieldName],
-        equals({"one", "two", "three"}));
-  });
-
   group("custom builder", () {
     Widget builder(BuildContext context, CheckboxState<String> state) {
       // Let's make something avant-garde
@@ -694,59 +643,6 @@ void main() {
       await tester.tap(find.text("One"));
       await tester.pumpAndSettle();
       expect(formKey.currentState?.values[fieldName], equals({"one"}));
-    });
-
-    testWidgets('initial value can be a list', (WidgetTester tester) async {
-      final formKey = GlobalKey<SuperFormState>();
-      const fieldName = 'field';
-
-      await tester.pumpWidget(
-        boilerplate(
-          child: SuperForm(
-            key: formKey,
-            initialValues: const {
-              fieldName: ["one", "two"],
-            },
-            child: get123(
-              name: fieldName,
-              builder: builder,
-            ),
-          ),
-        ),
-      );
-
-      expect(formKey.currentState?.values[fieldName], equals({"one", "two"}));
-
-      await tester.tap(find.text("Three"));
-      await tester.pumpAndSettle();
-      expect(formKey.currentState?.values[fieldName],
-          equals({"one", "two", "three"}));
-    });
-
-    testWidgets('updated value can be a list', (WidgetTester tester) async {
-      final formKey = GlobalKey<SuperFormState>();
-      const fieldName = 'field';
-
-      await tester.pumpWidget(
-        boilerplate(
-          child: SuperForm(
-            key: formKey,
-            child: get123(
-              name: fieldName,
-              builder: builder,
-            ),
-          ),
-        ),
-      );
-
-      formKey.currentState!.setValue(fieldName, <String>["one", "two"]);
-      expect(formKey.currentState?.values[fieldName], equals({"one", "two"}));
-
-      await tester.pumpAndSettle();
-      await tester.tap(find.text("Three"));
-      await tester.pumpAndSettle();
-      expect(formKey.currentState?.values[fieldName],
-          equals({"one", "two", "three"}));
     });
   });
 }

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:equatable/equatable.dart';
@@ -18,6 +19,44 @@ export 'super_form_error_text.dart';
 export 'super_form_field.dart';
 
 void _doNothing(dynamic _) {}
+
+class _Restorable {
+  final String type;
+  final dynamic value;
+
+  _Restorable(this.type, this.value);
+
+  static _Restorable? convert(dynamic value) {
+    var converted = value;
+
+    if (converted is Set) {
+      return 
+    }
+
+    try {
+      const StandardMessageCodec().encodeMessage(converted);
+      return _Restorable("raw", value);
+    } catch (_) {
+      return false;
+    }
+
+    if (value is String) {
+      return _Restorable("String", value);
+    } else if (value is int) {
+      return _Restorable("int", value);
+    } else if (value is double) {
+      return _Restorable("double", value);
+    } else if (value is bool) {
+      return _Restorable("bool", value);
+    } else if (value is List) {
+      return _Restorable("List", value);
+    } else if (value is Map) {
+      return _Restorable("Map", value);
+    } else {
+      throw ArgumentError.value(value, "value", "Unsupported type");
+    }
+  }
+}
 
 Random _random = Random();
 
@@ -489,7 +528,7 @@ class SuperFormState extends State<SuperForm> with RestorationMixin {
 
   /// Returns true when any field is modified considering given [initialValues]
   bool get modified => data.entries
-      .any((entry) => entry.value.value != _initialValues[entry.key]);
+      .any((entry) =>   entry.value.value != _initialValues[entry.key]);
 
   @override
   void initState() {
@@ -559,9 +598,15 @@ class SuperFormState extends State<SuperForm> with RestorationMixin {
       // StandardMessageCodec does not support Set so we need to convert it to List
       // CheckboxFields are able to convert it back to Set
       if (fieldData.value is Set) {
-        return MapEntry(fieldData.key, fieldData.value.toList());
+        return MapEntry(fieldData.key, {
+          "type": "set",
+          "data": fieldData.value.toList(),
+        });
       }
-      return fieldData;
+      return MapEntry(fieldData.key, {
+        "type": "encodable",
+        "data": fieldData.value,
+      });
     }).where((fieldData) {
       // Filter out values that cannot be encoded
       try {
@@ -801,9 +846,9 @@ class SuperFormState extends State<SuperForm> with RestorationMixin {
   }
 }
 
-class _RestorableSuperFormValues extends RestorableValue<Map> {
+class _RestorableSuperFormValues extends RestorableValue<Map<String, dynamic>> {
   @override
-  Map createDefaultValue() => {};
+  Map<String, dynamic> createDefaultValue() => {};
 
   @override
   void didUpdateValue(Map? oldValue) {
@@ -811,20 +856,29 @@ class _RestorableSuperFormValues extends RestorableValue<Map> {
   }
 
   @override
-  Map fromPrimitives(Object? data) {
-    final map = data as Map?;
+  Map<String, dynamic> fromPrimitives(Object? data) {
+    final map = data as Map<String, dynamic>?;
 
     if (map == null) {
       return const {};
     }
 
-    map.removeWhere((key, value) => key is! String);
+    // map.removeWhere((key, value) => key is! String);
 
     return map;
   }
 
   @override
-  Object? toPrimitives() => value;
+  Object? toPrimitives() {
+    return value.map((key, value) {
+      if (value is Map<String, dynamic>) {
+        if (value["type"] != null) {
+          return MapEntry(key, value);
+        }
+      }
+      return MapEntry(key, value);
+    });
+  }
 }
 
 class ValidationError extends Equatable {

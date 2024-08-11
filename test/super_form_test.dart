@@ -741,16 +741,17 @@ void main() {
   testWidgets('changing initial values does not effect modified state',
       (WidgetTester tester) async {
     final formKey = GlobalKey<SuperFormState>();
+    const fieldName = "name";
 
     await tester.pumpWidget(
       boilerplate(
         child: SuperForm(
           key: formKey,
-          initialValues: const {"name": "Bartosz"},
+          initialValues: const {fieldName: "Bartosz"},
           child: Builder(
             builder: (context) => Column(children: [
               TextSuperFormField(
-                name: "name",
+                name: fieldName,
               ),
             ]),
           ),
@@ -764,12 +765,63 @@ void main() {
       boilerplate(
         child: SuperForm(
           key: formKey,
-          initialValues: const {"name": "Anna"},
+          initialValues: const {fieldName: "Anna"},
           child: Builder(
             builder: (context) => Column(children: [
               TextSuperFormField(
-                name: "name",
+                name: fieldName,
               ),
+            ]),
+          ),
+        ),
+      ),
+    );
+
+    expect(formKey.currentState!.modified, false);
+  });
+
+  testWidgets(
+      'changing initial values (collection) does not effect modified state',
+      (WidgetTester tester) async {
+    final formKey = GlobalKey<SuperFormState>();
+    const fieldName = "numbers";
+
+    await tester.pumpWidget(
+      boilerplate(
+        child: SuperForm(
+          key: formKey,
+          initialValues: const {
+            fieldName: {"one", "two"}
+          },
+          child: Builder(
+            builder: (context) => Column(children: [
+              CheckboxSuperFormField.listTile(name: fieldName, options: const [
+                CheckboxOption("one", Text("One")),
+                CheckboxOption("two", Text("Two")),
+                CheckboxOption("three", Text("Three")),
+              ])
+            ]),
+          ),
+        ),
+      ),
+    );
+
+    expect(formKey.currentState!.modified, false);
+
+    await tester.pumpWidget(
+      boilerplate(
+        child: SuperForm(
+          key: formKey,
+          initialValues: const {
+            fieldName: {"hello", "world"}
+          },
+          child: Builder(
+            builder: (context) => Column(children: [
+              CheckboxSuperFormField.listTile(name: fieldName, options: const [
+                CheckboxOption("one", Text("One")),
+                CheckboxOption("two", Text("Two")),
+                CheckboxOption("three", Text("Three")),
+              ])
             ]),
           ),
         ),

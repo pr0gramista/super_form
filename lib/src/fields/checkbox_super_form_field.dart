@@ -5,13 +5,13 @@ import 'package:super_form/super_form.dart';
 Set<T> _correctValue<T>(dynamic value) {
   if (value == null) return {};
   if (value is Set<T>) return value;
-  if (value is Iterable<T>) return value.toSet();
-  if (value is List) {
-    // Case to handle RestorationValue which type is List<Object?>
-    return value.map((e) => e as T).toSet();
+  if (value is Map) {
+    final mapValue = value;
+    if (mapValue["type"] == "Set") {
+      return (mapValue["data"] as Iterable).map((e) => e as T).toSet();
+    }
   }
-  throw ArgumentError.value(
-      value, "value", "CheckboxSuperFormField value must be a Iterable<T>");
+  throw ArgumentError.value(value, "value", "Value must be a Set");
 }
 
 /// A pair of value and optional label for a single checkbox.
@@ -108,7 +108,7 @@ typedef CheckboxBuilder<T> = Widget Function(
 /// Specify [rules] to add validation for this field. Errors will not be displayed
 /// automatically. Consider putting [SuperFormErrorText] below the field.
 ///
-/// Checkboxes are operating on [Set], but can take any [Iterable<T>] that is compatible.
+/// Checkboxes are operating on [Set].
 /// If the Set contains the value the checkbox is considered checked.
 ///
 /// The field will automatically clear values that no longer have corresponding
