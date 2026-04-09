@@ -43,7 +43,7 @@ void main() {
     await tester.pumpWidget(
       boilerplate(
         child: SuperForm(
-          onSubmit: listener,
+          onSubmit: listener.call,
           key: formKey,
           validationMode: ValidationMode.onBlur,
           child: Builder(
@@ -100,7 +100,7 @@ void main() {
     await tester.pumpWidget(
       boilerplate(
         child: SuperForm(
-          onSubmit: listener,
+          onSubmit: listener.call,
           key: formKey,
           validationMode: ValidationMode.onChange,
           child: Builder(
@@ -205,7 +205,7 @@ void main() {
             TextSuperFormField(
               key: loginInput,
               name: "login",
-              onEditingComplete: listener,
+              onEditingComplete: listener.call,
             ),
             TextSuperFormField(
               name: "password",
@@ -238,7 +238,7 @@ void main() {
             TextSuperFormField(
               key: loginInput,
               name: "login",
-              onEditingComplete: listener,
+              onEditingComplete: listener.call,
             ),
             TextSuperFormField(
               name: "password",
@@ -458,8 +458,8 @@ void main() {
     final listener2 = VoidListener();
     final FocusNode focusNode1 = FocusNode();
     final FocusNode focusNode2 = FocusNode();
-    focusNode1.addListener(listener1);
-    focusNode2.addListener(listener2);
+    focusNode1.addListener(listener1.call);
+    focusNode2.addListener(listener2.call);
 
     await tester.pumpWidget(
       boilerplate(

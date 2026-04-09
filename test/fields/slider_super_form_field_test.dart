@@ -156,7 +156,7 @@ void main() {
           child: SliderSuperFormField(
             key: key,
             name: "name",
-            onChanged: listener,
+            onChanged: listener.call,
           ),
         ),
       ),
@@ -179,7 +179,7 @@ void main() {
           child: SliderSuperFormField(
             key: key,
             name: "name",
-            onChanged: listener,
+            onChanged: listener.call,
             enabled: true,
           ),
         ),
@@ -197,7 +197,7 @@ void main() {
           child: SliderSuperFormField(
             key: key,
             name: "name",
-            onChanged: listener,
+            onChanged: listener.call,
             enabled: false,
           ),
         ),
@@ -220,7 +220,7 @@ void main() {
           child: SliderSuperFormField(
             key: key,
             name: "name",
-            onChanged: listener,
+            onChanged: listener.call,
           ),
         ),
       ),
@@ -238,7 +238,7 @@ void main() {
           child: SliderSuperFormField(
             key: key,
             name: "name",
-            onChanged: listener,
+            onChanged: listener.call,
           ),
         ),
       ),

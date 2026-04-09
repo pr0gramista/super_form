@@ -135,16 +135,14 @@ class CheckboxSuperFormField<T> extends SuperFormField {
   /// You can check [listTileCheckboxBuilder] as an example implementation used in
   /// [CheckboxSuperFormField.listTile].
   CheckboxSuperFormField({
-    Key? key,
+    super.key,
     required CheckboxBuilder<T> builder,
-    required String name,
+    required super.name,
     required this.options,
     List<SuperFormFieldRule>? rules,
     void Function(T value, bool checked)? onChanged,
     this.enabled,
   }) : super(
-          key: key,
-          name: name,
           rules: rules ?? [],
           builder: (context, fieldState, formState) {
             final List<T> currentValue =
@@ -205,8 +203,8 @@ class CheckboxSuperFormField<T> extends SuperFormField {
   /// * [subtitle] is a function so developers can customize it per option
   /// * [selected] is a function so developers can customize it per option
   CheckboxSuperFormField.listTile({
-    Key? key,
-    required String name,
+    super.key,
+    required super.name,
     required this.options,
     List<SuperFormFieldRule>? rules,
     Color? activeColor,
@@ -225,8 +223,6 @@ class CheckboxSuperFormField<T> extends SuperFormField {
     void Function(T value, bool checked)? onChanged,
     this.enabled,
   }) : super(
-          key: key,
-          name: name,
           rules: rules ?? [],
           builder: (context, fieldState, formState) {
             final List<T> currentValue =

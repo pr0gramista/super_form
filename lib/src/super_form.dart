@@ -114,7 +114,7 @@ class SuperForm extends StatefulWidget {
   final Map<String, dynamic> initialValues;
 
   const SuperForm({
-    Key? key,
+    super.key,
     required this.child,
     this.onSubmit = _doNothing,
     this.validationMode = ValidationMode.onSubmit,
@@ -123,7 +123,7 @@ class SuperForm extends StatefulWidget {
     this.initialValues = const {},
     this.restorationId,
     this.enabled = true,
-  }) : super(key: key);
+  });
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
@@ -296,13 +296,12 @@ class _SuperFormScope extends InheritedModel<String> {
   final String formId;
 
   _SuperFormScope({
-    required Widget child,
+    required super.child,
     required this.state,
   })  : formId = state.formId,
         validationMode = state.validationMode,
         fieldsData = state.data,
-        enabled = state.enabled,
-        super(child: child);
+        enabled = state.enabled;
 
   static SuperFormState of(BuildContext context, {String? aspect}) {
     assert(_debugHasSuperFormInScope(context));
@@ -709,9 +708,9 @@ class SuperFormState extends State<SuperForm> with RestorationMixin {
     _fieldsData = _fieldsData.map(
         (name, field) => MapEntry(name, field.reset(_initialValues[name])));
 
-    _fields.forEach((controller) {
+    for (var controller in _fields) {
       controller.didReset(this);
-    });
+    }
 
     _triggerRebuild();
   }

@@ -93,10 +93,7 @@ void main() {
                 ],
               ),
               const SizedBox(height: 200),
-              TextSuperFormField(
-                name: "two",
-                key: anotherInput,
-              ),
+              TextSuperFormField(name: "two", key: anotherInput),
             ],
           ),
         ),
@@ -121,17 +118,19 @@ void main() {
           key: formKey1,
           validationMode: ValidationMode.onBlur,
           child: Builder(
-            builder: (context) => Column(children: [
-              DropdownSuperFormField(
-                key: inputKey,
-                name: "name",
-                rules: [MinValueRule(2, "Must be at least 2")],
-                items: const [
-                  DropdownMenuItem(value: 1, child: Text("One")),
-                  DropdownMenuItem(value: 2, child: Text("Two")),
-                ],
-              ),
-            ]),
+            builder: (context) => Column(
+              children: [
+                DropdownSuperFormField(
+                  key: inputKey,
+                  name: "name",
+                  rules: [MinValueRule(2, "Must be at least 2")],
+                  items: const [
+                    DropdownMenuItem(value: 1, child: Text("One")),
+                    DropdownMenuItem(value: 2, child: Text("Two")),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -148,17 +147,19 @@ void main() {
           key: formKey2,
           validationMode: ValidationMode.onBlur,
           child: Builder(
-            builder: (context) => Column(children: [
-              DropdownSuperFormField(
-                key: inputKey,
-                name: "name",
-                rules: [MinValueRule(2, "Must be at least 2")],
-                items: const [
-                  DropdownMenuItem(value: 1, child: Text("One")),
-                  DropdownMenuItem(value: 2, child: Text("Two")),
-                ],
-              ),
-            ]),
+            builder: (context) => Column(
+              children: [
+                DropdownSuperFormField(
+                  key: inputKey,
+                  name: "name",
+                  rules: [MinValueRule(2, "Must be at least 2")],
+                  items: const [
+                    DropdownMenuItem(value: 1, child: Text("One")),
+                    DropdownMenuItem(value: 2, child: Text("Two")),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -185,7 +186,7 @@ void main() {
               DropdownSuperFormField(
                 name: fieldName,
                 key: key,
-                onChanged: listener,
+                onChanged: listener.call,
                 items: const [
                   DropdownMenuItem(value: 1, child: Text("One")),
                   DropdownMenuItem(value: 2, child: Text("Two")),
@@ -254,8 +255,7 @@ void main() {
     await tester.tap(find.byKey(key));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text("One").last, warnIfMissed: false);
-    await tester.pumpAndSettle();
+    expect(find.text("One"), findsNothing);
     expect(formKey.currentState?.values[fieldName], equals(2));
   });
 
@@ -307,8 +307,7 @@ void main() {
     await tester.tap(find.byKey(key));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text("One").last, warnIfMissed: false);
-    await tester.pumpAndSettle();
+    expect(find.text("One"), findsNothing);
     expect(formKey.currentState?.values[fieldName], equals(2));
   });
 }

@@ -16,7 +16,7 @@ void main() {
     await tester.pumpWidget(
       boilerplate(
         child: SuperForm(
-          onSubmit: listener,
+          onSubmit: listener.call,
           key: formKey,
           child: Builder(
             builder: (context) => Column(children: [
@@ -63,7 +63,7 @@ void main() {
     await tester.pumpWidget(
       boilerplate(
         child: SuperForm(
-          onSubmit: listener,
+          onSubmit: listener.call,
           key: formKey,
           validationMode: ValidationMode.onChange,
           child: Builder(
@@ -110,7 +110,7 @@ void main() {
     await tester.pumpWidget(
       boilerplate(
         child: SuperForm(
-          onSubmit: listener,
+          onSubmit: listener.call,
           key: formKey,
           validationMode: ValidationMode.onBlur,
           child: Builder(
@@ -166,7 +166,7 @@ void main() {
     await tester.pumpWidget(
       boilerplate(
         child: SuperForm(
-          onSubmit: listener,
+          onSubmit: listener.call,
           key: formKey,
           validationMode: ValidationMode.onBlur,
           onInit: (formState) {

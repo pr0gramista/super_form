@@ -35,13 +35,13 @@ class SuperFormField extends StatefulWidget {
   final FocusNode? focusNode;
 
   const SuperFormField({
-    Key? key,
+    super.key,
     required this.builder,
     required this.name,
     this.rules = const [],
     this.noFormFallback = const SizedBox(),
     this.focusNode,
-  }) : super(key: key);
+  });
 
   @override
   SuperFormFieldState createState() => SuperFormFieldState();

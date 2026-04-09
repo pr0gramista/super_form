@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:super_form/super_form.dart';
 
-import 'model.dart';
+import 'package:super_form_example/burritox/model.dart';
 
 /// Form for adding and editing burrito orders
 class BurritoForm extends StatelessWidget {
@@ -31,7 +31,7 @@ class BurritoForm extends StatelessWidget {
             extras: (values["extras"] as List<String>? ?? <String>[]).toSet(),
           ),
           count: int.parse(values["count"] as String),
-        ));
+        ),);
 
         if (!isEditing) {
           // Clear form after submit if it's not editing.
@@ -55,7 +55,7 @@ class BurritoForm extends StatelessWidget {
               DropdownMenuItem(value: "pork", child: Text("Pork")),
               DropdownMenuItem(value: "chicken", child: Text("Chicken")),
               DropdownMenuItem(
-                  value: "seitan", child: Text("Seitan (vegan 🌱)")),
+                  value: "seitan", child: Text("Seitan (vegan 🌱)"),),
             ],
             rules: [RequiredRule("Choose your main ingredient")],
           ),
@@ -71,7 +71,7 @@ class BurritoForm extends StatelessWidget {
             rules: [
               RequiredRule("Choose your sauces"),
               MinimumLengthRule(1, "Choose your sauces"),
-              MaximumLengthRule(2, "You can't choose more sauces")
+              MaximumLengthRule(2, "You can't choose more sauces"),
             ],
             options: const [
               CheckboxOption("salsa_mango", Text("Salsa mango")),
@@ -92,7 +92,7 @@ class BurritoForm extends StatelessWidget {
             options: const [
               CheckboxOption("fries", Text("Fries (+1\$)")),
               CheckboxOption(
-                  "sweet_potato_fries", Text("Sweet potato fries (+2\$)")),
+                  "sweet_potato_fries", Text("Sweet potato fries (+2\$)"),),
               CheckboxOption("coleslaw", Text("Coleslaw (+1\$)")),
             ],
           ),
@@ -130,19 +130,19 @@ class BurritoForm extends StatelessWidget {
                       formKey.currentState?.submit();
                     },
                     style: ButtonStyle(
-                        padding: MaterialStateProperty.all(
+                        padding: WidgetStateProperty.all(
                       const EdgeInsets.symmetric(
                         horizontal: 24,
                         vertical: 16,
                       ),
-                    )),
+                    ),),
                     label: isEditing ? const Text("Save") : const Text("Add"),
                     icon: Icon(isEditing ? Icons.save : Icons.add),
                   ),
                 ),
               ),
             ],
-          )
+          ),
         ],
       ),
     );

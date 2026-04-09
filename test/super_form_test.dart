@@ -17,21 +17,20 @@ void main() {
     await tester.pumpWidget(
       boilerplate(
         child: SuperForm(
-          onSubmit: listener,
+          onSubmit: listener.call,
           key: formKey,
           child: Builder(
-            builder: (context) => Column(children: [
-              TextSuperFormField(
-                key: inputKey,
-                name: "name",
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  SuperForm.of(context, listen: false).submit();
-                },
-                child: const Text("Submit"),
-              )
-            ]),
+            builder: (context) => Column(
+              children: [
+                TextSuperFormField(key: inputKey, name: "name"),
+                ElevatedButton(
+                  onPressed: () {
+                    SuperForm.of(context, listen: false).submit();
+                  },
+                  child: const Text("Submit"),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -53,21 +52,20 @@ void main() {
     await tester.pumpWidget(
       boilerplate(
         child: SuperForm(
-          onSubmit: listener,
+          onSubmit: listener.call,
           key: formKey,
           child: Builder(
-            builder: (context) => Column(children: [
-              TextSuperFormField(
-                key: inputKey,
-                name: "name",
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  SuperForm.of(context, listen: false).submit();
-                },
-                child: const Text("Submit"),
-              )
-            ]),
+            builder: (context) => Column(
+              children: [
+                TextSuperFormField(key: inputKey, name: "name"),
+                ElevatedButton(
+                  onPressed: () {
+                    SuperForm.of(context, listen: false).submit();
+                  },
+                  child: const Text("Submit"),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -92,22 +90,24 @@ void main() {
     await tester.pumpWidget(
       boilerplate(
         child: SuperForm(
-          onSubmit: listener,
+          onSubmit: listener.call,
           key: formKey,
           child: Builder(
-            builder: (context) => Column(children: [
-              TextSuperFormField(
-                key: inputKey,
-                name: "name",
-                rules: [MinimumLengthRule(8, errorText)],
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  SuperForm.of(context, listen: false).submit();
-                },
-                child: const Text("Submit"),
-              )
-            ]),
+            builder: (context) => Column(
+              children: [
+                TextSuperFormField(
+                  key: inputKey,
+                  name: "name",
+                  rules: [MinimumLengthRule(8, errorText)],
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    SuperForm.of(context, listen: false).submit();
+                  },
+                  child: const Text("Submit"),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -139,37 +139,44 @@ void main() {
     await tester.pumpWidget(
       boilerplate(
         child: SuperForm(
-          onSubmit: listener,
+          onSubmit: listener.call,
           key: formKey,
           child: Builder(
-            builder: (context) => Column(children: [
-              TextSuperFormField(
-                key: loginInput,
-                name: "login",
-                rules: [RequiredRule("Login is required")],
-              ),
-              TextSuperFormField(
-                key: passwordInput,
-                name: "password",
-                rules: [
-                  RequiredRule("Password is required"),
-                  MinimumLengthRule(6, "Must be at least 6 characters"),
-                ],
-              ),
-              Builder(builder: (context) {
-                final pass = SuperForm.ofFieldMaybe(context, "password")
-                    ?.data["password"]
-                    ?.value as String?;
+            builder: (context) => Column(
+              children: [
+                TextSuperFormField(
+                  key: loginInput,
+                  name: "login",
+                  rules: [RequiredRule("Login is required")],
+                ),
+                TextSuperFormField(
+                  key: passwordInput,
+                  name: "password",
+                  rules: [
+                    RequiredRule("Password is required"),
+                    MinimumLengthRule(6, "Must be at least 6 characters"),
+                  ],
+                ),
+                Builder(
+                  builder: (context) {
+                    final pass =
+                        SuperForm.ofFieldMaybe(
+                              context,
+                              "password",
+                            )?.data["password"]?.value
+                            as String?;
 
-                return Text(pass ?? "No password");
-              }),
-              ElevatedButton(
-                onPressed: () {
-                  SuperForm.of(context, listen: false).submit();
-                },
-                child: const Text("Submit"),
-              )
-            ]),
+                    return Text(pass ?? "No password");
+                  },
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    SuperForm.of(context, listen: false).submit();
+                  },
+                  child: const Text("Submit"),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -188,28 +195,32 @@ void main() {
     await tester.pumpWidget(
       boilerplate(
         child: SuperForm(
-          onSubmit: listener,
+          onSubmit: listener.call,
           key: formKey,
           child: Builder(
-            builder: (context) => Column(children: [
-              TextSuperFormField(
-                key: loginInput,
-                name: "login",
-              ),
-              Builder(builder: (context) {
-                final pass = SuperForm.ofFieldMaybe(context, "password")
-                    ?.data["password"]
-                    ?.value as String?;
+            builder: (context) => Column(
+              children: [
+                TextSuperFormField(key: loginInput, name: "login"),
+                Builder(
+                  builder: (context) {
+                    final pass =
+                        SuperForm.ofFieldMaybe(
+                              context,
+                              "password",
+                            )?.data["password"]?.value
+                            as String?;
 
-                return Text(pass ?? "No password");
-              }),
-              ElevatedButton(
-                onPressed: () {
-                  SuperForm.of(context, listen: false).submit();
-                },
-                child: const Text("Submit"),
-              )
-            ]),
+                    return Text(pass ?? "No password");
+                  },
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    SuperForm.of(context, listen: false).submit();
+                  },
+                  child: const Text("Submit"),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -240,30 +251,32 @@ void main() {
     await tester.pumpWidget(
       boilerplate(
         child: SuperForm(
-          onSubmit: listener,
+          onSubmit: listener.call,
           key: formKey,
           child: Builder(
-            builder: (context) => Column(children: [
-              TextSuperFormField(
-                key: loginInput,
-                name: "login",
-                rules: [RequiredRule("Login is required")],
-              ),
-              TextSuperFormField(
-                key: passwordInput,
-                name: "password",
-                rules: [
-                  RequiredRule("Password is required"),
-                  MinimumLengthRule(6, "Must be at least 6 characters"),
-                ],
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  SuperForm.of(context, listen: false).submit();
-                },
-                child: const Text("Submit"),
-              )
-            ]),
+            builder: (context) => Column(
+              children: [
+                TextSuperFormField(
+                  key: loginInput,
+                  name: "login",
+                  rules: [RequiredRule("Login is required")],
+                ),
+                TextSuperFormField(
+                  key: passwordInput,
+                  name: "password",
+                  rules: [
+                    RequiredRule("Password is required"),
+                    MinimumLengthRule(6, "Must be at least 6 characters"),
+                  ],
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    SuperForm.of(context, listen: false).submit();
+                  },
+                  child: const Text("Submit"),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -296,31 +309,33 @@ void main() {
     await tester.pumpWidget(
       boilerplate(
         child: SuperForm(
-          onSubmit: listener,
+          onSubmit: listener.call,
           key: formKey,
           initialValues: const {"login": "hellothere"},
           child: Builder(
-            builder: (context) => Column(children: [
-              TextSuperFormField(
-                key: loginInput,
-                name: "login",
-                rules: [RequiredRule("Login is required")],
-              ),
-              TextSuperFormField(
-                key: passwordInput,
-                name: "password",
-                rules: [
-                  RequiredRule("Password is required"),
-                  MinimumLengthRule(6, "Must be at least 6 characters"),
-                ],
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  SuperForm.of(context, listen: false).submit();
-                },
-                child: const Text("Submit"),
-              )
-            ]),
+            builder: (context) => Column(
+              children: [
+                TextSuperFormField(
+                  key: loginInput,
+                  name: "login",
+                  rules: [RequiredRule("Login is required")],
+                ),
+                TextSuperFormField(
+                  key: passwordInput,
+                  name: "password",
+                  rules: [
+                    RequiredRule("Password is required"),
+                    MinimumLengthRule(6, "Must be at least 6 characters"),
+                  ],
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    SuperForm.of(context, listen: false).submit();
+                  },
+                  child: const Text("Submit"),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -361,31 +376,33 @@ void main() {
     await tester.pumpWidget(
       boilerplate(
         child: SuperForm(
-          onSubmit: listener,
+          onSubmit: listener.call,
           key: formKey,
           initialValues: const {"login": "@12345.pl"},
           child: Builder(
-            builder: (context) => Column(children: [
-              TextSuperFormField(
-                key: loginInput,
-                name: "login",
-                rules: [RequiredRule("Login is required")],
-              ),
-              TextSuperFormField(
-                key: passwordInput,
-                name: "password",
-                rules: [
-                  RequiredRule("Password is required"),
-                  MinimumLengthRule(6, "Must be at least 6 characters"),
-                ],
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  SuperForm.of(context, listen: false).submit();
-                },
-                child: const Text("Submit"),
-              )
-            ]),
+            builder: (context) => Column(
+              children: [
+                TextSuperFormField(
+                  key: loginInput,
+                  name: "login",
+                  rules: [RequiredRule("Login is required")],
+                ),
+                TextSuperFormField(
+                  key: passwordInput,
+                  name: "password",
+                  rules: [
+                    RequiredRule("Password is required"),
+                    MinimumLengthRule(6, "Must be at least 6 characters"),
+                  ],
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    SuperForm.of(context, listen: false).submit();
+                  },
+                  child: const Text("Submit"),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -411,8 +428,9 @@ void main() {
     expect(find.text("Must be at least 6 characters"), findsOneWidget);
   });
 
-  testWidgets('hot-reload / widget move does not remove field data',
-      (WidgetTester tester) async {
+  testWidgets('hot-reload / widget move does not remove field data', (
+    WidgetTester tester,
+  ) async {
     final formKey = GlobalKey<SuperFormState>();
     const loginInput = Key('loginInput');
     const passwordInput = Key('passwordInput');
@@ -422,26 +440,22 @@ void main() {
     await tester.pumpWidget(
       boilerplate(
         child: SuperForm(
-          onSubmit: listener,
+          onSubmit: listener.call,
           key: formKey,
-          child: Column(children: [
-            TextSuperFormField(
-              key: loginInput,
-              name: "login",
-            ),
-            TextSuperFormField(
-              key: passwordInput,
-              name: "password",
-            ),
-            Builder(
-              builder: (context) => ElevatedButton(
-                onPressed: () {
-                  SuperForm.of(context, listen: false).submit();
-                },
-                child: const Text("Submit"),
+          child: Column(
+            children: [
+              TextSuperFormField(key: loginInput, name: "login"),
+              TextSuperFormField(key: passwordInput, name: "password"),
+              Builder(
+                builder: (context) => ElevatedButton(
+                  onPressed: () {
+                    SuperForm.of(context, listen: false).submit();
+                  },
+                  child: const Text("Submit"),
+                ),
               ),
-            )
-          ]),
+            ],
+          ),
         ),
       ),
     );
@@ -452,29 +466,25 @@ void main() {
     await tester.pumpWidget(
       boilerplate(
         child: SuperForm(
-          onSubmit: listener,
+          onSubmit: listener.call,
           key: formKey,
-          child: Column(children: [
-            TextSuperFormField(
-              key: loginInput,
-              name: "login",
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextSuperFormField(
-                key: passwordInput,
-                name: "password",
+          child: Column(
+            children: [
+              TextSuperFormField(key: loginInput, name: "login"),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextSuperFormField(key: passwordInput, name: "password"),
               ),
-            ),
-            Builder(
-              builder: (context) => ElevatedButton(
-                onPressed: () {
-                  SuperForm.of(context, listen: false).submit();
-                },
-                child: const Text("Submit"),
+              Builder(
+                builder: (context) => ElevatedButton(
+                  onPressed: () {
+                    SuperForm.of(context, listen: false).submit();
+                  },
+                  child: const Text("Submit"),
+                ),
               ),
-            )
-          ]),
+            ],
+          ),
         ),
       ),
     );
@@ -485,8 +495,9 @@ void main() {
     expect(find.text("123"), findsOneWidget);
   });
 
-  testWidgets('field state resets after name change',
-      (WidgetTester tester) async {
+  testWidgets('field state resets after name change', (
+    WidgetTester tester,
+  ) async {
     final initialValues = {"email": "test@pr0gramista.pl"};
     final listener = SubmitListener();
 
@@ -494,12 +505,8 @@ void main() {
       boilerplate(
         child: SuperForm(
           initialValues: initialValues,
-          onSubmit: listener,
-          child: Column(children: [
-            TextSuperFormField(
-              name: "something",
-            ),
-          ]),
+          onSubmit: listener.call,
+          child: Column(children: [TextSuperFormField(name: "something")]),
         ),
       ),
     );
@@ -510,12 +517,8 @@ void main() {
       boilerplate(
         child: SuperForm(
           initialValues: initialValues,
-          onSubmit: listener,
-          child: Column(children: [
-            TextSuperFormField(
-              name: "email",
-            ),
-          ]),
+          onSubmit: listener.call,
+          child: Column(children: [TextSuperFormField(name: "email")]),
         ),
       ),
     );
@@ -536,13 +539,15 @@ void main() {
       boilerplate(
         child: SuperForm(
           key: formKey,
-          child: Column(children: [
-            TextSuperFormField(
-              key: inputKey,
-              name: fieldName,
-              rules: [EmailRule(errorMessage1)],
-            ),
-          ]),
+          child: Column(
+            children: [
+              TextSuperFormField(
+                key: inputKey,
+                name: fieldName,
+                rules: [EmailRule(errorMessage1)],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -558,13 +563,15 @@ void main() {
       boilerplate(
         child: SuperForm(
           key: formKey,
-          child: Column(children: [
-            TextSuperFormField(
-              key: inputKey,
-              name: fieldName,
-              rules: [MinimumLengthRule(10, errorMessage2)],
-            ),
-          ]),
+          child: Column(
+            children: [
+              TextSuperFormField(
+                key: inputKey,
+                name: fieldName,
+                rules: [MinimumLengthRule(10, errorMessage2)],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -585,27 +592,32 @@ void main() {
         restorationScopeId: "app",
         child: SuperForm(
           restorationId: "form",
-          onSubmit: listener,
+          onSubmit: listener.call,
           key: formKey,
           child: Builder(
-            builder: (context) => Column(children: [
-              TextSuperFormField(
-                key: nameInput,
-                name: "name",
-                rules: [RequiredRule("Please provide your name")],
-              ),
-              CheckboxSuperFormField.listTile(name: "services", options: const [
-                CheckboxOption("hoovering", Text("Hoovering")),
-                CheckboxOption("laundry", Text("Laundry")),
-                CheckboxOption("mopping", Text("Mopping")),
-              ]),
-              ElevatedButton(
-                onPressed: () {
-                  SuperForm.of(context, listen: false).submit();
-                },
-                child: const Text("Submit"),
-              )
-            ]),
+            builder: (context) => Column(
+              children: [
+                TextSuperFormField(
+                  key: nameInput,
+                  name: "name",
+                  rules: [RequiredRule("Please provide your name")],
+                ),
+                CheckboxSuperFormField.listTile(
+                  name: "services",
+                  options: const [
+                    CheckboxOption("hoovering", Text("Hoovering")),
+                    CheckboxOption("laundry", Text("Laundry")),
+                    CheckboxOption("mopping", Text("Mopping")),
+                  ],
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    SuperForm.of(context, listen: false).submit();
+                  },
+                  child: const Text("Submit"),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -621,8 +633,9 @@ void main() {
     expect(formKey.currentState!.values["services"], ["laundry"]);
   });
 
-  testWidgets('can restore ignoring unserializable fields',
-      (WidgetTester tester) async {
+  testWidgets('can restore ignoring unserializable fields', (
+    WidgetTester tester,
+  ) async {
     final formKey = GlobalKey<SuperFormState>();
     const nameInput = Key('nameInput');
 
@@ -633,27 +646,32 @@ void main() {
         restorationScopeId: "app",
         child: SuperForm(
           restorationId: "form",
-          onSubmit: listener,
+          onSubmit: listener.call,
           key: formKey,
           child: Builder(
-            builder: (context) => Column(children: [
-              TextSuperFormField(
-                key: nameInput,
-                name: "name",
-                rules: [RequiredRule("Please provide your name")],
-              ),
-              CheckboxSuperFormField.listTile(name: "numbers", options: const [
-                CheckboxOption(ExampleEnum.one, Text("One")),
-                CheckboxOption(ExampleEnum.two, Text("Two")),
-                CheckboxOption(ExampleEnum.three, Text("Three")),
-              ]),
-              ElevatedButton(
-                onPressed: () {
-                  SuperForm.of(context, listen: false).submit();
-                },
-                child: const Text("Submit"),
-              )
-            ]),
+            builder: (context) => Column(
+              children: [
+                TextSuperFormField(
+                  key: nameInput,
+                  name: "name",
+                  rules: [RequiredRule("Please provide your name")],
+                ),
+                CheckboxSuperFormField.listTile(
+                  name: "numbers",
+                  options: const [
+                    CheckboxOption(ExampleEnum.one, Text("One")),
+                    CheckboxOption(ExampleEnum.two, Text("Two")),
+                    CheckboxOption(ExampleEnum.three, Text("Three")),
+                  ],
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    SuperForm.of(context, listen: false).submit();
+                  },
+                  child: const Text("Submit"),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -665,10 +683,10 @@ void main() {
     await tester.tap(find.text("Three"));
     await tester.pumpAndSettle();
 
-    expect(
-      formKey.currentState!.values["numbers"],
-      [ExampleEnum.two, ExampleEnum.three],
-    );
+    expect(formKey.currentState!.values["numbers"], [
+      ExampleEnum.two,
+      ExampleEnum.three,
+    ]);
 
     await tester.restartAndRestore();
 
@@ -684,10 +702,12 @@ void main() {
         child: SuperForm(
           key: formKey,
           child: Builder(
-            builder: (context) => Column(children: [
-              TextSuperFormField(name: "login"),
-              TextSuperFormField(name: "password"),
-            ]),
+            builder: (context) => Column(
+              children: [
+                TextSuperFormField(name: "login"),
+                TextSuperFormField(name: "password"),
+              ],
+            ),
           ),
         ),
       ),
@@ -712,18 +732,19 @@ void main() {
       ),
     );
 
-    formKey.currentState!
-        .register(name: "virtual", rules: [MinValueRule(3, "Minimum 3")]);
+    formKey.currentState!.register(
+      name: "virtual",
+      rules: [MinValueRule(3, "Minimum 3")],
+    );
     formKey.currentState!.setValue("virtual", "a");
     formKey.currentState!.validate("virtual");
     await tester.pumpAndSettle();
 
     expect(find.text("Minimum 3"), findsOneWidget);
 
-    formKey.currentState!.updateFieldRules(
-      "virtual",
-      [MinValueRule(1, "Minimum 1")],
-    );
+    formKey.currentState!.updateFieldRules("virtual", [
+      MinValueRule(1, "Minimum 1"),
+    ]);
     await tester.pumpAndSettle();
 
     expect(find.text("Minimum 3"), findsOneWidget);
@@ -733,13 +754,17 @@ void main() {
 
     expect(find.text("Minimum 3"), findsNothing);
     expect(
-        formKey.currentState!.rules["virtual"],
-        predicate<List>((rules) =>
-            rules[0] is MinValueRule && (rules[0] as MinValueRule).min == 1));
+      formKey.currentState!.rules["virtual"],
+      predicate<List>(
+        (rules) =>
+            rules[0] is MinValueRule && (rules[0] as MinValueRule).min == 1,
+      ),
+    );
   });
 
-  testWidgets('changing initial values does not effect modified state',
-      (WidgetTester tester) async {
+  testWidgets('changing initial values does not effect modified state', (
+    WidgetTester tester,
+  ) async {
     final formKey = GlobalKey<SuperFormState>();
 
     await tester.pumpWidget(
@@ -748,11 +773,8 @@ void main() {
           key: formKey,
           initialValues: const {"name": "Bartosz"},
           child: Builder(
-            builder: (context) => Column(children: [
-              TextSuperFormField(
-                name: "name",
-              ),
-            ]),
+            builder: (context) =>
+                Column(children: [TextSuperFormField(name: "name")]),
           ),
         ),
       ),
@@ -766,11 +788,8 @@ void main() {
           key: formKey,
           initialValues: const {"name": "Anna"},
           child: Builder(
-            builder: (context) => Column(children: [
-              TextSuperFormField(
-                name: "name",
-              ),
-            ]),
+            builder: (context) =>
+                Column(children: [TextSuperFormField(name: "name")]),
           ),
         ),
       ),
@@ -780,62 +799,54 @@ void main() {
   });
 
   testWidgets(
-      'resetting form field does not use internal copy of initial values',
-      (WidgetTester tester) async {
-    final formKey = GlobalKey<SuperFormState>();
+    'resetting form field does not use internal copy of initial values',
+    (WidgetTester tester) async {
+      final formKey = GlobalKey<SuperFormState>();
 
-    await tester.pumpWidget(
-      boilerplate(
-        child: SuperForm(
-          key: formKey,
-          initialValues: const {"name": "Bartosz"},
-          child: Builder(
-            builder: (context) => Column(children: [
-              TextSuperFormField(
-                name: "name",
-              ),
-            ]),
+      await tester.pumpWidget(
+        boilerplate(
+          child: SuperForm(
+            key: formKey,
+            initialValues: const {"name": "Bartosz"},
+            child: Builder(
+              builder: (context) =>
+                  Column(children: [TextSuperFormField(name: "name")]),
+            ),
           ),
         ),
-      ),
-    );
+      );
 
-    await tester.pumpWidget(
-      boilerplate(
-        child: SuperForm(
-          key: formKey,
-          initialValues: const {"name": "Anna"},
-          child: Builder(
-            builder: (context) => Column(children: [
-              TextSuperFormField(
-                name: "name",
-              ),
-            ]),
+      await tester.pumpWidget(
+        boilerplate(
+          child: SuperForm(
+            key: formKey,
+            initialValues: const {"name": "Anna"},
+            child: Builder(
+              builder: (context) =>
+                  Column(children: [TextSuperFormField(name: "name")]),
+            ),
           ),
         ),
-      ),
-    );
+      );
 
-    formKey.currentState!.reset(name: "name");
-    expect(formKey.currentState!.values["name"], "Anna");
+      formKey.currentState!.reset(name: "name");
+      expect(formKey.currentState!.values["name"], "Anna");
 
-    await tester.pumpWidget(
-      boilerplate(
-        child: SuperForm(
-          key: formKey,
-          initialValues: const {"name": "John"},
-          child: Builder(
-            builder: (context) => Column(children: [
-              TextSuperFormField(
-                name: "name",
-              ),
-            ]),
+      await tester.pumpWidget(
+        boilerplate(
+          child: SuperForm(
+            key: formKey,
+            initialValues: const {"name": "John"},
+            child: Builder(
+              builder: (context) =>
+                  Column(children: [TextSuperFormField(name: "name")]),
+            ),
           ),
         ),
-      ),
-    );
+      );
 
-    formKey.currentState!.reset();
-    expect(formKey.currentState!.values["name"], "John");
-  });
+      formKey.currentState!.reset();
+      expect(formKey.currentState!.values["name"], "John");
+    },
+  );
 }

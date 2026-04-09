@@ -63,7 +63,7 @@ const integerTestCases = [
 
 void main() {
   group("MaximumValueRule", () {
-    maxValueTestCases.forEach((testCase) {
+    for (var testCase in maxValueTestCases) {
       test(
           'for max value ${testCase.param} "${testCase.value}" ${testCase.isOk ? "passes" : "errors"}',
           () {
@@ -76,11 +76,11 @@ void main() {
           expect(error.message, "Error");
         }
       });
-    });
+    }
   });
 
   group("MinValueRule", () {
-    minValueTestCases.forEach((testCase) {
+    for (var testCase in minValueTestCases) {
       test(
           'for min value ${testCase.param} "${testCase.value}" ${testCase.isOk ? "passes" : "errors"}',
           () {
@@ -93,11 +93,11 @@ void main() {
           expect(error.message, "Error");
         }
       });
-    });
+    }
   });
 
   group("IsNumberRule", () {
-    numberTestCases.forEach((testCase) {
+    for (var testCase in numberTestCases) {
       test('for "${testCase.value}" ${testCase.isOk ? "passes" : "errors"}',
           () {
         final rule = IsNumberRule("Error");
@@ -109,11 +109,11 @@ void main() {
           expect(error.message, "Error");
         }
       });
-    });
+    }
   });
 
   group("IsIntegerRule", () {
-    integerTestCases.forEach((testCase) {
+    for (var testCase in integerTestCases) {
       test('for "${testCase.value}" ${testCase.isOk ? "passes" : "errors"}',
           () {
         final rule = IsIntegerRule("Error");
@@ -125,6 +125,6 @@ void main() {
           expect(error.message, "Error");
         }
       });
-    });
+    }
   });
 }

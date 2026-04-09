@@ -26,7 +26,7 @@ class BuildCounter extends StatelessWidget {
 
   // We don't want it to be const since it won't build
   // ignore: prefer_const_constructors_in_immutables
-  BuildCounter({Key? key, required this.name}) : super(key: key);
+  BuildCounter({super.key, required this.name});
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class BuildCounter extends StatelessWidget {
 class SuperFormMangler extends StatefulWidget {
   final Widget child;
 
-  const SuperFormMangler({Key? key, required this.child}) : super(key: key);
+  const SuperFormMangler({super.key, required this.child});
 
   @override
   State<SuperFormMangler> createState() => _SuperFormManglerState();

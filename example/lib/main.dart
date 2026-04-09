@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:super_form_example/burritox/burritox.dart';
 import 'package:super_form_example/sign_up/sign_up.dart';
 import 'package:super_form_example/survey/survey.dart';
-
-import 'burritox/burritox.dart';
 
 void main() {
   runApp(ExamplesApp());
@@ -58,7 +57,7 @@ class ExamplesApp extends StatelessWidget {
               ListTile(
                 title: const Text("Survey"),
                 subtitle: const Text(
-                    "Survey with sliders, dynamic email field, navigation block and loading state"),
+                    "Survey with sliders, dynamic email field, navigation block and loading state",),
                 onTap: () {
                   Navigator.of(context).restorablePushNamed("survey");
                 },
@@ -66,7 +65,7 @@ class ExamplesApp extends StatelessWidget {
               ListTile(
                 title: const Text("Burritox"),
                 subtitle: const Text(
-                    "Takeaway order with checkboxes, dynamic rules and editing"),
+                    "Takeaway order with checkboxes, dynamic rules and editing",),
                 onTap: () {
                   Navigator.of(context).restorablePushNamed("burritox");
                 },

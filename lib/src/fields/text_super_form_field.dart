@@ -37,8 +37,8 @@ import '../super_form.dart';
 ///  * [TextField], which is non-connected version of this widget
 class TextSuperFormField extends SuperFormField {
   TextSuperFormField({
-    Key? key,
-    required String name,
+    super.key,
+    required super.name,
     List<SuperFormFieldRule>? rules,
     InputDecoration? decoration = const InputDecoration(),
     TextInputType? keyboardType,
@@ -83,13 +83,10 @@ class TextSuperFormField extends SuperFormField {
     Iterable<String>? autofillHints,
     ScrollController? scrollController,
     Widget? noFormFallback,
-    FocusNode? focusNode,
+    super.focusNode,
   }) : super(
-          key: key,
-          name: name,
           rules: rules ?? const [],
           noFormFallback: noFormFallback ?? const SizedBox(),
-          focusNode: focusNode,
           builder: (
             BuildContext context,
             fieldState,

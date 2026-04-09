@@ -20,8 +20,8 @@ void main() {
 
       expect(
           find.text(
-              "{experience_score: 4.0, delivery_score: 3.0, showEmail: null}"),
-          findsOneWidget);
+              "{experience_score: 4.0, delivery_score: 3.0, showEmail: null}",),
+          findsOneWidget,);
     });
 
     testWidgets('can complete with email', (WidgetTester tester) async {
@@ -51,8 +51,8 @@ void main() {
 
       expect(
           find.text(
-              "{experience_score: 4.0, delivery_score: 3.0, showEmail: [yes], email: test@pr0gramista.pl}"),
-          findsOneWidget);
+              "{experience_score: 4.0, delivery_score: 3.0, showEmail: [yes], email: test@pr0gramista.pl}",),
+          findsOneWidget,);
     });
   });
 }

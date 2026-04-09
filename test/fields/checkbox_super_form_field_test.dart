@@ -185,7 +185,7 @@ void main() {
           key: formKey,
           child: get123(
             name: "number",
-            onChanged: listener,
+            onChanged: listener.call,
           ),
         ),
       ),
@@ -545,7 +545,7 @@ void main() {
             key: formKey,
             child: get123(
               name: "number",
-              onChanged: listener,
+              onChanged: listener.call,
               builder: builder,
             ),
           ),

@@ -5,7 +5,7 @@ import 'package:super_form/super_form.dart';
 import 'utils.dart';
 
 class InfiniteRenderingCase extends StatelessWidget {
-  const InfiniteRenderingCase({Key? key}) : super(key: key);
+  const InfiniteRenderingCase({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -112,7 +112,7 @@ class SuperFormErrorText extends StatelessWidget {
   final Color? selectionColor;
 
   const SuperFormErrorText({
-    Key? key,
+    super.key,
     required this.name,
     this.fallback = const SizedBox(),
     this.style,
@@ -128,7 +128,7 @@ class SuperFormErrorText extends StatelessWidget {
     this.textWidthBasis,
     this.textHeightBehavior,
     this.selectionColor,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

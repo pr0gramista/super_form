@@ -18,7 +18,7 @@ void main() {
       addTearDown(tester.binding.window.clearPhysicalSizeTestValue);
       addTearDown(tester.binding.window.clearDevicePixelRatioTestValue);
       addTearDown(
-          tester.binding.platformDispatcher.clearTextScaleFactorTestValue);
+          tester.binding.platformDispatcher.clearTextScaleFactorTestValue,);
     }
 
     testWidgets('can keep multiple SuperForm instances',
@@ -79,8 +79,8 @@ void main() {
 
       expect(
           find.text(
-              "[BurritoOrder(Burrito(beef, {salsa_mango, mayo}, {}), 3), BurritoOrder(Burrito(beef, {salsa_mango, guacamole}, {}), 1)]"),
-          findsOneWidget);
+              "[BurritoOrder(Burrito(beef, {salsa_mango, mayo}, {}), 3), BurritoOrder(Burrito(beef, {salsa_mango, guacamole}, {}), 1)]",),
+          findsOneWidget,);
     });
   });
 }

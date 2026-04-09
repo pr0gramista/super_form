@@ -43,7 +43,7 @@ const minLengthTestCases = [
 
 void main() {
   group("MaximumLengthRule", () {
-    maxLengthTestCases.forEach((testCase) {
+    for (var testCase in maxLengthTestCases) {
       test(
           'for max length ${testCase.param} "${testCase.value}" ${testCase.isOk ? "passes" : "errors"}',
           () {
@@ -56,11 +56,11 @@ void main() {
           expect(error.message, "Error");
         }
       });
-    });
+    }
   });
 
   group("MinimumLengthRule", () {
-    minLengthTestCases.forEach((testCase) {
+    for (var testCase in minLengthTestCases) {
       test(
           'for min length ${testCase.param} "${testCase.value}" ${testCase.isOk ? "passes" : "errors"}',
           () {
@@ -73,6 +73,6 @@ void main() {
           expect(error.message, "Error");
         }
       });
-    });
+    }
   });
 }

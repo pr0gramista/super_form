@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:super_form/super_form.dart';
+import 'package:super_form_example/burritox/burrito_list.dart';
 import 'package:super_form_example/burritox/form.dart';
 import 'package:super_form_example/burritox/model.dart';
 import 'package:super_form_example/github_link.dart';
 import 'package:super_form_example/result_dialog.dart';
-
-import 'burrito_list.dart';
 
 /// Entrypoint for Burritox Food Delivery demo
 ///
@@ -44,12 +43,12 @@ class _BurritoxState extends State<Burritox> {
       body: Row(
         children: [
           Expanded(
-            child: Container(
+            child: DecoratedBox(
               decoration: const BoxDecoration(
                 image: DecorationImage(
                   fit: BoxFit.cover,
                   // https://unsplash.com/photos/50KffXbjIOg
-                  image: AssetImage("burritox.jpg"),
+                  image: AssetImage("assets/burritox.jpg"),
                 ),
               ),
               child: Center(
@@ -77,7 +76,7 @@ class _BurritoxState extends State<Burritox> {
                             });
                           },
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -93,46 +92,50 @@ class _BurritoxState extends State<Burritox> {
                 ),
               ),
             ),
-            child: Column(children: [
-              Expanded(
+            child: Column(
+              children: [
+                Expanded(
                   child: BurritoList(
-                orders: orders,
-                onSubmit: (oldOrder, newOrder) {
-                  setState(() {
-                    orders.removeWhere((element) => element == oldOrder);
+                    orders: orders,
+                    onSubmit: (oldOrder, newOrder) {
+                      setState(() {
+                        orders.removeWhere((element) => element == oldOrder);
 
-                    // If the incoming order has 0 as count we'll just remove it
-                    if (newOrder.count > 0) {
-                      _replaceOrAddOrder(newOrder);
-                    }
-                  });
-                },
-              )),
-              const GitHubLink(path: "/burritox"),
-              SizedBox(
-                width: double.infinity,
-                height: 75,
-                child: TextButton(
-                  key: const Key('checkout'),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => ResultDialog(
-                        title: const Text("Orders"),
-                        result: orders.toString(),
-                      ),
-                    );
-                  },
-                  style: TextButton.styleFrom(
-                    textStyle: const TextStyle(fontWeight: FontWeight.bold),
-                    backgroundColor: Theme.of(context).primaryColor,
-                    foregroundColor:
-                        Theme.of(context).primaryTextTheme.bodyMedium?.color,
+                        // If the incoming order has 0 as count we'll just remove it
+                        if (newOrder.count > 0) {
+                          _replaceOrAddOrder(newOrder);
+                        }
+                      });
+                    },
                   ),
-                  child: const Text("Proceed to checkout"),
                 ),
-              )
-            ]),
+                const GitHubLink(path: "/burritox"),
+                SizedBox(
+                  width: double.infinity,
+                  height: 75,
+                  child: TextButton(
+                    key: const Key('checkout'),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => ResultDialog(
+                          title: const Text("Orders"),
+                          result: orders.toString(),
+                        ),
+                      );
+                    },
+                    style: TextButton.styleFrom(
+                      shape: const RoundedRectangleBorder(),
+                      textStyle: const TextStyle(fontWeight: FontWeight.bold),
+                      backgroundColor: Theme.of(context).primaryColor,
+                      foregroundColor:
+                          Theme.of(context).primaryTextTheme.bodyMedium?.color,
+                    ),
+                    child: const Text("Proceed to checkout"),
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),

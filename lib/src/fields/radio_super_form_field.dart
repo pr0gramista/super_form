@@ -124,16 +124,14 @@ class RadioSuperFormField<T> extends SuperFormField {
   /// You can check [listTileRadioBuilder] as an example implementation used in
   /// [RadioSuperFormField.listTile].
   RadioSuperFormField({
-    Key? key,
+    super.key,
     required RadioBuilder<T> builder,
-    required String name,
+    required super.name,
     required this.options,
     List<SuperFormFieldRule>? rules,
     void Function(T? value)? onChanged,
     this.enabled,
   }) : super(
-          key: key,
-          name: name,
           rules: rules ?? [],
           builder: (context, fieldState, formState) {
             final T? currentGroupValue = fieldState.data?.value as T?;
@@ -180,8 +178,8 @@ class RadioSuperFormField<T> extends SuperFormField {
   /// * [subtitle] is a function so developers can customize it per option
   /// * [selected] is a function so developers can customize it per option
   RadioSuperFormField.listTile({
-    Key? key,
-    required String name,
+    super.key,
+    required super.name,
     required this.options,
     List<SuperFormFieldRule>? rules,
     bool toggleable = false,
@@ -200,8 +198,6 @@ class RadioSuperFormField<T> extends SuperFormField {
     void Function(T? value)? onChanged,
     this.enabled,
   }) : super(
-          key: key,
-          name: name,
           rules: rules ?? [],
           builder: (context, fieldState, formState) {
             final T? currentGroupValue = fieldState.data?.value as T?;

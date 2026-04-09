@@ -19,7 +19,7 @@ class ResultDialog extends StatelessWidget {
           SelectableText(
             result,
           ),
-        ]),
+        ],),
       ),
     );
   }
