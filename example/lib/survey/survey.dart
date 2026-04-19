@@ -21,36 +21,42 @@ class _SurveyPageState extends State<SurveyPage> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        if (_formKey.currentState!.modified) {
-          final result = await showDialog<bool?>(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                    title: const Text('Confirmation'),
-                    content: const Text(
-                        'You have unsaved changes. Are you sure you want to leave the page?'),
-                    actions: <Widget>[
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context).pop(true);
-                        },
-                        child: const Text('Yes'),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context).pop(false);
-                        },
-                        child: const Text('Cancel'),
-                      )
-                    ]);
-              });
-
-          return Future.value(result ?? false);
+    return PopScope(
+      canPop: _formKey.currentState?.modified ?? false,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) {
+          return;
         }
 
-        return Future.value(true);
+        final shouldPop = await showDialog<bool?>(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Confirmation'),
+              content: const Text(
+                'You have unsaved changes. Are you sure you want to leave the page?',
+              ),
+              actions: <Widget>[
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(true);
+                  },
+                  child: const Text('Yes'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(false);
+                  },
+                  child: const Text('Cancel'),
+                ),
+              ],
+            );
+          },
+        );
+
+        if (context.mounted && shouldPop == true) {
+          Navigator.of(context).pop(true);
+        }
       },
       child: Scaffold(
         appBar: AppBar(
@@ -65,19 +71,29 @@ class _SurveyPageState extends State<SurveyPage> {
               _isLoading = true;
             });
 
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("Simulating slow network request"),
+                ),
+              );
+            }
+
             await Future.delayed(const Duration(seconds: 3));
 
             setState(() {
               _isLoading = false;
             });
 
-            showDialog(
-              context: context,
-              builder: (context) => ResultDialog(
-                title: const Text("Form values"),
-                result: values.toString(),
-              ),
-            );
+            if (context.mounted) {
+              showDialog(
+                context: context,
+                builder: (context) => ResultDialog(
+                  title: const Text("Form values"),
+                  result: values.toString(),
+                ),
+              );
+            }
           },
           initialValues: const {"experience_score": 3.0, "delivery_score": 3.0},
           child: Column(
@@ -110,8 +126,9 @@ class _SurveyPageState extends State<SurveyPage> {
                               CheckboxOption(
                                 "yes",
                                 Text(
-                                    "I want to receive emails with special offers and discounts, but no spam."),
-                              )
+                                  "I want to receive emails with special offers and discounts, but no spam.",
+                                ),
+                              ),
                             ],
                           ),
                           const SizedBox(height: 8),
@@ -126,7 +143,7 @@ class _SurveyPageState extends State<SurveyPage> {
                   ),
                 ),
               ),
-              const GitHubLink(path: "/survey")
+              const GitHubLink(path: "/survey"),
             ],
           ),
         ),
@@ -173,19 +190,21 @@ class SatisfactionSlider extends StatelessWidget {
         const SizedBox(height: 8),
         Text(_scoreLabel(score), style: const TextStyle(fontSize: 16)),
         const SizedBox(height: 8),
-        Row(children: [
-          const Text("😕", style: TextStyle(fontSize: 36)),
-          Expanded(
-            child: SliderSuperFormField(
-              key: Key(name),
-              name: name,
-              min: 1,
-              max: 5,
-              divisions: 4,
+        Row(
+          children: [
+            const Text("😕", style: TextStyle(fontSize: 36)),
+            Expanded(
+              child: SliderSuperFormField(
+                key: Key(name),
+                name: name,
+                min: 1,
+                max: 5,
+                divisions: 4,
+              ),
             ),
-          ),
-          const Text("🙂", style: TextStyle(fontSize: 36)),
-        ])
+            const Text("🙂", style: TextStyle(fontSize: 36)),
+          ],
+        ),
       ],
     );
   }
@@ -211,7 +230,7 @@ class OffersEmailField extends StatelessWidget {
       name: "email",
       rules: [
         RequiredRule("Please provide a valid email address."),
-        EmailRule("Please provide a valid email address.")
+        EmailRule("Please provide a valid email address."),
       ],
     );
   }

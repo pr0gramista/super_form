@@ -16,17 +16,18 @@ void main() {
         boilerplate(
           child: SuperForm(
             child: Builder(
-              builder: (context) => Column(children: [
-                TextSuperFormField(
-                  key: inputKey,
-                  name: "name",
-                ),
-                Builder(builder: (context) {
-                  SuperForm.of(context);
+              builder: (context) => Column(
+                children: [
+                  TextSuperFormField(key: inputKey, name: "name"),
+                  Builder(
+                    builder: (context) {
+                      SuperForm.of(context);
 
-                  return BuildCounter(name: buildCounterName);
-                }),
-              ]),
+                      return BuildCounter(name: buildCounterName);
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -47,17 +48,18 @@ void main() {
         boilerplate(
           child: SuperForm(
             child: Builder(
-              builder: (context) => Column(children: [
-                TextSuperFormField(
-                  key: inputKey,
-                  name: "name",
-                ),
-                Builder(builder: (context) {
-                  SuperForm.of(context, listen: false);
+              builder: (context) => Column(
+                children: [
+                  TextSuperFormField(key: inputKey, name: "name"),
+                  Builder(
+                    builder: (context) {
+                      SuperForm.of(context, listen: false);
 
-                  return BuildCounter(name: buildCounterName);
-                }),
-              ]),
+                      return BuildCounter(name: buildCounterName);
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -78,17 +80,18 @@ void main() {
         boilerplate(
           child: SuperForm(
             child: Builder(
-              builder: (context) => Column(children: [
-                TextSuperFormField(
-                  key: inputKey,
-                  name: "name",
-                ),
-                Builder(builder: (context) {
-                  SuperForm.ofMaybe(context);
+              builder: (context) => Column(
+                children: [
+                  TextSuperFormField(key: inputKey, name: "name"),
+                  Builder(
+                    builder: (context) {
+                      SuperForm.ofMaybe(context);
 
-                  return BuildCounter(name: buildCounterName);
-                }),
-              ]),
+                      return BuildCounter(name: buildCounterName);
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -109,17 +112,18 @@ void main() {
         boilerplate(
           child: SuperForm(
             child: Builder(
-              builder: (context) => Column(children: [
-                TextSuperFormField(
-                  key: inputKey,
-                  name: "name",
-                ),
-                Builder(builder: (context) {
-                  SuperForm.ofMaybe(context, listen: false);
+              builder: (context) => Column(
+                children: [
+                  TextSuperFormField(key: inputKey, name: "name"),
+                  Builder(
+                    builder: (context) {
+                      SuperForm.ofMaybe(context, listen: false);
 
-                  return BuildCounter(name: buildCounterName);
-                }),
-              ]),
+                      return BuildCounter(name: buildCounterName);
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -147,21 +151,19 @@ void main() {
         boilerplate(
           child: SuperForm(
             child: Builder(
-              builder: (context) => Column(children: [
-                TextSuperFormField(
-                  key: inputKey,
-                  name: "name",
-                ),
-                TextSuperFormField(
-                  key: anotherInput,
-                  name: "anotherField",
-                ),
-                Builder(builder: (context) {
-                  final state = SuperForm.ofField(context, "anotherField");
-                  seenValues.add(state.values["anotherField"]);
-                  return BuildCounter(name: buildCounterName);
-                }),
-              ]),
+              builder: (context) => Column(
+                children: [
+                  TextSuperFormField(key: inputKey, name: "name"),
+                  TextSuperFormField(key: anotherInput, name: "anotherField"),
+                  Builder(
+                    builder: (context) {
+                      final state = SuperForm.ofField(context, "anotherField");
+                      seenValues.add(state.values["anotherField"]);
+                      return BuildCounter(name: buildCounterName);
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -197,21 +199,22 @@ void main() {
         boilerplate(
           child: SuperForm(
             child: Builder(
-              builder: (context) => Column(children: [
-                TextSuperFormField(
-                  key: inputKey,
-                  name: "name",
-                ),
-                TextSuperFormField(
-                  key: anotherInput,
-                  name: "anotherField",
-                ),
-                Builder(builder: (context) {
-                  final state = SuperForm.ofFieldMaybe(context, "anotherField");
-                  seenValues.add(state?.values["anotherField"]);
-                  return BuildCounter(name: buildCounterName);
-                }),
-              ]),
+              builder: (context) => Column(
+                children: [
+                  TextSuperFormField(key: inputKey, name: "name"),
+                  TextSuperFormField(key: anotherInput, name: "anotherField"),
+                  Builder(
+                    builder: (context) {
+                      final state = SuperForm.ofFieldMaybe(
+                        context,
+                        "anotherField",
+                      );
+                      seenValues.add(state?.values["anotherField"]);
+                      return BuildCounter(name: buildCounterName);
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -250,24 +253,24 @@ void main() {
         boilerplate(
           child: SuperForm(
             child: Builder(
-              builder: (context) => Column(children: [
-                TextSuperFormField(
-                  key: inputKey,
-                  name: name1,
-                ),
-                TextSuperFormField(
-                  key: anotherInput,
-                  name: name2,
-                ),
-                Builder(builder: (context) {
-                  final f = SuperForm.ofFieldValue(context, name2);
-                  seenValues.add(f);
-                  return Column(children: [
-                    BuildCounter(name: buildCounterName),
-                    Text("Value: $f")
-                  ]);
-                }),
-              ]),
+              builder: (context) => Column(
+                children: [
+                  TextSuperFormField(key: inputKey, name: name1),
+                  TextSuperFormField(key: anotherInput, name: name2),
+                  Builder(
+                    builder: (context) {
+                      final f = SuperForm.ofFieldValue(context, name2);
+                      seenValues.add(f);
+                      return Column(
+                        children: [
+                          BuildCounter(name: buildCounterName),
+                          Text("Value: $f"),
+                        ],
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -292,25 +295,32 @@ void main() {
       expect(seenValues, expectedValues);
     });
 
-    testWidgets('ofField updates when form properties are changed',
-        (WidgetTester tester) async {
+    testWidgets('ofField updates when form properties are changed', (
+      WidgetTester tester,
+    ) async {
       // This must be unique between all tests
       const buildCounterName = "offield-form-properties";
 
       await tester.pumpWidget(
         boilerplate(
-          child: Builder(builder: (context) {
-            return SuperFormMangler(
-              child: Column(children: [
-                TextSuperFormField(name: "name"),
-                Builder(builder: (context) {
-                  SuperForm.ofField(context, "name");
+          child: Builder(
+            builder: (context) {
+              return SuperFormMangler(
+                child: Column(
+                  children: [
+                    TextSuperFormField(name: "name"),
+                    Builder(
+                      builder: (context) {
+                        SuperForm.ofField(context, "name");
 
-                  return BuildCounter(name: buildCounterName);
-                }),
-              ]),
-            );
-          }),
+                        return BuildCounter(name: buildCounterName);
+                      },
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
         ),
       );
 
@@ -335,25 +345,32 @@ void main() {
       expect(buildCounters[buildCounterName], 4);
     });
 
-    testWidgets('of updates when form properties are changed',
-        (WidgetTester tester) async {
+    testWidgets('of updates when form properties are changed', (
+      WidgetTester tester,
+    ) async {
       // This must be unique between all tests
       const buildCounterName = "of-form-properties";
 
       await tester.pumpWidget(
         boilerplate(
-          child: Builder(builder: (context) {
-            return SuperFormMangler(
-              child: Column(children: [
-                TextSuperFormField(name: "name"),
-                Builder(builder: (context) {
-                  SuperForm.of(context);
+          child: Builder(
+            builder: (context) {
+              return SuperFormMangler(
+                child: Column(
+                  children: [
+                    TextSuperFormField(name: "name"),
+                    Builder(
+                      builder: (context) {
+                        SuperForm.of(context);
 
-                  return BuildCounter(name: buildCounterName);
-                }),
-              ]),
-            );
-          }),
+                        return BuildCounter(name: buildCounterName);
+                      },
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
         ),
       );
 

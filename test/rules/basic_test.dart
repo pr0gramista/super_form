@@ -60,64 +60,70 @@ void main() {
   group("Required rule", () {
     final rule = RequiredRule("Error");
 
-    requiredTestCases.forEach((testCase) {
-      test('for "${testCase.value}" ${testCase.isOk ? "passes" : "errors"}',
-          () {
-        final error = rule.validate(testCase.value);
+    for (var testCase in requiredTestCases) {
+      test(
+        'for "${testCase.value}" ${testCase.isOk ? "passes" : "errors"}',
+        () {
+          final error = rule.validate(testCase.value);
 
-        expect(error == null, testCase.isOk);
-        if (error != null) {
-          expect(error.message, "Error");
-        }
-      });
-    });
+          expect(error == null, testCase.isOk);
+          if (error != null) {
+            expect(error.message, "Error");
+          }
+        },
+      );
+    }
   });
 
   group("Email rule", () {
     final rule = EmailRule("Error");
 
-    emailTestCases.forEach((testCase) {
-      test('for "${testCase.value}" ${testCase.isOk ? "passes" : "errors"}',
-          () {
-        final error = rule.validate(testCase.value);
+    for (var testCase in emailTestCases) {
+      test(
+        'for "${testCase.value}" ${testCase.isOk ? "passes" : "errors"}',
+        () {
+          final error = rule.validate(testCase.value);
 
-        expect(error == null, testCase.isOk);
-        if (error != null) {
-          expect(error.message, "Error");
-        }
-      });
-    });
+          expect(error == null, testCase.isOk);
+          if (error != null) {
+            expect(error.message, "Error");
+          }
+        },
+      );
+    }
   });
 
   group("IsEqualRule", () {
-    isEqualTestCases.forEach((testCase) {
+    for (var testCase in isEqualTestCases) {
       test(
-          'for ${testCase.param} == "${testCase.value}" ${testCase.isOk ? "passes" : "errors"}',
-          () {
-        final rule = IsEqualRule(testCase.param, "Error");
-        final error = rule.validate(testCase.value);
+        'for ${testCase.param} == "${testCase.value}" ${testCase.isOk ? "passes" : "errors"}',
+        () {
+          final rule = IsEqualRule(testCase.param, "Error");
+          final error = rule.validate(testCase.value);
 
-        expect(error == null, testCase.isOk);
-        if (error != null) {
-          expect(error.message, "Error");
-        }
-      });
-    });
+          expect(error == null, testCase.isOk);
+          if (error != null) {
+            expect(error.message, "Error");
+          }
+        },
+      );
+    }
   });
 
   group("ContainsRule", () {
-    containsTestCases.forEach((testCase) {
+    for (var testCase in containsTestCases) {
       test(
-          'for ${testCase.value} contains "${testCase.param}" ${testCase.isOk ? "passes" : "errors"}',
-          () {
-        final rule = ContainsRule(testCase.param, "Error");
-        final error = rule.validate(testCase.value);
+        'for ${testCase.value} contains "${testCase.param}" ${testCase.isOk ? "passes" : "errors"}',
+        () {
+          final rule = ContainsRule(testCase.param, "Error");
+          final error = rule.validate(testCase.value);
 
-        expect(error == null, testCase.isOk);
-        if (error != null) {
-          expect(error.message, "Error");
-        }
-      });
-    });
+          expect(error == null, testCase.isOk);
+          if (error != null) {
+            expect(error.message, "Error");
+          }
+        },
+      );
+    }
   });
 }

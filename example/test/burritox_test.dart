@@ -11,14 +11,15 @@ const checkoutKey = Key('checkout');
 void main() {
   group('Burritox', () {
     void setUpTester(WidgetTester tester) {
-      // Burritox is built for big screens
-      tester.binding.window.physicalSizeTestValue = const Size(1600, 2000);
-      tester.binding.window.devicePixelRatioTestValue = 1;
+      // Built for big screens
       tester.binding.platformDispatcher.textScaleFactorTestValue = 0.5;
-      addTearDown(tester.binding.window.clearPhysicalSizeTestValue);
-      addTearDown(tester.binding.window.clearDevicePixelRatioTestValue);
+      tester.view.physicalSize = const Size(1600, 2000);
+      tester.view.devicePixelRatio = 1;
+
+      addTearDown(tester.view.resetPhysicalSize);
       addTearDown(
-          tester.binding.platformDispatcher.clearTextScaleFactorTestValue);
+        tester.binding.platformDispatcher.clearTextScaleFactorTestValue,
+      );
     }
 
     testWidgets('can keep multiple SuperForm instances',
@@ -78,9 +79,11 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(
-          find.text(
-              "[BurritoOrder(Burrito(beef, {salsa_mango, mayo}, {}), 3), BurritoOrder(Burrito(beef, {salsa_mango, guacamole}, {}), 1)]"),
-          findsOneWidget);
+        find.text(
+          "[BurritoOrder(Burrito(beef, {salsa_mango, mayo}, {}), 3), BurritoOrder(Burrito(beef, {salsa_mango, guacamole}, {}), 1)]",
+        ),
+        findsOneWidget,
+      );
     });
   });
 }

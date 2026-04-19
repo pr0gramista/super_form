@@ -16,22 +16,24 @@ void main() {
     await tester.pumpWidget(
       boilerplate(
         child: SuperForm(
-          onSubmit: listener,
+          onSubmit: listener.call,
           key: formKey,
           child: Builder(
-            builder: (context) => Column(children: [
-              TextSuperFormField(
-                key: inputKey,
-                name: "name",
-                rules: [MinimumLengthRule(8, errorText)],
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  SuperForm.of(context, listen: false).submit();
-                },
-                child: const Text("Submit"),
-              )
-            ]),
+            builder: (context) => Column(
+              children: [
+                TextSuperFormField(
+                  key: inputKey,
+                  name: "name",
+                  rules: [MinimumLengthRule(8, errorText)],
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    SuperForm.of(context, listen: false).submit();
+                  },
+                  child: const Text("Submit"),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -63,23 +65,25 @@ void main() {
     await tester.pumpWidget(
       boilerplate(
         child: SuperForm(
-          onSubmit: listener,
+          onSubmit: listener.call,
           key: formKey,
           validationMode: ValidationMode.onChange,
           child: Builder(
-            builder: (context) => Column(children: [
-              TextSuperFormField(
-                key: inputKey,
-                name: "name",
-                rules: [MinimumLengthRule(8, errorText)],
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  SuperForm.of(context, listen: false).submit();
-                },
-                child: const Text("Submit"),
-              )
-            ]),
+            builder: (context) => Column(
+              children: [
+                TextSuperFormField(
+                  key: inputKey,
+                  name: "name",
+                  rules: [MinimumLengthRule(8, errorText)],
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    SuperForm.of(context, listen: false).submit();
+                  },
+                  child: const Text("Submit"),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -110,24 +114,26 @@ void main() {
     await tester.pumpWidget(
       boilerplate(
         child: SuperForm(
-          onSubmit: listener,
+          onSubmit: listener.call,
           key: formKey,
           validationMode: ValidationMode.onBlur,
           child: Builder(
-            builder: (context) => Column(children: [
-              TextSuperFormField(
-                key: inputKey,
-                name: "name",
-                rules: [MinimumLengthRule(8, errorText)],
-              ),
-              const TextField(key: anotherInput),
-              ElevatedButton(
-                onPressed: () {
-                  SuperForm.of(context, listen: false).submit();
-                },
-                child: const Text("Submit"),
-              )
-            ]),
+            builder: (context) => Column(
+              children: [
+                TextSuperFormField(
+                  key: inputKey,
+                  name: "name",
+                  rules: [MinimumLengthRule(8, errorText)],
+                ),
+                const TextField(key: anotherInput),
+                ElevatedButton(
+                  onPressed: () {
+                    SuperForm.of(context, listen: false).submit();
+                  },
+                  child: const Text("Submit"),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -155,8 +161,9 @@ void main() {
     verifyNoMoreInteractions(listener);
   });
 
-  testWidgets('Manually registered fields are validated',
-      (WidgetTester tester) async {
+  testWidgets('Manually registered fields are validated', (
+    WidgetTester tester,
+  ) async {
     const errorText = "Must be a number";
     final formKey = GlobalKey<SuperFormState>();
     const inputKey = Key('input');
@@ -166,27 +173,27 @@ void main() {
     await tester.pumpWidget(
       boilerplate(
         child: SuperForm(
-          onSubmit: listener,
+          onSubmit: listener.call,
           key: formKey,
           validationMode: ValidationMode.onBlur,
           onInit: (formState) {
-            formState.register(name: "manual", rules: [
-              IsNumberRule("Must be a number"),
-            ]);
+            formState.register(
+              name: "manual",
+              rules: [IsNumberRule("Must be a number")],
+            );
           },
           child: Builder(
-            builder: (context) => Column(children: [
-              TextSuperFormField(
-                key: inputKey,
-                name: "name",
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  SuperForm.of(context, listen: false).submit();
-                },
-                child: const Text("Submit"),
-              )
-            ]),
+            builder: (context) => Column(
+              children: [
+                TextSuperFormField(key: inputKey, name: "name"),
+                ElevatedButton(
+                  onPressed: () {
+                    SuperForm.of(context, listen: false).submit();
+                  },
+                  child: const Text("Submit"),
+                ),
+              ],
+            ),
           ),
         ),
       ),

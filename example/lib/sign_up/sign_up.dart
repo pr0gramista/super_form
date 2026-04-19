@@ -34,8 +34,8 @@ class SignUpPage extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.all(20),
                   width: 500,
-                  child: Column(
-                    children: const [
+                  child: const Column(
+                    children: [
                       EmailField(),
                       SizedBox(height: 8),
                       PasswordField(),
@@ -72,7 +72,7 @@ class EmailField extends StatelessWidget {
       name: "email",
       rules: [
         RequiredRule("Must not be empty"),
-        EmailRule("Must be a valid email")
+        EmailRule("Must be a valid email"),
       ],
     );
   }
@@ -133,7 +133,7 @@ class RepeatPasswordField extends StatelessWidget {
           if (!arePasswordsEqual) return "Passwords must match";
 
           return null;
-        })
+        }),
       ],
     );
   }
@@ -146,7 +146,7 @@ class SubmitButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return OutlinedButton(
       style: ButtonStyle(
-        padding: MaterialStateProperty.all(
+        padding: WidgetStateProperty.all(
           const EdgeInsets.symmetric(
             vertical: 20,
             horizontal: 32,
@@ -164,36 +164,42 @@ class TermsAndConditionsCheckbox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      CheckboxSuperFormField.listTile(
-        key: const Key('tc'),
-        controlAffinity: ListTileControlAffinity.leading,
-        contentPadding: const EdgeInsets.only(left: 4),
-        name: "termsAndConditionsAccepted",
-        rules: [
-          ContainsRule(
-              "yes", "You must accept our Terms & Condition to continue")
-        ],
-        options: [
-          CheckboxOption(
-            "yes",
-            RichText(
-              text: TextSpan(
-                text: 'I accept ',
-                style: DefaultTextStyle.of(context).style,
-                children: <TextSpan>[
-                  TextSpan(
+    return Column(
+      children: [
+        CheckboxSuperFormField.listTile(
+          key: const Key('tc'),
+          controlAffinity: ListTileControlAffinity.leading,
+          contentPadding: const EdgeInsets.only(left: 4),
+          name: "termsAndConditionsAccepted",
+          rules: [
+            ContainsRule(
+              "yes",
+              "You must accept our Terms & Condition to continue",
+            ),
+          ],
+          options: [
+            CheckboxOption(
+              "yes",
+              RichText(
+                text: TextSpan(
+                  text: 'I accept ',
+                  style: DefaultTextStyle.of(context).style,
+                  children: <TextSpan>[
+                    TextSpan(
                       text: 'Terms & Conditions',
                       style: TextStyle(
-                          color: Theme.of(context).colorScheme.secondary)),
-                  const TextSpan(text: ' which I did not read.'),
-                ],
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                    ),
+                    const TextSpan(text: ' which I did not read.'),
+                  ],
+                ),
               ),
             ),
-          )
-        ],
-      ),
-      const SuperFormErrorText(name: "termsAndConditionsAccepted"),
-    ]);
+          ],
+        ),
+        const SuperFormErrorText(name: "termsAndConditionsAccepted"),
+      ],
+    );
   }
 }

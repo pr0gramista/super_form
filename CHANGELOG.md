@@ -1,3 +1,6 @@
+## 1.1.0
+* Adapted to newest Flutter version
+
 ## 1.0.3-beta
 * Upgrade stuff to newer Flutter version
 

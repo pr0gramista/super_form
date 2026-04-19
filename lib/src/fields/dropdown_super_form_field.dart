@@ -39,8 +39,8 @@ import '../../super_form.dart';
 ///  * [DropdownButtonField], which is Flutter form version of this widget
 class DropdownSuperFormField<T> extends SuperFormField {
   DropdownSuperFormField({
-    Key? key,
-    required String name,
+    super.key,
+    required super.name,
     List<SuperFormFieldRule>? rules,
     required List<DropdownMenuItem<T>>? items,
     DropdownButtonBuilder? selectedItemBuilder,
@@ -57,7 +57,7 @@ class DropdownSuperFormField<T> extends SuperFormField {
     bool isExpanded = false,
     double? itemHeight,
     Color? focusColor,
-    FocusNode? focusNode,
+    super.focusNode,
     bool autofocus = false,
     Color? dropdownColor,
     InputDecoration? decoration,
@@ -65,78 +65,79 @@ class DropdownSuperFormField<T> extends SuperFormField {
     ValueChanged<T?>? onChanged,
     bool? enabled,
   }) : super(
-          key: key,
-          name: name,
-          focusNode: focusNode,
-          rules: rules ?? const [],
-          builder: (context, fieldState, formState) {
-            final fieldData = formState.data[name];
+         rules: rules ?? const [],
+         builder: (context, fieldState, formState) {
+           final fieldData = formState.data[name];
 
-            InputDecoration? effectiveDecoration =
-                (decoration ?? InputDecoration(focusColor: focusColor))
-                    .applyDefaults(
-                        Theme.of(fieldState.context).inputDecorationTheme);
-            if (fieldData != null && fieldData.errors.isNotEmpty) {
-              effectiveDecoration = effectiveDecoration.copyWith(
-                  errorText: fieldData.errors.first.message);
-            }
+           InputDecoration? effectiveDecoration =
+               (decoration ?? InputDecoration(focusColor: focusColor))
+                   .applyDefaults(
+                     Theme.of(fieldState.context).inputDecorationTheme,
+                   );
+           if (fieldData != null && fieldData.errors.isNotEmpty) {
+             effectiveDecoration = effectiveDecoration.copyWith(
+               errorText: fieldData.errors.first.message,
+             );
+           }
 
-            final effectiveEnabled = enabled ?? formState.enabled;
+           final effectiveEnabled = enabled ?? formState.enabled;
 
-            return Focus(
-              canRequestFocus: false,
-              skipTraversal: true,
-              child: Builder(builder: (BuildContext context) {
-                return InputDecorator(
-                  decoration: effectiveDecoration!,
-                  isEmpty: fieldData?.value == null,
-                  isFocused: Focus.of(context).hasFocus,
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<T>(
-                      items: items,
-                      selectedItemBuilder: selectedItemBuilder,
-                      value: fieldData?.value as T?,
-                      hint: hint,
-                      disabledHint: disabledHint,
-                      onChanged: effectiveEnabled
-                          ? (newValue) {
-                              SuperFormFieldData newData =
-                                  fieldData!.copyWithValue(
-                                value: newValue,
-                                touched: true,
-                              );
+           return Focus(
+             canRequestFocus: false,
+             skipTraversal: true,
+             child: Builder(
+               builder: (BuildContext context) {
+                 return InputDecorator(
+                   decoration: effectiveDecoration!,
+                   isEmpty: fieldData?.value == null,
+                   isFocused: Focus.of(context).hasFocus,
+                   child: DropdownButtonHideUnderline(
+                     child: DropdownButton<T>(
+                       items: items,
+                       selectedItemBuilder: selectedItemBuilder,
+                       value: fieldData?.value as T?,
+                       hint: hint,
+                       disabledHint: disabledHint,
+                       onChanged: effectiveEnabled
+                           ? (newValue) {
+                               SuperFormFieldData newData = fieldData!
+                                   .copyWithValue(
+                                     value: newValue,
+                                     touched: true,
+                                   );
 
-                              if (formState.validationMode ==
-                                      ValidationMode.onChange ||
-                                  newData.submitted) {
-                                newData = newData.validate(rules ?? []);
-                              }
+                               if (formState.validationMode ==
+                                       ValidationMode.onChange ||
+                                   newData.submitted) {
+                                 newData = newData.validate(rules ?? []);
+                               }
 
-                              formState.updateFieldData(newData);
+                               formState.updateFieldData(newData);
 
-                              if (onChanged != null) onChanged(newValue);
-                            }
-                          : null,
-                      onTap: onTap,
-                      elevation: elevation,
-                      style: style,
-                      icon: icon,
-                      iconDisabledColor: iconDisabledColor,
-                      iconEnabledColor: iconEnabledColor,
-                      iconSize: iconSize,
-                      isDense: isDense,
-                      isExpanded: isExpanded,
-                      itemHeight: itemHeight,
-                      focusColor: focusColor,
-                      focusNode: fieldState.focusNode,
-                      autofocus: autofocus,
-                      dropdownColor: dropdownColor,
-                      menuMaxHeight: menuMaxHeight,
-                    ),
-                  ),
-                );
-              }),
-            );
-          },
-        );
+                               if (onChanged != null) onChanged(newValue);
+                             }
+                           : null,
+                       onTap: onTap,
+                       elevation: elevation,
+                       style: style,
+                       icon: icon,
+                       iconDisabledColor: iconDisabledColor,
+                       iconEnabledColor: iconEnabledColor,
+                       iconSize: iconSize,
+                       isDense: isDense,
+                       isExpanded: isExpanded,
+                       itemHeight: itemHeight,
+                       focusColor: focusColor,
+                       focusNode: fieldState.focusNode,
+                       autofocus: autofocus,
+                       dropdownColor: dropdownColor,
+                       menuMaxHeight: menuMaxHeight,
+                     ),
+                   ),
+                 );
+               },
+             ),
+           );
+         },
+       );
 }

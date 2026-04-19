@@ -83,10 +83,8 @@ class CheckboxState<T> {
   );
 }
 
-typedef CheckboxBuilder<T> = Widget Function(
-  BuildContext context,
-  CheckboxState<T> state,
-);
+typedef CheckboxBuilder<T> =
+    Widget Function(BuildContext context, CheckboxState<T> state);
 
 /// Base class for creating checkboxes that extends [SuperFormField].
 ///
@@ -135,65 +133,63 @@ class CheckboxSuperFormField<T> extends SuperFormField {
   /// You can check [listTileCheckboxBuilder] as an example implementation used in
   /// [CheckboxSuperFormField.listTile].
   CheckboxSuperFormField({
-    Key? key,
+    super.key,
     required CheckboxBuilder<T> builder,
-    required String name,
+    required super.name,
     required this.options,
     List<SuperFormFieldRule>? rules,
     void Function(T value, bool checked)? onChanged,
     this.enabled,
   }) : super(
-          key: key,
-          name: name,
-          rules: rules ?? [],
-          builder: (context, fieldState, formState) {
-            final List<T> currentValue =
-                (fieldState.data?.value as List<T>?) ?? [];
+         rules: rules ?? [],
+         builder: (context, fieldState, formState) {
+           final List<T> currentValue =
+               (fieldState.data?.value as List<T>?) ?? [];
 
-            void effectiveOnChanged(T value, bool checked) {
-              List<T> newValue = currentValue;
+           void effectiveOnChanged(T value, bool checked) {
+             List<T> newValue = currentValue;
 
-              if (checked) {
-                if (!currentValue.contains(value)) {
-                  newValue = <T>[...currentValue, value];
-                }
-              } else {
-                newValue = currentValue
-                    .where((element) => element != value)
-                    .toList(growable: false);
-              }
+             if (checked) {
+               if (!currentValue.contains(value)) {
+                 newValue = <T>[...currentValue, value];
+               }
+             } else {
+               newValue = currentValue
+                   .where((element) => element != value)
+                   .toList(growable: false);
+             }
 
-              SuperFormFieldData newData = fieldState.data!.copyWithValue(
-                value: newValue,
-                touched: true,
-              );
+             SuperFormFieldData newData = fieldState.data!.copyWithValue(
+               value: newValue,
+               touched: true,
+             );
 
-              // If the field was tried to be submitted it should be now revalidated every change
-              if (formState.validationMode == ValidationMode.onChange ||
-                  newData.submitted) {
-                newData = newData.validate(rules ?? []);
-              }
+             // If the field was tried to be submitted it should be now revalidated every change
+             if (formState.validationMode == ValidationMode.onChange ||
+                 newData.submitted) {
+               newData = newData.validate(rules ?? []);
+             }
 
-              formState.updateFieldData(newData);
+             formState.updateFieldData(newData);
 
-              if (onChanged != null) {
-                onChanged(value, checked);
-              }
-            }
+             if (onChanged != null) {
+               onChanged(value, checked);
+             }
+           }
 
-            final effectiveEnabled = enabled ?? formState.enabled;
+           final effectiveEnabled = enabled ?? formState.enabled;
 
-            return builder(
-              context,
-              CheckboxState<T>(
-                options,
-                currentValue,
-                effectiveEnabled ? effectiveOnChanged : null,
-                fieldState.focusNode,
-              ),
-            );
-          },
-        );
+           return builder(
+             context,
+             CheckboxState<T>(
+               options,
+               currentValue,
+               effectiveEnabled ? effectiveOnChanged : null,
+               fieldState.focusNode,
+             ),
+           );
+         },
+       );
 
   /// Creates a [Column] of connected [CheckboxListTile]s which represent the
   /// options.
@@ -205,8 +201,8 @@ class CheckboxSuperFormField<T> extends SuperFormField {
   /// * [subtitle] is a function so developers can customize it per option
   /// * [selected] is a function so developers can customize it per option
   CheckboxSuperFormField.listTile({
-    Key? key,
-    required String name,
+    super.key,
+    required super.name,
     required this.options,
     List<SuperFormFieldRule>? rules,
     Color? activeColor,
@@ -225,77 +221,76 @@ class CheckboxSuperFormField<T> extends SuperFormField {
     void Function(T value, bool checked)? onChanged,
     this.enabled,
   }) : super(
-          key: key,
-          name: name,
-          rules: rules ?? [],
-          builder: (context, fieldState, formState) {
-            final List<T> currentValue =
-                List.from(fieldState.data?.value as List? ?? []);
+         rules: rules ?? [],
+         builder: (context, fieldState, formState) {
+           final List<T> currentValue = List.from(
+             fieldState.data?.value as List? ?? [],
+           );
 
-            void effectiveOnChanged(T value, bool checked) {
-              List<T> newValue = currentValue;
+           void effectiveOnChanged(T value, bool checked) {
+             List<T> newValue = currentValue;
 
-              if (checked) {
-                if (!currentValue.contains(value)) {
-                  newValue = <T>[...currentValue, value];
-                }
-              } else {
-                newValue = currentValue
-                    .where((element) => element != value)
-                    .toList(growable: false);
-              }
+             if (checked) {
+               if (!currentValue.contains(value)) {
+                 newValue = <T>[...currentValue, value];
+               }
+             } else {
+               newValue = currentValue
+                   .where((element) => element != value)
+                   .toList(growable: false);
+             }
 
-              SuperFormFieldData newData = fieldState.data!.copyWithValue(
-                value: newValue,
-                touched: true,
-              );
+             SuperFormFieldData newData = fieldState.data!.copyWithValue(
+               value: newValue,
+               touched: true,
+             );
 
-              // If the field was tried to be submitted it should be now revalidated every change
-              if (formState.validationMode == ValidationMode.onChange ||
-                  newData.submitted) {
-                newData = newData.validate(rules ?? []);
-              }
+             // If the field was tried to be submitted it should be now revalidated every change
+             if (formState.validationMode == ValidationMode.onChange ||
+                 newData.submitted) {
+               newData = newData.validate(rules ?? []);
+             }
 
-              formState.updateFieldData(newData);
+             formState.updateFieldData(newData);
 
-              if (onChanged != null) {
-                onChanged(value, checked);
-              }
-            }
+             if (onChanged != null) {
+               onChanged(value, checked);
+             }
+           }
 
-            final effectiveEnabled = enabled ?? formState.enabled;
+           final effectiveEnabled = enabled ?? formState.enabled;
 
-            return listTileCheckboxBuilder(
-              context,
-              CheckboxState<T>(
-                options,
-                currentValue,
-                effectiveEnabled ? effectiveOnChanged : null,
-                fieldState.focusNode,
-              ),
-              activeColor: activeColor,
-              checkColor: checkColor,
-              tileColor: tileColor,
-              subtitle: subtitle,
-              isThreeLine: isThreeLine,
-              dense: dense,
-              secondary: secondary,
-              selected: selected,
-              controlAffinity: controlAffinity,
-              autofocus: autofocus,
-              contentPadding: contentPadding,
-              shape: shape,
-              selectedTileColor: selectedTileColor,
-            );
-          },
-        );
+           return listTileCheckboxBuilder(
+             context,
+             CheckboxState<T>(
+               options,
+               currentValue,
+               effectiveEnabled ? effectiveOnChanged : null,
+               fieldState.focusNode,
+             ),
+             activeColor: activeColor,
+             checkColor: checkColor,
+             tileColor: tileColor,
+             subtitle: subtitle,
+             isThreeLine: isThreeLine,
+             dense: dense,
+             secondary: secondary,
+             selected: selected,
+             controlAffinity: controlAffinity,
+             autofocus: autofocus,
+             contentPadding: contentPadding,
+             shape: shape,
+             selectedTileColor: selectedTileColor,
+           );
+         },
+       );
 
   @override
-  _CheckboxSuperFormFieldState<T> createState() =>
-      _CheckboxSuperFormFieldState<T>();
+  CheckboxSuperFormFieldState<T> createState() =>
+      CheckboxSuperFormFieldState<T>();
 }
 
-class _CheckboxSuperFormFieldState<T> extends SuperFormFieldState {
+class CheckboxSuperFormFieldState<T> extends SuperFormFieldState {
   @override
   CheckboxSuperFormField get widget => super.widget as CheckboxSuperFormField;
 

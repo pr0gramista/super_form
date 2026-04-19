@@ -9,11 +9,7 @@ Widget boilerplate({required Widget child, String? restorationScopeId}) {
       textDirection: TextDirection.ltr,
       child: MediaQuery(
         data: const MediaQueryData(size: Size(800.0, 600.0)),
-        child: Center(
-          child: Material(
-            child: child,
-          ),
-        ),
+        child: Center(child: Material(child: child)),
       ),
     ),
   );
@@ -26,7 +22,7 @@ class BuildCounter extends StatelessWidget {
 
   // We don't want it to be const since it won't build
   // ignore: prefer_const_constructors_in_immutables
-  BuildCounter({Key? key, required this.name}) : super(key: key);
+  BuildCounter({super.key, required this.name});
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +35,7 @@ class BuildCounter extends StatelessWidget {
 class SuperFormMangler extends StatefulWidget {
   final Widget child;
 
-  const SuperFormMangler({Key? key, required this.child}) : super(key: key);
+  const SuperFormMangler({super.key, required this.child});
 
   @override
   State<SuperFormMangler> createState() => _SuperFormManglerState();
@@ -51,29 +47,31 @@ class _SuperFormManglerState extends State<SuperFormMangler> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      SuperForm(
-        enabled: enabled,
-        validationMode: validationMode,
-        child: widget.child,
-      ),
-      TextButton(
-        onPressed: () {
-          setState(() {
-            enabled = false;
-          });
-        },
-        child: const Text("Disable"),
-      ),
-      TextButton(
-        onPressed: () {
-          setState(() {
-            validationMode = ValidationMode.onBlur;
-          });
-        },
-        child: const Text("Set onBlur"),
-      )
-    ]);
+    return Column(
+      children: [
+        SuperForm(
+          enabled: enabled,
+          validationMode: validationMode,
+          child: widget.child,
+        ),
+        TextButton(
+          onPressed: () {
+            setState(() {
+              enabled = false;
+            });
+          },
+          child: const Text("Disable"),
+        ),
+        TextButton(
+          onPressed: () {
+            setState(() {
+              validationMode = ValidationMode.onBlur;
+            });
+          },
+          child: const Text("Set onBlur"),
+        ),
+      ],
+    );
   }
 }
 

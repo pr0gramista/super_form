@@ -43,36 +43,38 @@ const minLengthTestCases = [
 
 void main() {
   group("MaximumLengthRule", () {
-    maxLengthTestCases.forEach((testCase) {
+    for (var testCase in maxLengthTestCases) {
       test(
-          'for max length ${testCase.param} "${testCase.value}" ${testCase.isOk ? "passes" : "errors"}',
-          () {
-        final rule = MaximumLengthRule(testCase.param, "Error");
+        'for max length ${testCase.param} "${testCase.value}" ${testCase.isOk ? "passes" : "errors"}',
+        () {
+          final rule = MaximumLengthRule(testCase.param, "Error");
 
-        final error = rule.validate(testCase.value);
+          final error = rule.validate(testCase.value);
 
-        expect(error == null, testCase.isOk);
-        if (error != null) {
-          expect(error.message, "Error");
-        }
-      });
-    });
+          expect(error == null, testCase.isOk);
+          if (error != null) {
+            expect(error.message, "Error");
+          }
+        },
+      );
+    }
   });
 
   group("MinimumLengthRule", () {
-    minLengthTestCases.forEach((testCase) {
+    for (var testCase in minLengthTestCases) {
       test(
-          'for min length ${testCase.param} "${testCase.value}" ${testCase.isOk ? "passes" : "errors"}',
-          () {
-        final rule = MinimumLengthRule(testCase.param, "Error");
+        'for min length ${testCase.param} "${testCase.value}" ${testCase.isOk ? "passes" : "errors"}',
+        () {
+          final rule = MinimumLengthRule(testCase.param, "Error");
 
-        final error = rule.validate(testCase.value);
+          final error = rule.validate(testCase.value);
 
-        expect(error == null, testCase.isOk);
-        if (error != null) {
-          expect(error.message, "Error");
-        }
-      });
-    });
+          expect(error == null, testCase.isOk);
+          if (error != null) {
+            expect(error.message, "Error");
+          }
+        },
+      );
+    }
   });
 }

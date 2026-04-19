@@ -33,32 +33,34 @@ Widget listTileRadioBuilder<T>(
   Color? tileColor,
   Color? selectedTileColor,
 }) {
-  return Focus(
-    focusNode: state.focusNode,
-    skipTraversal: true,
-    child: Column(
-      children: state.options.map((option) {
-        return RadioListTile(
-          groupValue: state.groupValue,
-          onChanged: state.onChanged,
-          value: option.value,
-          title: option.label,
-          toggleable: toggleable,
-          activeColor: activeColor,
-          subtitle: subtitle != null ? subtitle(option) : null,
-          // ignore: avoid_bool_literals_in_conditional_expressions
-          selected: selected != null ? selected(option) : false,
-          isThreeLine: isThreeLine,
-          dense: dense,
-          secondary: secondary,
-          controlAffinity: controlAffinity,
-          autofocus: autofocus,
-          contentPadding: contentPadding,
-          shape: shape,
-          tileColor: tileColor,
-          selectedTileColor: selectedTileColor,
-        );
-      }).toList(),
+  return RadioGroup<T>(
+    onChanged: state.onChanged ?? (T? value) {},
+    groupValue: state.groupValue,
+    child: Focus(
+      focusNode: state.focusNode,
+      skipTraversal: true,
+      child: Column(
+        children: state.options.map((option) {
+          return RadioListTile(
+            value: option.value,
+            title: option.label,
+            toggleable: toggleable,
+            activeColor: activeColor,
+            subtitle: subtitle != null ? subtitle(option) : null,
+            // ignore: avoid_bool_literals_in_conditional_expressions
+            selected: selected != null ? selected(option) : false,
+            isThreeLine: isThreeLine,
+            dense: dense,
+            secondary: secondary,
+            controlAffinity: controlAffinity,
+            autofocus: autofocus,
+            contentPadding: contentPadding,
+            shape: shape,
+            tileColor: tileColor,
+            selectedTileColor: selectedTileColor,
+          );
+        }).toList(),
+      ),
     ),
   );
 }
@@ -78,10 +80,8 @@ class RadioState<T> {
   );
 }
 
-typedef RadioBuilder<T> = Widget Function(
-  BuildContext context,
-  RadioState<T> state,
-);
+typedef RadioBuilder<T> =
+    Widget Function(BuildContext context, RadioState<T> state);
 
 /// Base class for creating radio groups that extends [SuperFormField].
 ///
@@ -124,52 +124,50 @@ class RadioSuperFormField<T> extends SuperFormField {
   /// You can check [listTileRadioBuilder] as an example implementation used in
   /// [RadioSuperFormField.listTile].
   RadioSuperFormField({
-    Key? key,
+    super.key,
     required RadioBuilder<T> builder,
-    required String name,
+    required super.name,
     required this.options,
     List<SuperFormFieldRule>? rules,
     void Function(T? value)? onChanged,
     this.enabled,
   }) : super(
-          key: key,
-          name: name,
-          rules: rules ?? [],
-          builder: (context, fieldState, formState) {
-            final T? currentGroupValue = fieldState.data?.value as T?;
+         rules: rules ?? [],
+         builder: (context, fieldState, formState) {
+           final T? currentGroupValue = fieldState.data?.value as T?;
 
-            void effectiveOnChanged(T? value) {
-              SuperFormFieldData newData = fieldState.data!.copyWithValue(
-                value: value,
-                touched: true,
-              );
+           void effectiveOnChanged(T? value) {
+             SuperFormFieldData newData = fieldState.data!.copyWithValue(
+               value: value,
+               touched: true,
+             );
 
-              // If the field was tried to be submitted it should be now revalidated every change
-              if (formState.validationMode == ValidationMode.onChange ||
-                  newData.submitted) {
-                newData = newData.validate(rules ?? []);
-              }
+             // If the field was tried to be submitted it should be now revalidated every change
+             if (formState.validationMode == ValidationMode.onChange ||
+                 newData.submitted) {
+               newData = newData.validate(rules ?? []);
+             }
 
-              formState.updateFieldData(newData);
+             formState.updateFieldData(newData);
 
-              if (onChanged != null) {
-                onChanged(value);
-              }
-            }
+             if (onChanged != null) {
+               onChanged(value);
+             }
+           }
 
-            final effectiveEnabled = enabled ?? formState.enabled;
+           final effectiveEnabled = enabled ?? formState.enabled;
 
-            return builder(
-              context,
-              RadioState<T>(
-                options,
-                currentGroupValue,
-                effectiveEnabled ? effectiveOnChanged : null,
-                fieldState.focusNode,
-              ),
-            );
-          },
-        );
+           return builder(
+             context,
+             RadioState<T>(
+               options,
+               currentGroupValue,
+               effectiveEnabled ? effectiveOnChanged : null,
+               fieldState.focusNode,
+             ),
+           );
+         },
+       );
 
   /// Creates a [Column] of connected [RadioListTile]s which represent the
   /// options.
@@ -180,8 +178,8 @@ class RadioSuperFormField<T> extends SuperFormField {
   /// * [subtitle] is a function so developers can customize it per option
   /// * [selected] is a function so developers can customize it per option
   RadioSuperFormField.listTile({
-    Key? key,
-    required String name,
+    super.key,
+    required super.name,
     required this.options,
     List<SuperFormFieldRule>? rules,
     bool toggleable = false,
@@ -200,63 +198,61 @@ class RadioSuperFormField<T> extends SuperFormField {
     void Function(T? value)? onChanged,
     this.enabled,
   }) : super(
-          key: key,
-          name: name,
-          rules: rules ?? [],
-          builder: (context, fieldState, formState) {
-            final T? currentGroupValue = fieldState.data?.value as T?;
+         rules: rules ?? [],
+         builder: (context, fieldState, formState) {
+           final T? currentGroupValue = fieldState.data?.value as T?;
 
-            void effectiveOnChanged(T? value) {
-              SuperFormFieldData newData = fieldState.data!.copyWithValue(
-                value: value,
-                touched: true,
-              );
+           void effectiveOnChanged(T? value) {
+             SuperFormFieldData newData = fieldState.data!.copyWithValue(
+               value: value,
+               touched: true,
+             );
 
-              // If the field was tried to be submitted it should be now revalidated every change
-              if (formState.validationMode == ValidationMode.onChange ||
-                  newData.submitted) {
-                newData = newData.validate(rules ?? []);
-              }
+             // If the field was tried to be submitted it should be now revalidated every change
+             if (formState.validationMode == ValidationMode.onChange ||
+                 newData.submitted) {
+               newData = newData.validate(rules ?? []);
+             }
 
-              formState.updateFieldData(newData);
+             formState.updateFieldData(newData);
 
-              if (onChanged != null) {
-                onChanged(value);
-              }
-            }
+             if (onChanged != null) {
+               onChanged(value);
+             }
+           }
 
-            final effectiveEnabled = enabled ?? formState.enabled;
+           final effectiveEnabled = enabled ?? formState.enabled;
 
-            return listTileRadioBuilder(
-              context,
-              RadioState<T>(
-                options,
-                currentGroupValue,
-                effectiveEnabled ? effectiveOnChanged : null,
-                fieldState.focusNode,
-              ),
-              toggleable: toggleable,
-              activeColor: activeColor,
-              subtitle: subtitle,
-              isThreeLine: isThreeLine,
-              dense: dense,
-              secondary: secondary,
-              selected: selected,
-              controlAffinity: controlAffinity,
-              autofocus: autofocus,
-              contentPadding: contentPadding,
-              shape: shape,
-              tileColor: tileColor,
-              selectedTileColor: selectedTileColor,
-            );
-          },
-        );
+           return listTileRadioBuilder(
+             context,
+             RadioState<T>(
+               options,
+               currentGroupValue,
+               effectiveEnabled ? effectiveOnChanged : null,
+               fieldState.focusNode,
+             ),
+             toggleable: toggleable,
+             activeColor: activeColor,
+             subtitle: subtitle,
+             isThreeLine: isThreeLine,
+             dense: dense,
+             secondary: secondary,
+             selected: selected,
+             controlAffinity: controlAffinity,
+             autofocus: autofocus,
+             contentPadding: contentPadding,
+             shape: shape,
+             tileColor: tileColor,
+             selectedTileColor: selectedTileColor,
+           );
+         },
+       );
 
   @override
-  _RadioSuperFormFieldState<T> createState() => _RadioSuperFormFieldState<T>();
+  RadioSuperFormFieldState<T> createState() => RadioSuperFormFieldState<T>();
 }
 
-class _RadioSuperFormFieldState<T> extends SuperFormFieldState {
+class RadioSuperFormFieldState<T> extends SuperFormFieldState {
   @override
   RadioSuperFormField get widget => super.widget as RadioSuperFormField;
 
@@ -268,8 +264,9 @@ class _RadioSuperFormFieldState<T> extends SuperFormFieldState {
     if (!listEquals(oldWidget.options, widget.options) && data != null) {
       final currentGroupValue = data!.value as T?;
 
-      final contains =
-          widget.options.any((element) => element.value == currentGroupValue);
+      final contains = widget.options.any(
+        (element) => element.value == currentGroupValue,
+      );
 
       if (!contains) {
         setValue(null);

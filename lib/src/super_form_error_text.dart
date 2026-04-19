@@ -112,7 +112,7 @@ class SuperFormErrorText extends StatelessWidget {
   final Color? selectionColor;
 
   const SuperFormErrorText({
-    Key? key,
+    super.key,
     required this.name,
     this.fallback = const SizedBox(),
     this.style,
@@ -128,7 +128,7 @@ class SuperFormErrorText extends StatelessWidget {
     this.textWidthBasis,
     this.textHeightBehavior,
     this.selectionColor,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -140,9 +140,19 @@ class SuperFormErrorText extends StatelessWidget {
       return fallback;
     }
 
+    final ThemeData theme = Theme.of(context);
+    final DefaultTextStyle defaultTextStyle = DefaultTextStyle.of(context);
+
+    TextStyle? effectiveTextStyle = style;
+    if (style == null || style!.inherit) {
+      effectiveTextStyle = defaultTextStyle.style
+          .merge(TextStyle(color: theme.colorScheme.error))
+          .merge(style);
+    }
+
     return Text(
       error.message,
-      style: style,
+      style: effectiveTextStyle,
       strutStyle: strutStyle,
       textAlign: textAlign,
       textDirection: textDirection,

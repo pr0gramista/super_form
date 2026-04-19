@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:super_form/super_form.dart';
 
-import 'form.dart';
-import 'model.dart';
+import 'package:super_form_example/burritox/form.dart';
+import 'package:super_form_example/burritox/model.dart';
 
 class BurritoList extends StatefulWidget {
   final List<BurritoOrder> orders;
@@ -40,23 +40,33 @@ class _BurritoListState extends State<BurritoList> {
                   context: context,
                   builder: (context) => Dialog(
                     child: Container(
-                      padding: const EdgeInsets.all(8),
+                      padding: const EdgeInsets.fromLTRB(8, 16, 8, 8),
                       constraints: const BoxConstraints(maxWidth: 400),
-                      child: BurritoForm(
-                        formKey: formKey,
-                        isEditing: true,
-                        initialValues: {
-                          'count': order.count.toString(),
-                          'filling': order.burrito.filling,
-                          'sauce': order.burrito.sauce.toList(),
-                          'extras': order.burrito.extras.toList(),
-                        },
-                        onSubmit: (order) {
-                          widget.onSubmit(editingOrder!, order);
-                          editingOrder = null;
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Text(
+                            "Edit position",
+                            style: TextStyle(fontSize: 18),
+                          ),
+                          const SizedBox(height: 8),
+                          BurritoForm(
+                            formKey: formKey,
+                            isEditing: true,
+                            initialValues: {
+                              'count': order.count.toString(),
+                              'filling': order.burrito.filling,
+                              'sauce': order.burrito.sauce.toList(),
+                              'extras': order.burrito.extras.toList(),
+                            },
+                            onSubmit: (order) {
+                              widget.onSubmit(editingOrder!, order);
+                              editingOrder = null;
 
-                          Navigator.of(context).pop();
-                        },
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -77,7 +87,7 @@ class _BurritoListState extends State<BurritoList> {
                         Text('🌯 with ${order.burrito.filling}'),
                         Text("With ${order.burrito.sauce.join(', ')}"),
                         if (order.burrito.extras.isNotEmpty)
-                          Text("Extras: ${order.burrito.extras.join(', ')}")
+                          Text("Extras: ${order.burrito.extras.join(', ')}"),
                       ],
                     ),
                   ],

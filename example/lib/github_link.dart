@@ -13,7 +13,7 @@ class GitHubLink extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        launch(repositoryExampleTreeUrl + path);
+        launchUrl(Uri.parse(repositoryExampleTreeUrl + path));
       },
       child: Container(
         width: double.infinity,

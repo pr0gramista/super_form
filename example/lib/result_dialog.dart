@@ -13,13 +13,16 @@ class ResultDialog extends StatelessWidget {
       child: Container(
         constraints: const BoxConstraints(maxWidth: 600),
         padding: const EdgeInsets.all(16),
-        child: Column(children: [
-          title,
-          const SizedBox(height: 16),
-          SelectableText(
-            result,
-          ),
-        ]),
+        child: Column(
+          children: [
+            title,
+            const SizedBox(height: 16),
+            SelectableText(
+              result,
+              key: const Key('result'),
+            ),
+          ],
+        ),
       ),
     );
   }

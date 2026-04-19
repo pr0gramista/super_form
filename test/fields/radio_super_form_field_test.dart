@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide RadioBuilder;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:super_form/super_form.dart';
@@ -51,7 +51,10 @@ void main() {
 
     await tester.pumpWidget(
       boilerplate(
-        child: SuperForm(key: formKey, child: get123(name: fieldName)),
+        child: SuperForm(
+          key: formKey,
+          child: get123(name: fieldName),
+        ),
       ),
     );
 
@@ -73,10 +76,7 @@ void main() {
         child: SuperForm(
           initialValues: const {fieldName: "one"},
           key: formKey,
-          child: get123(
-            name: fieldName,
-            toggleable: true,
-          ),
+          child: get123(name: fieldName, toggleable: true),
         ),
       ),
     );
@@ -131,10 +131,7 @@ void main() {
                 autofocus: true,
                 rules: [IsEqualRule("three", "Pick 3 my lord!!!")],
               ),
-              TextSuperFormField(
-                name: "two",
-                key: anotherInput,
-              ),
+              TextSuperFormField(name: "two", key: anotherInput),
               const SuperFormErrorText(name: fieldName),
             ],
           ),
@@ -158,11 +155,7 @@ void main() {
           key: formKey1,
           validationMode: ValidationMode.onBlur,
           child: Builder(
-            builder: (context) => Column(children: [
-              get123(
-                name: fieldName,
-              ),
-            ]),
+            builder: (context) => Column(children: [get123(name: fieldName)]),
           ),
         ),
       ),
@@ -178,11 +171,7 @@ void main() {
           key: formKey2,
           validationMode: ValidationMode.onBlur,
           child: Builder(
-            builder: (context) => Column(children: [
-              get123(
-                name: fieldName,
-              ),
-            ]),
+            builder: (context) => Column(children: [get123(name: fieldName)]),
           ),
         ),
       ),
@@ -204,10 +193,7 @@ void main() {
       boilerplate(
         child: SuperForm(
           key: formKey,
-          child: get123(
-            name: "number",
-            onChanged: listener,
-          ),
+          child: get123(name: "number", onChanged: listener.call),
         ),
       ),
     );
@@ -218,8 +204,9 @@ void main() {
     verifyNoMoreInteractions(listener);
   });
 
-  testWidgets('clears values that have no corresponding option',
-      (WidgetTester tester) async {
+  testWidgets('clears values that have no corresponding option', (
+    WidgetTester tester,
+  ) async {
     final formKey = GlobalKey<SuperFormState>();
     const fieldName = 'number';
 
@@ -285,8 +272,9 @@ void main() {
     expect(formKey.currentState?.values[fieldName], equals("two"));
   });
 
-  testWidgets('renders with selected and subtitle',
-      (WidgetTester tester) async {
+  testWidgets('renders with selected and subtitle', (
+    WidgetTester tester,
+  ) async {
     final formKey = GlobalKey<SuperFormState>();
     const fieldName = 'number';
 
@@ -324,10 +312,7 @@ void main() {
       boilerplate(
         child: SuperForm(
           key: formKey,
-          child: get123(
-            name: fieldName,
-            enabled: true,
-          ),
+          child: get123(name: fieldName, enabled: true),
         ),
       ),
     );
@@ -340,10 +325,7 @@ void main() {
       boilerplate(
         child: SuperForm(
           key: formKey,
-          child: get123(
-            name: fieldName,
-            enabled: false,
-          ),
+          child: get123(name: fieldName, enabled: false),
         ),
       ),
     );
@@ -362,9 +344,7 @@ void main() {
       boilerplate(
         child: SuperForm(
           key: formKey,
-          child: get123(
-            name: fieldName,
-          ),
+          child: get123(name: fieldName),
         ),
       ),
     );
@@ -378,9 +358,7 @@ void main() {
         child: SuperForm(
           key: formKey,
           enabled: false,
-          child: get123(
-            name: fieldName,
-          ),
+          child: get123(name: fieldName),
         ),
       ),
     );
@@ -395,18 +373,21 @@ void main() {
     Widget builder(BuildContext context, RadioState<String> state) {
       // Let's make something avant-garde
       return Row(
-          children: state.options
-              .map((o) => ElevatedButton(
-                    focusNode: state.focusNode,
-                    autofocus: true,
-                    onPressed: state.onChanged != null
-                        ? () {
-                            state.onChanged!(o.value);
-                          }
-                        : null,
-                    child: o.label,
-                  ))
-              .toList());
+        children: state.options
+            .map(
+              (o) => ElevatedButton(
+                focusNode: state.focusNode,
+                autofocus: true,
+                onPressed: state.onChanged != null
+                    ? () {
+                        state.onChanged!(o.value);
+                      }
+                    : null,
+                child: o.label,
+              ),
+            )
+            .toList(),
+      );
     }
 
     testWidgets('sends value to SuperForm', (WidgetTester tester) async {
@@ -416,7 +397,9 @@ void main() {
       await tester.pumpWidget(
         boilerplate(
           child: SuperForm(
-              key: formKey, child: get123(name: fieldName, builder: builder)),
+            key: formKey,
+            child: get123(name: fieldName, builder: builder),
+          ),
         ),
       );
 
@@ -478,10 +461,7 @@ void main() {
                   builder: builder,
                   rules: [IsEqualRule("three", "Pick 3 my lord!!!")],
                 ),
-                TextSuperFormField(
-                  name: "two",
-                  key: anotherInput,
-                ),
+                TextSuperFormField(name: "two", key: anotherInput),
                 const SuperFormErrorText(name: fieldName),
               ],
             ),
@@ -505,12 +485,9 @@ void main() {
             key: formKey1,
             validationMode: ValidationMode.onBlur,
             child: Builder(
-              builder: (context) => Column(children: [
-                get123(
-                  name: fieldName,
-                  builder: builder,
-                ),
-              ]),
+              builder: (context) => Column(
+                children: [get123(name: fieldName, builder: builder)],
+              ),
             ),
           ),
         ),
@@ -526,12 +503,9 @@ void main() {
             key: formKey2,
             validationMode: ValidationMode.onBlur,
             child: Builder(
-              builder: (context) => Column(children: [
-                get123(
-                  name: fieldName,
-                  builder: builder,
-                ),
-              ]),
+              builder: (context) => Column(
+                children: [get123(name: fieldName, builder: builder)],
+              ),
             ),
           ),
         ),
@@ -555,7 +529,7 @@ void main() {
             key: formKey,
             child: get123(
               name: "number",
-              onChanged: listener,
+              onChanged: listener.call,
               builder: builder,
             ),
           ),
@@ -576,11 +550,7 @@ void main() {
         boilerplate(
           child: SuperForm(
             key: formKey,
-            child: get123(
-              name: fieldName,
-              builder: builder,
-              enabled: true,
-            ),
+            child: get123(name: fieldName, builder: builder, enabled: true),
           ),
         ),
       );
@@ -593,11 +563,7 @@ void main() {
         boilerplate(
           child: SuperForm(
             key: formKey,
-            child: get123(
-              name: fieldName,
-              builder: builder,
-              enabled: false,
-            ),
+            child: get123(name: fieldName, builder: builder, enabled: false),
           ),
         ),
       );
@@ -616,10 +582,7 @@ void main() {
         boilerplate(
           child: SuperForm(
             key: formKey,
-            child: get123(
-              name: fieldName,
-              builder: builder,
-            ),
+            child: get123(name: fieldName, builder: builder),
           ),
         ),
       );
@@ -633,10 +596,7 @@ void main() {
           child: SuperForm(
             key: formKey,
             enabled: false,
-            child: get123(
-              name: fieldName,
-              builder: builder,
-            ),
+            child: get123(name: fieldName, builder: builder),
           ),
         ),
       );

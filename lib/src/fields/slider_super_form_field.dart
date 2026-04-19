@@ -98,13 +98,13 @@ class SliderSuperFormField extends SuperFormField {
   /// widget.
   ///
   /// If [mouseCursor] is a [MaterialStateProperty<MouseCursor>],
-  /// [MaterialStateProperty.resolve] is used for the following [MaterialState]s:
+  /// [WidgetStateProperty.resolve] is used for the following [WidgetState]s:
   ///
-  ///  * [MaterialState.hovered].
-  ///  * [MaterialState.focused].
-  ///  * [MaterialState.disabled].
+  ///  * [WidgetState.hovered].
+  ///  * [WidgetState.focused].
+  ///  * [WidgetState.disabled].
   ///
-  /// If this property is null, [MaterialStateMouseCursor.clickable] will be used.
+  /// If this property is null, [WidgetStateMouseCursor.clickable] will be used.
   final MouseCursor? mouseCursor;
 
   /// The callback used to create a semantic value from a slider value.
@@ -147,10 +147,10 @@ class SliderSuperFormField extends SuperFormField {
   final bool? enabled;
 
   SliderSuperFormField({
-    Key? key,
-    required String name,
+    super.key,
+    required super.name,
     List<SuperFormFieldRule>? rules,
-    FocusNode? focusNode,
+    super.focusNode,
     this.onChanged,
     this.onChangeStart,
     this.onChangeEnd,
@@ -165,54 +165,47 @@ class SliderSuperFormField extends SuperFormField {
     this.autofocus = false,
     this.enabled,
   }) : super(
-          key: key,
-          name: name,
-          rules: rules ?? const [],
-          focusNode: focusNode,
-          builder: (
-            BuildContext context,
-            fieldState,
-            formState,
-          ) {
-            final fieldData = formState.data[name]!;
+         rules: rules ?? const [],
+         builder: (BuildContext context, fieldState, formState) {
+           final fieldData = formState.data[name]!;
 
-            final effectiveEnabled = enabled ?? formState.enabled;
+           final effectiveEnabled = enabled ?? formState.enabled;
 
-            void effectiveOnChange(double newValue) {
-              SuperFormFieldData newData = fieldData.copyWithValue(
-                value: newValue,
-                touched: true,
-              );
+           void effectiveOnChange(double newValue) {
+             SuperFormFieldData newData = fieldData.copyWithValue(
+               value: newValue,
+               touched: true,
+             );
 
-              // If the field was tried to be submitted it should be now revalidated every change
-              if (formState.validationMode == ValidationMode.onChange ||
-                  newData.submitted) {
-                newData = newData.validate(rules ?? []);
-              }
+             // If the field was tried to be submitted it should be now revalidated every change
+             if (formState.validationMode == ValidationMode.onChange ||
+                 newData.submitted) {
+               newData = newData.validate(rules ?? []);
+             }
 
-              formState.updateFieldData(newData);
+             formState.updateFieldData(newData);
 
-              if (onChanged != null) {
-                onChanged(newValue);
-              }
-            }
+             if (onChanged != null) {
+               onChanged(newValue);
+             }
+           }
 
-            return Slider(
-              value: (fieldData.value as double?) ?? min,
-              onChanged: effectiveEnabled ? effectiveOnChange : null,
-              onChangeStart: onChangeStart,
-              onChangeEnd: onChangeEnd,
-              min: min,
-              max: max,
-              divisions: divisions,
-              label: label,
-              activeColor: activeColor,
-              inactiveColor: inactiveColor,
-              mouseCursor: mouseCursor,
-              semanticFormatterCallback: semanticFormatterCallback,
-              focusNode: fieldState.focusNode,
-              autofocus: autofocus,
-            );
-          },
-        );
+           return Slider(
+             value: (fieldData.value as double?) ?? min,
+             onChanged: effectiveEnabled ? effectiveOnChange : null,
+             onChangeStart: onChangeStart,
+             onChangeEnd: onChangeEnd,
+             min: min,
+             max: max,
+             divisions: divisions,
+             label: label,
+             activeColor: activeColor,
+             inactiveColor: inactiveColor,
+             mouseCursor: mouseCursor,
+             semanticFormatterCallback: semanticFormatterCallback,
+             focusNode: fieldState.focusNode,
+             autofocus: autofocus,
+           );
+         },
+       );
 }

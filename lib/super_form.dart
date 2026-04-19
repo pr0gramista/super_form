@@ -1,3 +1,3 @@
-library super_form;
+library;
 
 export './src/super_form.dart';
