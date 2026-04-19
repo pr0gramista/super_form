@@ -45,8 +45,10 @@ class _BurritoListState extends State<BurritoList> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Text("Edit position",
-                              style: TextStyle(fontSize: 18)),
+                          const Text(
+                            "Edit position",
+                            style: TextStyle(fontSize: 18),
+                          ),
                           const SizedBox(height: 8),
                           BurritoForm(
                             formKey: formKey,

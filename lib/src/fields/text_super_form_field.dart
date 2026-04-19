@@ -51,7 +51,7 @@ class TextSuperFormField extends SuperFormField {
     TextAlignVertical? textAlignVertical,
     bool autofocus = false,
     bool readOnly = false,
-    ToolbarOptions? toolbarOptions,
+    EditableTextContextMenuBuilder? contextMenuBuilder,
     bool? showCursor,
     String obscuringCharacter = '•',
     bool obscureText = false,
@@ -85,103 +85,102 @@ class TextSuperFormField extends SuperFormField {
     Widget? noFormFallback,
     super.focusNode,
   }) : super(
-          rules: rules ?? const [],
-          noFormFallback: noFormFallback ?? const SizedBox(),
-          builder: (
-            BuildContext context,
-            fieldState,
-            formState,
-          ) {
-            fieldState as _TextSuperFormFieldState;
-            final fieldData = formState.data[name];
+         rules: rules ?? const [],
+         noFormFallback: noFormFallback ?? const SizedBox(),
+         builder: (BuildContext context, fieldState, formState) {
+           fieldState as TextSuperFormFieldState;
+           final fieldData = formState.data[name];
 
-            InputDecoration? effectiveDecoration =
-                decoration ?? const InputDecoration();
-            if (fieldData != null && fieldData.errors.isNotEmpty) {
-              effectiveDecoration = effectiveDecoration.copyWith(
-                  errorText: fieldData.errors.first.message);
-            }
+           InputDecoration? effectiveDecoration =
+               decoration ?? const InputDecoration();
+           if (fieldData != null && fieldData.errors.isNotEmpty) {
+             effectiveDecoration = effectiveDecoration.copyWith(
+               errorText: fieldData.errors.first.message,
+             );
+           }
 
-            VoidCallback? effectiveOnEditingComplete = onEditingComplete;
-            if (fieldData != null &&
-                formState.validationMode == ValidationMode.onBlur) {
-              effectiveOnEditingComplete = () {
-                if (onEditingComplete != null) {
-                  onEditingComplete();
-                }
+           VoidCallback? effectiveOnEditingComplete = onEditingComplete;
+           if (fieldData != null &&
+               formState.validationMode == ValidationMode.onBlur) {
+             effectiveOnEditingComplete = () {
+               if (onEditingComplete != null) {
+                 onEditingComplete();
+               }
 
-                final validated = fieldData.validate(rules ?? []);
-                if (validated.errors.isEmpty) {
-                  fieldState.focusNode.nextFocus();
-                }
+               final validated = fieldData.validate(rules ?? []);
+               if (validated.errors.isEmpty) {
+                 fieldState.focusNode.nextFocus();
+               }
 
-                formState.updateFieldData(validated);
-              };
-            }
+               formState.updateFieldData(validated);
+             };
+           }
 
-            final effectiveEnabled = enabled ?? formState.enabled;
+           final effectiveEnabled = enabled ?? formState.enabled;
 
-            return TextField(
-              controller: fieldState._controller,
-              focusNode: fieldState.focusNode,
-              decoration: effectiveDecoration,
-              keyboardType: keyboardType,
-              textInputAction: textInputAction,
-              style: style,
-              strutStyle: strutStyle,
-              textAlign: textAlign,
-              textAlignVertical: textAlignVertical,
-              textDirection: textDirection,
-              textCapitalization: textCapitalization,
-              autofocus: autofocus,
-              toolbarOptions: toolbarOptions,
-              readOnly: readOnly,
-              showCursor: showCursor,
-              obscuringCharacter: obscuringCharacter,
-              obscureText: obscureText,
-              autocorrect: autocorrect,
-              smartDashesType: smartDashesType ??
-                  (obscureText
-                      ? SmartDashesType.disabled
-                      : SmartDashesType.enabled),
-              smartQuotesType: smartQuotesType ??
-                  (obscureText
-                      ? SmartQuotesType.disabled
-                      : SmartQuotesType.enabled),
-              enableSuggestions: enableSuggestions,
-              maxLengthEnforcement: maxLengthEnforcement,
-              maxLines: maxLines,
-              minLines: minLines,
-              expands: expands,
-              maxLength: maxLength,
-              onChanged: onChanged,
-              onTap: onTap,
-              onEditingComplete: effectiveOnEditingComplete,
-              onSubmitted: onFieldSubmitted,
-              inputFormatters: inputFormatters,
-              enabled: effectiveEnabled,
-              cursorWidth: cursorWidth,
-              cursorHeight: cursorHeight,
-              cursorRadius: cursorRadius,
-              cursorColor: cursorColor,
-              scrollPadding: scrollPadding,
-              scrollPhysics: scrollPhysics,
-              keyboardAppearance: keyboardAppearance,
-              enableInteractiveSelection: enableInteractiveSelection,
-              selectionControls: selectionControls,
-              buildCounter: buildCounter,
-              autofillHints: autofillHints,
-              scrollController: scrollController,
-            );
-          },
-        );
+           return TextField(
+             controller: fieldState.controller,
+             focusNode: fieldState.focusNode,
+             decoration: effectiveDecoration,
+             keyboardType: keyboardType,
+             textInputAction: textInputAction,
+             style: style,
+             strutStyle: strutStyle,
+             textAlign: textAlign,
+             textAlignVertical: textAlignVertical,
+             textDirection: textDirection,
+             textCapitalization: textCapitalization,
+             autofocus: autofocus,
+             contextMenuBuilder: contextMenuBuilder,
+             readOnly: readOnly,
+             showCursor: showCursor,
+             obscuringCharacter: obscuringCharacter,
+             obscureText: obscureText,
+             autocorrect: autocorrect,
+             smartDashesType:
+                 smartDashesType ??
+                 (obscureText
+                     ? SmartDashesType.disabled
+                     : SmartDashesType.enabled),
+             smartQuotesType:
+                 smartQuotesType ??
+                 (obscureText
+                     ? SmartQuotesType.disabled
+                     : SmartQuotesType.enabled),
+             enableSuggestions: enableSuggestions,
+             maxLengthEnforcement: maxLengthEnforcement,
+             maxLines: maxLines,
+             minLines: minLines,
+             expands: expands,
+             maxLength: maxLength,
+             onChanged: onChanged,
+             onTap: onTap,
+             onEditingComplete: effectiveOnEditingComplete,
+             onSubmitted: onFieldSubmitted,
+             inputFormatters: inputFormatters,
+             enabled: effectiveEnabled,
+             cursorWidth: cursorWidth,
+             cursorHeight: cursorHeight,
+             cursorRadius: cursorRadius,
+             cursorColor: cursorColor,
+             scrollPadding: scrollPadding,
+             scrollPhysics: scrollPhysics,
+             keyboardAppearance: keyboardAppearance,
+             enableInteractiveSelection: enableInteractiveSelection,
+             selectionControls: selectionControls,
+             buildCounter: buildCounter,
+             autofillHints: autofillHints,
+             scrollController: scrollController,
+           );
+         },
+       );
 
   @override
-  _TextSuperFormFieldState createState() => _TextSuperFormFieldState();
+  TextSuperFormFieldState createState() => TextSuperFormFieldState();
 }
 
-class _TextSuperFormFieldState extends SuperFormFieldState {
-  TextEditingController? _controller;
+class TextSuperFormFieldState extends SuperFormFieldState {
+  TextEditingController? controller;
 
   @override
   TextSuperFormField get widget => super.widget as TextSuperFormField;
@@ -190,8 +189,8 @@ class _TextSuperFormFieldState extends SuperFormFieldState {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    if (_controller?.text != data?.value) {
-      _controller?.text = data?.value as String? ?? "";
+    if (controller?.text != data?.value) {
+      controller?.text = data?.value as String? ?? "";
     }
   }
 
@@ -199,8 +198,8 @@ class _TextSuperFormFieldState extends SuperFormFieldState {
   void didUpdateWidget(TextSuperFormField oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (_controller?.text != data?.value) {
-      _controller?.text = data?.value as String? ?? "";
+    if (controller?.text != data?.value) {
+      controller?.text = data?.value as String? ?? "";
     }
   }
 
@@ -208,11 +207,11 @@ class _TextSuperFormFieldState extends SuperFormFieldState {
   void didReset(SuperFormState formState) {
     super.didReset(formState);
 
-    if (_controller == null) {
-      _controller ??= TextEditingController(text: data?.value as String? ?? "");
-      _controller?.addListener(onTextChange);
+    if (controller == null) {
+      controller ??= TextEditingController(text: data?.value as String? ?? "");
+      controller?.addListener(onTextChange);
     } else {
-      _controller?.text = data?.value as String? ?? "";
+      controller?.text = data?.value as String? ?? "";
     }
   }
 
@@ -224,9 +223,11 @@ class _TextSuperFormFieldState extends SuperFormFieldState {
       return;
     }
 
-    if ((currentFieldData.value ?? "") != _controller?.text) {
+    if ((currentFieldData.value ?? "") != controller?.text) {
       SuperFormFieldData newData = currentFieldData.copyWithValue(
-          value: _controller?.text, touched: true);
+        value: controller?.text,
+        touched: true,
+      );
 
       // If the field was tried to be submitted it should be now revalidated every change
       if (form?.validationMode == ValidationMode.onChange ||
@@ -234,14 +235,16 @@ class _TextSuperFormFieldState extends SuperFormFieldState {
         newData = newData.validate(widget.rules);
       }
 
-      SuperForm.ofFieldMaybe(context, currentFieldData.name)
-          ?.updateFieldData(newData);
+      SuperForm.ofFieldMaybe(
+        context,
+        currentFieldData.name,
+      )?.updateFieldData(newData);
     }
   }
 
   @override
   void dispose() {
     super.dispose();
-    _controller?.dispose();
+    controller?.dispose();
   }
 }

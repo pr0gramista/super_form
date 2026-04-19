@@ -129,14 +129,17 @@ class SuperForm extends StatefulWidget {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties.add(EnumProperty("validationMode", validationMode));
-    properties.add(FlagProperty(
-      "enabled",
-      value: enabled,
-      ifTrue: "enabled",
-      ifFalse: "disabled via enabled: false",
-    ));
-    properties.add(DiagnosticsProperty<Map<String, dynamic>>(
-        "initialValues", initialValues));
+    properties.add(
+      FlagProperty(
+        "enabled",
+        value: enabled,
+        ifTrue: "enabled",
+        ifFalse: "disabled via enabled: false",
+      ),
+    );
+    properties.add(
+      DiagnosticsProperty<Map<String, dynamic>>("initialValues", initialValues),
+    );
   }
 
   /// Gets the closest [SuperFormState] instance.
@@ -245,9 +248,11 @@ class SuperForm extends StatefulWidget {
   /// final showEmploymentFields = SuperForm.ofFieldValue<bool>(context, "employment") ?? false;
   /// ```
   static T? ofFieldValue<T>(BuildContext context, String fieldName) {
-    return _SuperFormScope.ofFieldMaybe(context, fieldName)
-        ?.data[fieldName]
-        ?.value as T?;
+    return _SuperFormScope.ofFieldMaybe(
+          context,
+          fieldName,
+        )?.data[fieldName]?.value
+        as T?;
   }
 
   @override
@@ -261,13 +266,15 @@ bool _debugHasSuperFormInScope(BuildContext context) {
       throw FlutterError.fromParts(<DiagnosticsNode>[
         ErrorSummary('No SuperForm widget ancestor found.'),
         ErrorDescription(
-            '${context.widget.runtimeType} requires a SuperForm widget ancestor.'),
+          '${context.widget.runtimeType} requires a SuperForm widget ancestor.',
+        ),
         ErrorHint(
-            'No SuperForm ancestor could be found starting from the context '
-            'that was passed to SuperForm.of(). This can happen because you '
-            'have not added a SuperForm widget on top of your form, or it can happen if the '
-            'context you use comes from the widget building SuperForm widget, in that case '
-            'consider wrapping the part of the tree with a Builder widget like this:'),
+          'No SuperForm ancestor could be found starting from the context '
+          'that was passed to SuperForm.of(). This can happen because you '
+          'have not added a SuperForm widget on top of your form, or it can happen if the '
+          'context you use comes from the widget building SuperForm widget, in that case '
+          'consider wrapping the part of the tree with a Builder widget like this:',
+        ),
         ErrorHint('''
 Builder(
   builder: (context) => TextButton(
@@ -277,7 +284,8 @@ Builder(
 );
         '''),
         context.describeWidget(
-            'The specific widget that could not find a SuperForm ancestor was'),
+          'The specific widget that could not find a SuperForm ancestor was',
+        ),
       ]);
     }
     return true;
@@ -295,23 +303,25 @@ class _SuperFormScope extends InheritedModel<String> {
   final bool enabled;
   final String formId;
 
-  _SuperFormScope({
-    required super.child,
-    required this.state,
-  })  : formId = state.formId,
-        validationMode = state.validationMode,
-        fieldsData = state.data,
-        enabled = state.enabled;
+  _SuperFormScope({required super.child, required this.state})
+    : formId = state.formId,
+      validationMode = state.validationMode,
+      fieldsData = state.data,
+      enabled = state.enabled;
 
   static SuperFormState of(BuildContext context, {String? aspect}) {
     assert(_debugHasSuperFormInScope(context));
-    return InheritedModel.inheritFrom<_SuperFormScope>(context, aspect: aspect)!
-        .state;
+    return InheritedModel.inheritFrom<_SuperFormScope>(
+      context,
+      aspect: aspect,
+    )!.state;
   }
 
   static SuperFormState? ofMaybe(BuildContext context, {String? aspect}) {
-    return InheritedModel.inheritFrom<_SuperFormScope>(context, aspect: aspect)
-        ?.state;
+    return InheritedModel.inheritFrom<_SuperFormScope>(
+      context,
+      aspect: aspect,
+    )?.state;
   }
 
   static SuperFormState ofField(BuildContext context, String field) {
@@ -319,8 +329,7 @@ class _SuperFormScope extends InheritedModel<String> {
     return InheritedModel.inheritFrom<_SuperFormScope>(
       context,
       aspect: field,
-    )!
-        .state;
+    )!.state;
   }
 
   static SuperFormState? ofFieldMaybe(BuildContext context, String field) {
@@ -349,7 +358,9 @@ class _SuperFormScope extends InheritedModel<String> {
 
   @override
   bool updateShouldNotifyDependent(
-      _SuperFormScope old, Set<String> fieldNames) {
+    _SuperFormScope old,
+    Set<String> fieldNames,
+  ) {
     if (_propertiesCheck(old)) return true;
 
     for (final name in fieldNames) {
@@ -434,8 +445,10 @@ class SuperFormFieldData extends Equatable {
   }
 
   /// Validates the field against given rules
-  SuperFormFieldData validate(Iterable<SuperFormFieldRule> rules,
-      {bool markSubmitted = false}) {
+  SuperFormFieldData validate(
+    Iterable<SuperFormFieldRule> rules, {
+    bool markSubmitted = false,
+  }) {
     final errors = rules
         .map((r) => r.validate(value))
         .where((element) => element != null)
@@ -454,8 +467,9 @@ class SuperFormState extends State<SuperForm> with RestorationMixin {
   ValidationMode _validationMode = ValidationMode.onSubmit;
   bool _enabled = true;
 
-  final String _formId =
-      (_random.nextInt(15728640) + 1048576).toRadixString(16);
+  final String _formId = (_random.nextInt(15728640) + 1048576).toRadixString(
+    16,
+  );
 
   final List<SuperFormFieldState> _fields = [];
   Map<String, SuperFormFieldData> _fieldsData = {};
@@ -487,8 +501,9 @@ class SuperFormState extends State<SuperForm> with RestorationMixin {
       _RestorableSuperFormValues();
 
   /// Returns true when any field is modified considering given [initialValues]
-  bool get modified => data.entries
-      .any((entry) => entry.value.value != _initialValues[entry.key]);
+  bool get modified => data.entries.any(
+    (entry) => entry.value.value != _initialValues[entry.key],
+  );
 
   @override
   void initState() {
@@ -529,7 +544,8 @@ class SuperFormState extends State<SuperForm> with RestorationMixin {
 
     if (fieldData == null) {
       throw StateError(
-          'Field $name is not registered so a value cannot be changed. Have you forget to register your field manually?');
+        'Field $name is not registered so a value cannot be changed. Have you forget to register your field manually?',
+      );
     }
 
     updateFieldData(fieldData.copyWithValue(value: value));
@@ -545,7 +561,8 @@ class SuperFormState extends State<SuperForm> with RestorationMixin {
   void updateFieldData(SuperFormFieldData newData) {
     if (!data.containsKey(newData.name)) {
       throw StateError(
-          "You are trying to update field ${newData.name}, but it is not registered");
+        "You are trying to update field ${newData.name}, but it is not registered",
+      );
     }
 
     _fieldsData = {..._fieldsData, newData.name: newData};
@@ -553,16 +570,17 @@ class SuperFormState extends State<SuperForm> with RestorationMixin {
 
     widget.onChange(_fieldsData);
 
-    _restorableFormValues.value =
-        Map.fromEntries(values.entries.where((fieldData) {
-      // Filter out values that cannot be encoded
-      try {
-        const StandardMessageCodec().encodeMessage(fieldData.value);
-        return true;
-      } catch (_) {
-        return false;
-      }
-    }));
+    _restorableFormValues.value = Map.fromEntries(
+      values.entries.where((fieldData) {
+        // Filter out values that cannot be encoded
+        try {
+          const StandardMessageCodec().encodeMessage(fieldData.value);
+          return true;
+        } catch (_) {
+          return false;
+        }
+      }),
+    );
   }
 
   /// Updates field rules.
@@ -574,7 +592,8 @@ class SuperFormState extends State<SuperForm> with RestorationMixin {
   void updateFieldRules(String name, Iterable<SuperFormFieldRule> rules) {
     if (!_fieldsRules.containsKey(name)) {
       throw StateError(
-          "You are trying to update rules on field $name, but it is not registered");
+        "You are trying to update rules on field $name, but it is not registered",
+      );
     }
 
     _fieldsRules = {..._fieldsRules, name: List.from(rules)};
@@ -592,7 +611,8 @@ class SuperFormState extends State<SuperForm> with RestorationMixin {
 
     if (fieldData == null) {
       throw StateError(
-          'Field $name is not registered so it cannot be validated. Have you forget to register your field manually?');
+        'Field $name is not registered so it cannot be validated. Have you forget to register your field manually?',
+      );
     }
 
     final List<SuperFormFieldRule> rules = _fieldsRules[name]!;
@@ -618,21 +638,27 @@ class SuperFormState extends State<SuperForm> with RestorationMixin {
 
     if (fieldData == null) {
       throw StateError(
-          'Field $name is not registered so touched property cannot be changed. Have you forget to register your field manually?');
+        'Field $name is not registered so touched property cannot be changed. Have you forget to register your field manually?',
+      );
     }
 
     updateFieldData(fieldData.copyWith(touched: touched));
   }
 
   bool _validateFields() {
-    final newFieldsData = _fieldsData.map((key, field) =>
-        MapEntry(key, field.validate(_fieldsRules[key]!, markSubmitted: true)));
+    final newFieldsData = _fieldsData.map(
+      (key, field) => MapEntry(
+        key,
+        field.validate(_fieldsRules[key]!, markSubmitted: true),
+      ),
+    );
 
     _fieldsData = newFieldsData;
     _triggerRebuild();
 
-    final bool hasError =
-        newFieldsData.values.any((field) => field.errors.isNotEmpty);
+    final bool hasError = newFieldsData.values.any(
+      (field) => field.errors.isNotEmpty,
+    );
 
     widget.onChange(data);
     return hasError;
@@ -706,7 +732,8 @@ class SuperFormState extends State<SuperForm> with RestorationMixin {
     _initialValues = widget.initialValues;
 
     _fieldsData = _fieldsData.map(
-        (name, field) => MapEntry(name, field.reset(_initialValues[name])));
+      (name, field) => MapEntry(name, field.reset(_initialValues[name])),
+    );
 
     for (var controller in _fields) {
       controller.didReset(this);
@@ -718,7 +745,8 @@ class SuperFormState extends State<SuperForm> with RestorationMixin {
   void _resetField(String name) {
     if (!data.containsKey(name)) {
       throw StateError(
-          "You are trying to reset field $name, but it is not registered");
+        "You are trying to reset field $name, but it is not registered",
+      );
     }
 
     final field = _fieldsData[name]!;
@@ -750,10 +778,7 @@ class SuperFormState extends State<SuperForm> with RestorationMixin {
   ///
   /// Controlling widgets will usually call this method by themselves when their state
   /// is being disposed.
-  void unregister({
-    required String name,
-    SuperFormFieldState? fieldState,
-  }) {
+  void unregister({required String name, SuperFormFieldState? fieldState}) {
     if (fieldState != null) {
       _fields.remove(fieldState);
 
@@ -776,10 +801,7 @@ class SuperFormState extends State<SuperForm> with RestorationMixin {
 
   @override
   Widget build(BuildContext context) {
-    return _SuperFormScope(
-      state: this,
-      child: widget.child,
-    );
+    return _SuperFormScope(state: this, child: widget.child);
   }
 
   @override

@@ -3,11 +3,12 @@ import 'package:flutter/widgets.dart';
 
 import '../super_form.dart';
 
-typedef SuperFormFieldBuilder<T> = Widget Function(
-  BuildContext context,
-  SuperFormFieldState fieldState,
-  SuperFormState form,
-);
+typedef SuperFormFieldBuilder<T> =
+    Widget Function(
+      BuildContext context,
+      SuperFormFieldState fieldState,
+      SuperFormState form,
+    );
 
 /// Base widget for SuperFormFields like [TextSuperFormField].
 ///
@@ -112,10 +113,7 @@ class SuperFormFieldState extends State<SuperFormField> {
       form = SuperForm.ofFieldMaybe(context, widget.name);
       data = form?.data[widget.name];
 
-      form?.unregister(
-        name: oldWidget.name,
-        fieldState: this,
-      );
+      form?.unregister(name: oldWidget.name, fieldState: this);
 
       data = form!.register(
         name: widget.name,
@@ -188,10 +186,7 @@ class SuperFormFieldState extends State<SuperFormField> {
 
   @override
   void deactivate() {
-    form?.unregister(
-      name: widget.name,
-      fieldState: this,
-    );
+    form?.unregister(name: widget.name, fieldState: this);
 
     super.deactivate();
   }
@@ -208,11 +203,7 @@ class SuperFormFieldState extends State<SuperFormField> {
       return widget.noFormFallback;
     }
 
-    form?.register(
-      name: widget.name,
-      rules: widget.rules,
-      fieldState: this,
-    );
+    form?.register(name: widget.name, rules: widget.rules, fieldState: this);
 
     return widget.builder(context, this, form!);
   }

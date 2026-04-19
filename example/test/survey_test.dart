@@ -8,7 +8,20 @@ const emailKey = Key('email');
 
 void main() {
   group('Survey', () {
+    void setUpTester(WidgetTester tester) {
+      // Built for big screens
+      tester.binding.platformDispatcher.textScaleFactorTestValue = 0.5;
+      tester.view.physicalSize = const Size(1600, 2000);
+      tester.view.devicePixelRatio = 1;
+
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(
+        tester.binding.platformDispatcher.clearTextScaleFactorTestValue,
+      );
+    }
+
     testWidgets('can complete without email', (WidgetTester tester) async {
+      setUpTester(tester);
       await tester.pumpWidget(const MaterialApp(home: SurveyPage()));
       await tester.pumpAndSettle();
 
@@ -19,12 +32,15 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(
-          find.text(
-              "{experience_score: 4.0, delivery_score: 3.0, showEmail: null}",),
-          findsOneWidget,);
+        find.text(
+          "{experience_score: 4.0, delivery_score: 3.0, showEmail: null}",
+        ),
+        findsOneWidget,
+      );
     });
 
     testWidgets('can complete with email', (WidgetTester tester) async {
+      setUpTester(tester);
       await tester.pumpWidget(const MaterialApp(home: SurveyPage()));
       await tester.pumpAndSettle();
 
@@ -39,7 +55,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(
-        find.textContaining("Please provide a valid email address."),
+        find.textContaining("Your email address"),
         findsOneWidget,
       );
 
@@ -50,9 +66,11 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(
-          find.text(
-              "{experience_score: 4.0, delivery_score: 3.0, showEmail: [yes], email: test@pr0gramista.pl}",),
-          findsOneWidget,);
+        find.text(
+          "{experience_score: 4.0, delivery_score: 3.0, showEmail: [yes], email: test@pr0gramista.pl}",
+        ),
+        findsOneWidget,
+      );
     });
   });
 }

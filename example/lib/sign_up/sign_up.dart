@@ -164,36 +164,42 @@ class TermsAndConditionsCheckbox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      CheckboxSuperFormField.listTile(
-        key: const Key('tc'),
-        controlAffinity: ListTileControlAffinity.leading,
-        contentPadding: const EdgeInsets.only(left: 4),
-        name: "termsAndConditionsAccepted",
-        rules: [
-          ContainsRule(
-              "yes", "You must accept our Terms & Condition to continue",),
-        ],
-        options: [
-          CheckboxOption(
-            "yes",
-            RichText(
-              text: TextSpan(
-                text: 'I accept ',
-                style: DefaultTextStyle.of(context).style,
-                children: <TextSpan>[
-                  TextSpan(
+    return Column(
+      children: [
+        CheckboxSuperFormField.listTile(
+          key: const Key('tc'),
+          controlAffinity: ListTileControlAffinity.leading,
+          contentPadding: const EdgeInsets.only(left: 4),
+          name: "termsAndConditionsAccepted",
+          rules: [
+            ContainsRule(
+              "yes",
+              "You must accept our Terms & Condition to continue",
+            ),
+          ],
+          options: [
+            CheckboxOption(
+              "yes",
+              RichText(
+                text: TextSpan(
+                  text: 'I accept ',
+                  style: DefaultTextStyle.of(context).style,
+                  children: <TextSpan>[
+                    TextSpan(
                       text: 'Terms & Conditions',
                       style: TextStyle(
-                          color: Theme.of(context).colorScheme.secondary,),),
-                  const TextSpan(text: ' which I did not read.'),
-                ],
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                    ),
+                    const TextSpan(text: ' which I did not read.'),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
-      ),
-      const SuperFormErrorText(name: "termsAndConditionsAccepted"),
-    ],);
+          ],
+        ),
+        const SuperFormErrorText(name: "termsAndConditionsAccepted"),
+      ],
+    );
   }
 }

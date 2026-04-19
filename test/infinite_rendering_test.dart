@@ -10,24 +10,28 @@ class InfiniteRenderingCase extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SuperForm(
-        child: Column(
-      children: [
-        Builder(builder: (context) {
-          SuperForm.ofField(context, "field");
+      child: Column(
+        children: [
+          Builder(
+            builder: (context) {
+              SuperForm.ofField(context, "field");
 
-          return TextSuperFormField(
-            name: "field",
-            rules: [RequiredRule("Can't be empty")],
-          );
-        })
-      ],
-    ));
+              return TextSuperFormField(
+                name: "field",
+                rules: [RequiredRule("Can't be empty")],
+              );
+            },
+          ),
+        ],
+      ),
+    );
   }
 }
 
 void main() {
-  testWidgets('renders in finite amount of frames',
-      (WidgetTester tester) async {
+  testWidgets('renders in finite amount of frames', (
+    WidgetTester tester,
+  ) async {
     await tester.pumpWidget(boilerplate(child: const InfiniteRenderingCase()));
 
     await tester.pumpAndSettle();

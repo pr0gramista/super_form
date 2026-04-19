@@ -47,20 +47,22 @@ void main() {
           key: formKey,
           validationMode: ValidationMode.onBlur,
           child: Builder(
-            builder: (context) => Column(children: [
-              TextSuperFormField(
-                key: inputKey,
-                name: "name",
-                rules: [MinimumLengthRule(8, errorText)],
-              ),
-              const TextField(key: anotherInput),
-              ElevatedButton(
-                onPressed: () {
-                  SuperForm.of(context, listen: false).submit();
-                },
-                child: const Text("Submit"),
-              )
-            ]),
+            builder: (context) => Column(
+              children: [
+                TextSuperFormField(
+                  key: inputKey,
+                  name: "name",
+                  rules: [MinimumLengthRule(8, errorText)],
+                ),
+                const TextField(key: anotherInput),
+                ElevatedButton(
+                  onPressed: () {
+                    SuperForm.of(context, listen: false).submit();
+                  },
+                  child: const Text("Submit"),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -104,19 +106,21 @@ void main() {
           key: formKey,
           validationMode: ValidationMode.onChange,
           child: Builder(
-            builder: (context) => Column(children: [
-              TextSuperFormField(
-                key: inputKey,
-                name: "name",
-                rules: [MinimumLengthRule(8, errorText)],
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  SuperForm.of(context, listen: false).submit();
-                },
-                child: const Text("Submit"),
-              )
-            ]),
+            builder: (context) => Column(
+              children: [
+                TextSuperFormField(
+                  key: inputKey,
+                  name: "name",
+                  rules: [MinimumLengthRule(8, errorText)],
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    SuperForm.of(context, listen: false).submit();
+                  },
+                  child: const Text("Submit"),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -151,12 +155,9 @@ void main() {
           key: formKey1,
           validationMode: ValidationMode.onBlur,
           child: Builder(
-            builder: (context) => Column(children: [
-              TextSuperFormField(
-                key: inputKey,
-                name: "name",
-              ),
-            ]),
+            builder: (context) => Column(
+              children: [TextSuperFormField(key: inputKey, name: "name")],
+            ),
           ),
         ),
       ),
@@ -172,12 +173,9 @@ void main() {
           key: formKey2,
           validationMode: ValidationMode.onBlur,
           child: Builder(
-            builder: (context) => Column(children: [
-              TextSuperFormField(
-                key: inputKey,
-                name: "name",
-              ),
-            ]),
+            builder: (context) => Column(
+              children: [TextSuperFormField(key: inputKey, name: "name")],
+            ),
           ),
         ),
       ),
@@ -201,16 +199,16 @@ void main() {
       boilerplate(
         child: SuperForm(
           key: formKey,
-          child: Column(children: [
-            TextSuperFormField(
-              key: loginInput,
-              name: "login",
-              onEditingComplete: listener.call,
-            ),
-            TextSuperFormField(
-              name: "password",
-            ),
-          ]),
+          child: Column(
+            children: [
+              TextSuperFormField(
+                key: loginInput,
+                name: "login",
+                onEditingComplete: listener.call,
+              ),
+              TextSuperFormField(name: "password"),
+            ],
+          ),
         ),
       ),
     );
@@ -222,8 +220,9 @@ void main() {
     verifyNoMoreInteractions(listener);
   });
 
-  testWidgets('onEditingComplete is called when validation mode is onBlur',
-      (WidgetTester tester) async {
+  testWidgets('onEditingComplete is called when validation mode is onBlur', (
+    WidgetTester tester,
+  ) async {
     final formKey = GlobalKey<SuperFormState>();
     const loginInput = Key('loginInput');
 
@@ -234,16 +233,16 @@ void main() {
         child: SuperForm(
           key: formKey,
           validationMode: ValidationMode.onBlur,
-          child: Column(children: [
-            TextSuperFormField(
-              key: loginInput,
-              name: "login",
-              onEditingComplete: listener.call,
-            ),
-            TextSuperFormField(
-              name: "password",
-            ),
-          ]),
+          child: Column(
+            children: [
+              TextSuperFormField(
+                key: loginInput,
+                name: "login",
+                onEditingComplete: listener.call,
+              ),
+              TextSuperFormField(name: "password"),
+            ],
+          ),
         ),
       ),
     );
@@ -255,8 +254,9 @@ void main() {
     verifyNoMoreInteractions(listener);
   });
 
-  testWidgets('resets when widget is also changed',
-      (WidgetTester tester) async {
+  testWidgets('resets when widget is also changed', (
+    WidgetTester tester,
+  ) async {
     final formKey = GlobalKey<SuperFormState>();
     const loginInput = Key('loginInput');
 
@@ -267,42 +267,43 @@ void main() {
 
     await tester.pumpWidget(
       boilerplate(
-          child: StreamBuilder<int>(
-        stream: streamController.stream,
-        builder: (context, snapshot) {
-          return SuperForm(
-            key: formKey,
-            validationMode: ValidationMode.onBlur,
-            initialValues: const {"login": "hello"},
-            onSubmit: (values) {
-              streamController.add(snapshot.data! + 1);
+        child: StreamBuilder<int>(
+          stream: streamController.stream,
+          builder: (context, snapshot) {
+            return SuperForm(
+              key: formKey,
+              validationMode: ValidationMode.onBlur,
+              initialValues: const {"login": "hello"},
+              onSubmit: (values) {
+                streamController.add(snapshot.data! + 1);
 
-              formKey.currentState?.reset();
-            },
-            child: Column(
-              children: [
-                TextSuperFormField(
-                  key: loginInput,
-                  name: "login",
-                  // Rules are not memorized so this rule will trigger didUpdateWidget
-                  rules: [RequiredRule("Must not be empty")],
-                ),
-                TextSuperFormField(
-                  name: "password",
-                ),
-                Builder(builder: (context) {
-                  return ElevatedButton(
-                    onPressed: () {
-                      SuperForm.of(context, listen: false).submit();
+                formKey.currentState?.reset();
+              },
+              child: Column(
+                children: [
+                  TextSuperFormField(
+                    key: loginInput,
+                    name: "login",
+                    // Rules are not memorized so this rule will trigger didUpdateWidget
+                    rules: [RequiredRule("Must not be empty")],
+                  ),
+                  TextSuperFormField(name: "password"),
+                  Builder(
+                    builder: (context) {
+                      return ElevatedButton(
+                        onPressed: () {
+                          SuperForm.of(context, listen: false).submit();
+                        },
+                        child: const Text("Submit"),
+                      );
                     },
-                    child: const Text("Submit"),
-                  );
-                })
-              ],
-            ),
-          );
-        },
-      )),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      ),
     );
 
     await tester.enterText(find.byKey(loginInput), "rex");
@@ -315,8 +316,9 @@ void main() {
     expect(find.text("rex"), findsNothing);
   });
 
-  testWidgets('shows errors when widget is also changed',
-      (WidgetTester tester) async {
+  testWidgets('shows errors when widget is also changed', (
+    WidgetTester tester,
+  ) async {
     final formKey = GlobalKey<SuperFormState>();
     const loginInput = Key('loginInput');
 
@@ -327,35 +329,36 @@ void main() {
 
     await tester.pumpWidget(
       boilerplate(
-          child: StreamBuilder<int>(
-        stream: streamController.stream,
-        builder: (context, snapshot) {
-          return SuperForm(
-            key: formKey,
-            child: Column(
-              children: [
-                TextSuperFormField(
-                  key: loginInput,
-                  name: "login",
-                  // Rules are not memorized so this rule will trigger didUpdateWidget
-                  rules: [RequiredRule("Must not be empty")],
-                ),
-                TextSuperFormField(
-                  name: "password",
-                ),
-                Builder(builder: (context) {
-                  return ElevatedButton(
-                    onPressed: () {
-                      SuperForm.of(context, listen: false).submit();
+        child: StreamBuilder<int>(
+          stream: streamController.stream,
+          builder: (context, snapshot) {
+            return SuperForm(
+              key: formKey,
+              child: Column(
+                children: [
+                  TextSuperFormField(
+                    key: loginInput,
+                    name: "login",
+                    // Rules are not memorized so this rule will trigger didUpdateWidget
+                    rules: [RequiredRule("Must not be empty")],
+                  ),
+                  TextSuperFormField(name: "password"),
+                  Builder(
+                    builder: (context) {
+                      return ElevatedButton(
+                        onPressed: () {
+                          SuperForm.of(context, listen: false).submit();
+                        },
+                        child: const Text("Submit"),
+                      );
                     },
-                    child: const Text("Submit"),
-                  );
-                })
-              ],
-            ),
-          );
-        },
-      )),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      ),
     );
     await tester.pumpAndSettle();
 
@@ -419,10 +422,8 @@ void main() {
         child: SuperForm(
           key: formKey,
           child: Builder(
-            builder: (context) => TextSuperFormField(
-              key: inputKey,
-              name: fieldName,
-            ),
+            builder: (context) =>
+                TextSuperFormField(key: inputKey, name: fieldName),
           ),
         ),
       ),
@@ -437,10 +438,8 @@ void main() {
           key: formKey,
           enabled: false,
           child: Builder(
-            builder: (context) => TextSuperFormField(
-              key: inputKey,
-              name: fieldName,
-            ),
+            builder: (context) =>
+                TextSuperFormField(key: inputKey, name: fieldName),
           ),
         ),
       ),

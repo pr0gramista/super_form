@@ -23,14 +23,20 @@ class ExamplesApp extends StatelessWidget {
           case "burritox":
             return MaterialPageRoute(
               builder: (_) => Theme(
-                data: ThemeData(primarySwatch: Colors.deepOrange),
+                data: ThemeData(
+                  colorScheme:
+                      ColorScheme.fromSwatch(primarySwatch: Colors.orange),
+                ),
                 child: const Burritox(),
               ),
             );
           case "survey":
             return MaterialPageRoute(
               builder: (_) => Theme(
-                data: ThemeData(primarySwatch: Colors.green),
+                data: ThemeData(
+                  colorScheme:
+                      ColorScheme.fromSwatch(primarySwatch: Colors.green),
+                ),
                 child: const SurveyPage(),
               ),
             );
@@ -57,7 +63,8 @@ class ExamplesApp extends StatelessWidget {
               ListTile(
                 title: const Text("Survey"),
                 subtitle: const Text(
-                    "Survey with sliders, dynamic email field, navigation block and loading state",),
+                  "Survey with sliders, dynamic email field, navigation block and loading state",
+                ),
                 onTap: () {
                   Navigator.of(context).restorablePushNamed("survey");
                 },
@@ -65,7 +72,8 @@ class ExamplesApp extends StatelessWidget {
               ListTile(
                 title: const Text("Burritox"),
                 subtitle: const Text(
-                    "Takeaway order with checkboxes, dynamic rules and editing",),
+                  "Takeaway order with checkboxes, dynamic rules and editing",
+                ),
                 onTap: () {
                   Navigator.of(context).restorablePushNamed("burritox");
                 },

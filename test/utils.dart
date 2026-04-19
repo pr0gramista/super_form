@@ -9,11 +9,7 @@ Widget boilerplate({required Widget child, String? restorationScopeId}) {
       textDirection: TextDirection.ltr,
       child: MediaQuery(
         data: const MediaQueryData(size: Size(800.0, 600.0)),
-        child: Center(
-          child: Material(
-            child: child,
-          ),
-        ),
+        child: Center(child: Material(child: child)),
       ),
     ),
   );
@@ -51,29 +47,31 @@ class _SuperFormManglerState extends State<SuperFormMangler> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      SuperForm(
-        enabled: enabled,
-        validationMode: validationMode,
-        child: widget.child,
-      ),
-      TextButton(
-        onPressed: () {
-          setState(() {
-            enabled = false;
-          });
-        },
-        child: const Text("Disable"),
-      ),
-      TextButton(
-        onPressed: () {
-          setState(() {
-            validationMode = ValidationMode.onBlur;
-          });
-        },
-        child: const Text("Set onBlur"),
-      )
-    ]);
+    return Column(
+      children: [
+        SuperForm(
+          enabled: enabled,
+          validationMode: validationMode,
+          child: widget.child,
+        ),
+        TextButton(
+          onPressed: () {
+            setState(() {
+              enabled = false;
+            });
+          },
+          child: const Text("Disable"),
+        ),
+        TextButton(
+          onPressed: () {
+            setState(() {
+              validationMode = ValidationMode.onBlur;
+            });
+          },
+          child: const Text("Set onBlur"),
+        ),
+      ],
+    );
   }
 }
 

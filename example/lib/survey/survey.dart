@@ -71,19 +71,29 @@ class _SurveyPageState extends State<SurveyPage> {
               _isLoading = true;
             });
 
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("Simulating slow network request"),
+                ),
+              );
+            }
+
             await Future.delayed(const Duration(seconds: 3));
 
             setState(() {
               _isLoading = false;
             });
 
-            showDialog(
-              context: context,
-              builder: (context) => ResultDialog(
-                title: const Text("Form values"),
-                result: values.toString(),
-              ),
-            );
+            if (context.mounted) {
+              showDialog(
+                context: context,
+                builder: (context) => ResultDialog(
+                  title: const Text("Form values"),
+                  result: values.toString(),
+                ),
+              );
+            }
           },
           initialValues: const {"experience_score": 3.0, "delivery_score": 3.0},
           child: Column(

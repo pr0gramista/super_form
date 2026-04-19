@@ -24,14 +24,16 @@ class BurritoForm extends StatelessWidget {
     return SuperForm(
       key: formKey,
       onSubmit: (values) {
-        onSubmit(BurritoOrder(
-          burrito: Burrito(
-            filling: values["filling"] as String,
-            sauce: (values["sauce"] as List<String>).toSet(),
-            extras: (values["extras"] as List<String>? ?? <String>[]).toSet(),
+        onSubmit(
+          BurritoOrder(
+            burrito: Burrito(
+              filling: values["filling"] as String,
+              sauce: (values["sauce"] as List<String>).toSet(),
+              extras: (values["extras"] as List<String>? ?? <String>[]).toSet(),
+            ),
+            count: int.parse(values["count"] as String),
           ),
-          count: int.parse(values["count"] as String),
-        ),);
+        );
 
         if (!isEditing) {
           // Clear form after submit if it's not editing.
@@ -55,7 +57,9 @@ class BurritoForm extends StatelessWidget {
               DropdownMenuItem(value: "pork", child: Text("Pork")),
               DropdownMenuItem(value: "chicken", child: Text("Chicken")),
               DropdownMenuItem(
-                  value: "seitan", child: Text("Seitan (vegan 🌱)"),),
+                value: "seitan",
+                child: Text("Seitan (vegan 🌱)"),
+              ),
             ],
             rules: [RequiredRule("Choose your main ingredient")],
           ),
@@ -92,7 +96,9 @@ class BurritoForm extends StatelessWidget {
             options: const [
               CheckboxOption("fries", Text("Fries (+1\$)")),
               CheckboxOption(
-                  "sweet_potato_fries", Text("Sweet potato fries (+2\$)"),),
+                "sweet_potato_fries",
+                Text("Sweet potato fries (+2\$)"),
+              ),
               CheckboxOption("coleslaw", Text("Coleslaw (+1\$)")),
             ],
           ),
@@ -130,12 +136,13 @@ class BurritoForm extends StatelessWidget {
                       formKey.currentState?.submit();
                     },
                     style: ButtonStyle(
-                        padding: WidgetStateProperty.all(
-                      const EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 16,
+                      padding: WidgetStateProperty.all(
+                        const EdgeInsets.symmetric(
+                          horizontal: 24,
+                          vertical: 16,
+                        ),
                       ),
-                    ),),
+                    ),
                     label: isEditing ? const Text("Save") : const Text("Add"),
                     icon: Icon(isEditing ? Icons.save : Icons.add),
                   ),

@@ -140,9 +140,19 @@ class SuperFormErrorText extends StatelessWidget {
       return fallback;
     }
 
+    final ThemeData theme = Theme.of(context);
+    final DefaultTextStyle defaultTextStyle = DefaultTextStyle.of(context);
+
+    TextStyle? effectiveTextStyle = style;
+    if (style == null || style!.inherit) {
+      effectiveTextStyle = defaultTextStyle.style
+          .merge(TextStyle(color: theme.colorScheme.error))
+          .merge(style);
+    }
+
     return Text(
       error.message,
-      style: style,
+      style: effectiveTextStyle,
       strutStyle: strutStyle,
       textAlign: textAlign,
       textDirection: textDirection,

@@ -22,9 +22,9 @@ void main() {
               );
             },
             key: formKey,
-            child: const Column(children: [
-              SuperFormErrorText(name: "counter"),
-            ]),
+            child: const Column(
+              children: [SuperFormErrorText(name: "counter")],
+            ),
           ),
         ),
       );
@@ -56,12 +56,14 @@ void main() {
               formState.register(name: "counter", rules: []);
             },
             key: formKey,
-            child: const Column(children: [
-              SuperFormErrorText(
-                name: "counter",
-                fallback: Text(fallbackText),
-              ),
-            ]),
+            child: const Column(
+              children: [
+                SuperFormErrorText(
+                  name: "counter",
+                  fallback: Text(fallbackText),
+                ),
+              ],
+            ),
           ),
         ),
       );
