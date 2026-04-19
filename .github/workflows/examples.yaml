@@ -20,8 +20,8 @@ jobs:
       - name: Pub get
         run: flutter pub get
       - name: Analyze
-        run: flutter analyze
+        run: dart analyze
       - name: Check format
-        run: flutter format --set-exit-if-changed .
+        run: dart format --set-exit-if-changed .
       - name: Run unit tests
         run: flutter test --coverage --test-randomize-ordering-seed random
