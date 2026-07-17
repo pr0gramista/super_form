@@ -1,3 +1,7 @@
+## 1.1.1
+* Loosen Dart version requirement
+* Update dependencies
+
 ## 1.1.0
 * Adapted to newest Flutter version
 
