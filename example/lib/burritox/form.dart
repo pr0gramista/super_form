@@ -67,40 +67,44 @@ class BurritoForm extends StatelessWidget {
           const SizedBox(height: 16),
           const Text("Sauces (maximum 2):"),
           const SizedBox(height: 8),
-          CheckboxSuperFormField.listTile(
-            name: "sauce",
-            controlAffinity: ListTileControlAffinity.leading,
-            contentPadding: const EdgeInsets.only(left: 4),
-            dense: true,
-            rules: [
-              RequiredRule("Choose your sauces"),
-              MinimumLengthRule(1, "Choose your sauces"),
-              MaximumLengthRule(2, "You can't choose more sauces"),
-            ],
-            options: const [
-              CheckboxOption("salsa_mango", Text("Salsa mango")),
-              CheckboxOption("salsa_chili", Text("Salsa chili")),
-              CheckboxOption("guacamole", Text("Guacamole")),
-              CheckboxOption("mayo", Text("Mayo")),
-            ],
+          Material(
+            child: CheckboxSuperFormField.listTile(
+              name: "sauce",
+              controlAffinity: ListTileControlAffinity.leading,
+              contentPadding: const EdgeInsets.only(left: 4),
+              dense: true,
+              rules: [
+                RequiredRule("Choose your sauces"),
+                MinimumLengthRule(1, "Choose your sauces"),
+                MaximumLengthRule(2, "You can't choose more sauces"),
+              ],
+              options: const [
+                CheckboxOption("salsa_mango", Text("Salsa mango")),
+                CheckboxOption("salsa_chili", Text("Salsa chili")),
+                CheckboxOption("guacamole", Text("Guacamole")),
+                CheckboxOption("mayo", Text("Mayo")),
+              ],
+            ),
           ),
           const SuperFormErrorText(name: "sauce"),
           const SizedBox(height: 8),
           const Text("Extras:"),
           const SizedBox(height: 8),
-          CheckboxSuperFormField.listTile(
-            name: "extras",
-            controlAffinity: ListTileControlAffinity.leading,
-            contentPadding: const EdgeInsets.only(left: 4),
-            dense: true,
-            options: const [
-              CheckboxOption("fries", Text("Fries (+1\$)")),
-              CheckboxOption(
-                "sweet_potato_fries",
-                Text("Sweet potato fries (+2\$)"),
-              ),
-              CheckboxOption("coleslaw", Text("Coleslaw (+1\$)")),
-            ],
+          Material(
+            child: CheckboxSuperFormField.listTile(
+              name: "extras",
+              controlAffinity: ListTileControlAffinity.leading,
+              contentPadding: const EdgeInsets.only(left: 4),
+              dense: true,
+              options: const [
+                CheckboxOption("fries", Text("Fries (+1\$)")),
+                CheckboxOption(
+                  "sweet_potato_fries",
+                  Text("Sweet potato fries (+2\$)"),
+                ),
+                CheckboxOption("coleslaw", Text("Coleslaw (+1\$)")),
+              ],
+            ),
           ),
           const SizedBox(height: 8),
           Row(
